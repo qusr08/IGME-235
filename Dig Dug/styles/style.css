@@ -1,0 +1,35 @@
+h1 {
+    color: red;
+    font-family: sans-serif;
+    border-bottom: 1px solid blue;
+}
+
+h2 {
+    color: teal;
+    font-family: sans-serif;
+    margin-left: 50px;
+}
+
+blockquote {
+    background-color: lightgray;
+    padding: 1rem;
+    font-size: xx-large;
+}
+
+ul {
+    margin-left: 55px;
+}
+
+p {
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+body {
+    background-color: rgb(138, 179, 74);
+}
+
+img.side {
+    float: right;
+    margin: 0 12px;
+}
