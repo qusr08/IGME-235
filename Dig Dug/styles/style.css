@@ -1,19 +1,23 @@
 h1 {
-    color: red;
+    color: #845988;
     font-family: sans-serif;
-    border-bottom: 1px solid blue;
+    border-bottom: 1px solid #845988;
 }
 
 h2 {
-    color: teal;
+    color: #845988;
     font-family: sans-serif;
     margin-left: 50px;
 }
 
+hr {
+    color: #845988;
+}
+
 blockquote {
-    background-color: lightgray;
+    background-color: #FBCA9D;
     padding: 1rem;
-    font-size: xx-large;
+    font-size: large;
 }
 
 ul {
@@ -25,11 +29,45 @@ p {
     margin-right: 100px;
 }
 
+header {
+    font-family: 'Roboto Condensed', sans-serif;
+    background-color: #FA6807;
+}
+
 body {
-    background-color: rgb(138, 179, 74);
+    background-color: #FDE5CE;
+    font-family: 'Arial', sans-serif;
+}
+
+footer {
+    background-color: #FBCA9D;
 }
 
 img.side {
     float: right;
     margin: 0 12px;
+}
+
+a:link {
+    color: #FA6807;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:visited {
+    color: #8C3A03;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #FB924B;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+a:active {
+    color: #FB924B;
+    background-color: transparent;
+    text-decoration: underline;
 }
