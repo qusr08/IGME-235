@@ -1,0 +1,32 @@
+header {
+    text-align: center;
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.projects {
+    content: attr(title);
+    display: block;
+    text-align: center;
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+.projects img {
+    display: inline-block;
+    max-width: 100%;
+    width: 25%;
+    height: auto;
+}
+
+hr {
+    margin-left: 10%;
+    margin-right: 10%;
+    height: 2px;
+    background-color: black;
+    border-radius: 7px 7px 7px 7px;
+}
