@@ -1,32 +1,79 @@
 header {
     text-align: center;
+}
+
+header p {
     padding-left: 20%;
     padding-right: 20%;
 }
 
+header h1 {
+    /* page title color */
+    color: #FACE7F;
+}
+
+header img {
+    /* profile picture border color */
+    border: 14px solid #911F27;
+}
+
 body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: large;
+    /* text color */
+    color: #FCF0C8;
+    /* background color */
+    background: #630A10;
 }
 
-.projects {
-    content: attr(title);
-    display: block;
-    text-align: center;
-    padding-left: 15%;
-    padding-right: 15%;
+main div {
+    padding-left: 12.5%;
+    padding-right: 12.5%;
 }
 
-.projects img {
-    display: inline-block;
-    max-width: 100%;
-    width: 25%;
-    height: auto;
+.project {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    padding: 0.5%;
+}
+
+.project img {
+    /* project image border color */
+    border: 7px solid #911F27;
+    border-radius: 10%;
+    max-width: 20%;
+    float: left;
+}
+
+.project-details {
+    padding-left: 2.5%;
+}
+
+.project-details h3 {
+    /* project title text color */
+    color: #FACE7F;
+}
+
+.social {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+}
+
+.social img {
+    /* socials image border color */
+    border: 4px solid #911F27;
+    border-radius: 100%;
+    max-width: 10%;
 }
 
 hr {
     margin-left: 10%;
     margin-right: 10%;
     height: 2px;
-    background-color: black;
+    /* horizontal rule color */
+    background-color: #911F27;
+    border: 2px solid #911F27;
     border-radius: 7px 7px 7px 7px;
 }
