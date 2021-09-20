@@ -11,13 +11,14 @@ h2 {
 }
 
 hr {
-    color: #845988;
+    border-color: black;
 }
 
 blockquote {
-    background-color: #FBCA9D;
+    background-color: #FA6807;
     padding: 1rem;
     font-size: large;
+    border-radius: 20px;
 }
 
 ul {
@@ -29,6 +30,21 @@ p {
     margin-right: 100px;
 }
 
+img {
+    border-radius: 20px;
+}
+
+main,
+header,
+footer {
+    border: 5px solid black;
+    border-radius: 20px;
+    margin: 10px auto;
+    width: 80vw;
+    padding: 1rem;
+    background-color: #FBCA9D;
+}
+
 header {
     font-family: 'Roboto Condensed', sans-serif;
     background-color: #FA6807;
@@ -37,10 +53,11 @@ header {
 body {
     background-color: #FDE5CE;
     font-family: 'Arial', sans-serif;
+    background-color: #845988;
 }
 
 footer {
-    background-color: #FBCA9D;
+    background-color: #FA6807;
 }
 
 img.side {
@@ -49,25 +66,25 @@ img.side {
 }
 
 a:link {
-    color: #FA6807;
+    color: white;
     background-color: transparent;
     text-decoration: none;
 }
 
 a:visited {
-    color: #8C3A03;
+    color: black;
     background-color: transparent;
     text-decoration: none;
 }
 
 a:hover {
-    color: #FB924B;
+    color: gray;
     background-color: transparent;
     text-decoration: underline;
 }
 
 a:active {
-    color: #FB924B;
+    color: gray;
     background-color: transparent;
     text-decoration: underline;
 }
