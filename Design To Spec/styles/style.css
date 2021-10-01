@@ -1,0 +1,157 @@
+@font-face {
+    font-family: 'DogicaPixel';
+    src: url('../fonts/Dogica\ Webfont/dogicapixel-webfont.woff2') format('woff2'), url('../fonts/Dogica\ Webfont/dogicapixel-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'RetroComputer';
+    src: url('../fonts/RetroComputer\ Webfont/retro_computer_personal_use-webfont.woff2') format('woff2'), url('../fonts/RetroComputer\ Webfont/retro_computer_personal_use-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: grid;
+    grid-template-areas: "header" "oaktree" "landscape" "materials" "footer";
+    grid-template-rows: 1fr 9fr 9fr 9fr 3fr;
+    height: 100vh;
+    color: #FFFFFF;
+    font-family: 'RetroComputer';
+    background-color: #35363D;
+    line-height: 20px;
+}
+
+
+/* --- HEADER ----- */
+
+header {
+    grid-area: "header";
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-areas: "title" "creator";
+    grid-template-columns: 3fr 2fr;
+    padding: 5px 80px;
+    align-items: center;
+    background-color: #686868;
+}
+
+#title {
+    grid-area: "title";
+}
+
+#creator {
+    grid-area: "creator";
+    text-align: right;
+}
+
+
+/* --- THE OAK TREE ----- */
+
+.oaktree {
+    grid-area: "oaktree";
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    column-gap: 20px;
+    padding: 40px 80px;
+}
+
+.oaktree div {
+    padding: 40px;
+}
+
+.oaktree #desc {
+    background-color: #686868;
+}
+
+.oaktree #desc p {
+    font-family: 'DogicaPixel';
+    font-size: small;
+    overflow: hidden;
+}
+
+.oaktree #desc h2 {
+    padding-bottom: 40px;
+}
+
+.oaktree #image {
+    outline: 10px solid #FFFFFF;
+    outline-offset: -10px;
+    background-image: linear-gradient(to bottom right, #E8FDF5, #244D3E);
+}
+
+.oaktree #image img {
+    width: 100%;
+}
+
+
+/* --- LANDSCAPE ----- */
+
+.landscape {
+    grid-area: "landscape";
+    width: 100%;
+}
+
+
+/* --- MATERIALS ----- */
+
+.materials {
+    grid-area: "materials";
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 20px;
+    padding: 40px 80px;
+}
+
+.materials div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 20px;
+}
+
+.materials div #desc {
+    display: block;
+    font-family: 'DogicaPixel';
+    font-size: small;
+    overflow: hidden;
+    background-color: #686868;
+    padding: 40px;
+}
+
+.materials div #image {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    text-align: center;
+    background-color: #244D3E;
+    outline: 10px solid #FFFFFF;
+    outline-offset: -10px;
+    padding: 40px;
+}
+
+.materials div #image img {
+    width: 60%;
+    align-self: center;
+}
+
+
+/* --- FOOTER ----- */
+
+footer {
+    grid-area: "footer";
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 3fr 2fr;
+    padding: 5px 80px;
+    background-image: url('../images/trees.jpg');
+    align-items: center;
+}
