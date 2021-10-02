@@ -42,19 +42,19 @@ header {
     background-color: #686868;
 }
 
-header #title {
+header .title {
     grid-area: "title";
     display: inline-block;
     line-height: 30px;
 }
 
-header #title img {
+header .title img {
     width: 40px;
     vertical-align: middle;
     transform: translateY(5px);
 }
 
-header #creator {
+header .creator {
     grid-area: "creator";
     text-align: right;
 }
@@ -77,22 +77,22 @@ header #creator {
     padding: 40px 80px;
 }
 
-.oaktree #desc {
+.oaktree .desc {
     background-color: #686868;
     padding: 40px;
 }
 
-.oaktree #desc p {
+.oaktree .desc p {
     font-family: 'DogicaPixel';
     font-size: small;
     overflow: hidden;
 }
 
-.oaktree #desc h2 {
+.oaktree .desc h2 {
     padding-bottom: 40px;
 }
 
-.oaktree #image {
+.oaktree .image {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -102,7 +102,7 @@ header #creator {
     background-image: linear-gradient(to bottom right, #E8FDF5, #244D3E);
 }
 
-.oaktree #image img {
+.oaktree .image img {
     width: 100%;
 }
 
@@ -111,7 +111,7 @@ header #creator {
         grid-template-rows: auto auto;
         grid-template-columns: auto;
     }
-    .oaktree #image {
+    .oaktree .image {
         height: fit-content;
     }
 }
@@ -149,7 +149,7 @@ header #creator {
     gap: 20px;
 }
 
-.materials div #desc {
+.materials div .desc {
     display: block;
     font-family: 'DogicaPixel';
     font-size: small;
@@ -158,7 +158,7 @@ header #creator {
     padding: 40px;
 }
 
-.materials div #image {
+.materials div .image {
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
@@ -169,7 +169,7 @@ header #creator {
     padding: 40px;
 }
 
-.materials div #image img {
+.materials div .image img {
     width: 60%;
     align-self: center;
 }
@@ -192,7 +192,7 @@ header #creator {
         grid-template-rows: auto auto;
         gap: 0px;
     }
-    .materials div #image {
+    .materials div .image {
         height: fit-content;
         row-gap: 20px;
     }
@@ -216,12 +216,12 @@ footer {
     padding: 80px;
 }
 
-footer #coolright {
+footer .coolright {
     grid-area: "coolright";
     grid-column: 1/span 1;
 }
 
-footer #copyright {
+footer .copyright {
     grid-area: "copyright";
     grid-column: 3/span 1;
     text-align: right;
@@ -234,10 +234,10 @@ footer #copyright {
         grid-template-columns: auto;
         padding: 40px;
     }
-    footer #coolright {
+    footer .coolright {
         grid-column: 1/span 1;
     }
-    footer #copyright {
+    footer .copyright {
         grid-column: 1/span 1;
     }
 }
