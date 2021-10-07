@@ -1,0 +1,84 @@
+/* https://colorhunt.co/palette/0820322c394b334756ff4c29 */
+
+* {
+    margin: 0;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+header,
+footer {
+    background-color: #334756;
+}
+
+body {
+    background-color: #082032;
+}
+
+hr {
+    border: 2px solid #FF4C29;
+    border-radius: 10px 10px 10px 10px;
+}
+
+main {
+    background-color: #2C394B;
+    padding: 10px;
+    margin: 0px 10%;
+    height: 100vh;
+    color: black;
+}
+
+.menubar {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: right;
+    align-items: center;
+}
+
+.menubar #title {
+    color: #FF4C29;
+    margin: 10px;
+    flex: 1;
+}
+
+.menubar #selected {
+    background-color: #9A2E19;
+    width: auto;
+}
+
+.button {
+    background-color: #FF4C29;
+    transition: all 0.25s ease;
+    border: 5px solid #CD3D21;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.button:hover {
+    background-color: #CD3D21;
+    border: 5px solid white;
+}
+
+a:link {
+    color: black;
+    text-decoration: none;
+    /* transition: color 0.25s ease; */
+}
+
+a:visited {
+    color: black;
+}
+
+a:focus {
+    color: white;
+}
+
+a:hover {
+    color: white;
+}
+
+a:active {
+    font-weight: normal;
+}
