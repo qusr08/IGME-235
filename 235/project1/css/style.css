@@ -3,20 +3,28 @@
 * {
     margin: 0;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-}
-
-header,
-footer {
-    background-color: #334756;
-}
-
-body {
-    background-color: #082032;
+    color: black;
+    font-weight: bold;
 }
 
 hr {
     border: 2px solid #FF4C29;
     border-radius: 10px 10px 10px 10px;
+    margin: 0px 5%;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    background-color: #334756;
+    z-index: 10000;
+}
+
+body {
+    background-color: #082032;
+    display: grid;
+    grid-template-areas: "header" "main" "footer";
+    grid-template-rows: auto 10fr auto;
 }
 
 main {
@@ -24,21 +32,193 @@ main {
     background-color: #2C394B;
     padding: 10px;
     margin: 0px 10%;
-    height: 100vh;
     text-align: center;
-    color: black;
+    border-width: 0px 5px;
+    border-style: solid;
+    border-color: #FF4C29;
 }
 
-main p {
+@media screen and (max-width:750px) {
+    main {
+        margin: 0;
+        border-width: 0px;
+    }
+}
+
+main h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #FF4C29;
+}
+
+main>div {
     font-size: large;
-    padding: 10px 10%;
+    padding: 20px 10%;
 }
 
-.menubar {
+@media screen and (max-width: 900px) {
+    main>div {
+        padding: 20px 10px;
+    }
+}
+
+
+/* #region About Me */
+
+#pfp {
+    display: grid;
+    grid-template-columns: 25% 75%;
+    grid-template-rows: auto auto;
+    grid-template-areas: "pfp tagline" "pfp about";
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+    gap: 30px;
+}
+
+#pfp img {
+    grid-area: pfp;
+    width: 100%;
+    height: auto;
+    border: 5px solid #FF4C29;
+    border-radius: 100%;
+}
+
+#pfp h1 {
+    grid-area: tagline;
+    align-self: flex-end;
+}
+
+#pfp p {
+    grid-area: about;
+    align-self: flex-start;
+}
+
+@media screen and (max-width:1200px) {
+    #pfp {
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+    #pfp img {
+        height: 100%;
+        width: 50%;
+    }
+}
+
+
+/* #endregion */
+
+
+/* #region Project in Gallery */
+
+.project {
+    display: grid;
+    grid-template-areas: "images title links" "images description description" "images video video";
+    grid-template-columns: 2fr 2fr 2fr;
+    grid-template-rows: auto auto auto;
+    gap: 20px;
+    background-color: #334756;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+}
+
+.project .title {
+    grid-area: title;
+    justify-self: center;
+    align-self: center;
+}
+
+.project .links {
+    grid-area: links;
     display: flex;
     flex-flow: row wrap;
     justify-content: right;
+    align-self: center;
+}
+
+.project .images {
+    grid-area: images;
+    align-self: flex-start;
+}
+
+.project .images img {
+    width: 95%;
+    border: 5px solid #FF4C29;
+    border-radius: 10px;
+}
+
+.project .description {
+    text-align: left;
+    grid-area: description;
+    padding: 0px 20px;
+}
+
+.project .video {
+    grid-area: video;
+    justify-self: center;
+    width: 95%;
+    border: 5px solid #FF4C29;
+    border-radius: 10px;
+}
+
+@media screen and (max-width:1400px) {
+    .project {
+        grid-template-areas: "title links" "description description" "video video" "images images";
+        grid-template-columns: auto auto;
+    }
+}
+
+
+/* #endregion */
+
+
+/* #region Contact Info */
+
+#contact {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+#contact p {
+    margin-top: 10px;
+}
+
+
+/* #endregion */
+
+footer {
+    background-color: #334756;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+footer p {
+    margin: 10px;
+}
+
+
+/*#region Menu Bar*/
+
+.menubar {
+    display: flex;
+    flex-flow: row nowrap;
     align-items: stretch;
+    border-width: 0 0 2px 0;
+    border-style: solid;
+    border-color: #FF4C29;
 }
 
 .menubar #title {
@@ -48,10 +228,30 @@ main p {
     flex: 1;
 }
 
-.menubar #selected {
+.menubar .buttons {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+@media screen and (max-width:700px) {
+    .menubar {
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+
+/* .menubar #selected {
     background-color: #9A2E19;
     width: auto;
-}
+} */
+
+
+/*#endregion */
+
+
+/* #region Button */
 
 .button {
     display: block;
@@ -70,10 +270,15 @@ main p {
     border: 5px solid white;
 }
 
+
+/* #endregion */
+
+
+/* #region Links */
+
 a:link {
     color: black;
-    text-decoration: none;
-    /* transition: color 0.25s ease; */
+    text-decoration: underline;
 }
 
 a:visited {
@@ -91,3 +296,6 @@ a:hover {
 a:active {
     color: black;
 }
+
+
+/* #endregion */
