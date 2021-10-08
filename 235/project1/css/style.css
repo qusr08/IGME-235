@@ -20,23 +20,31 @@ hr {
 }
 
 main {
+    display: block;
     background-color: #2C394B;
     padding: 10px;
     margin: 0px 10%;
     height: 100vh;
+    text-align: center;
     color: black;
+}
+
+main p {
+    font-size: large;
+    padding: 10px 10%;
 }
 
 .menubar {
     display: flex;
     flex-flow: row wrap;
     justify-content: right;
-    align-items: center;
+    align-items: stretch;
 }
 
 .menubar #title {
     color: #FF4C29;
     margin: 10px;
+    font-size: 2.5em;
     flex: 1;
 }
 
@@ -46,6 +54,7 @@ main {
 }
 
 .button {
+    display: block;
     background-color: #FF4C29;
     transition: all 0.25s ease;
     border: 5px solid #CD3D21;
@@ -80,5 +89,5 @@ a:hover {
 }
 
 a:active {
-    font-weight: normal;
+    color: black;
 }
