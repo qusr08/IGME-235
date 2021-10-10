@@ -1,4 +1,8 @@
-/* https://colorhunt.co/palette/0820322c394b334756ff4c29 */
+/* Color palette
+https://colorhunt.co/palette/0820322c394b334756ff4c29 */
+
+
+/* Set some initial aspects of all elements */
 
 * {
     margin: 0;
@@ -14,18 +18,24 @@ hr {
 }
 
 header {
+    background-color: #334756;
+    /* Make the menu bar stick to the top of the page at all times */
     position: sticky;
     top: 0;
-    background-color: #334756;
+    /* Make menu bar stay above everything else on the webpage */
     z-index: 10000;
 }
 
 body {
     background-color: #082032;
+    /* Set the dimensions for each of the main content areas */
     display: grid;
     grid-template-areas: "header" "main" "footer";
     grid-template-rows: auto 10fr auto;
 }
+
+
+/* #region Main Content */
 
 main {
     display: block;
@@ -33,16 +43,10 @@ main {
     padding: 10px;
     margin: 0px 10%;
     text-align: center;
+    /* Set the border on either side of the main content */
     border-width: 0px 5px;
     border-style: solid;
     border-color: #FF4C29;
-}
-
-@media screen and (max-width:750px) {
-    main {
-        margin: 0;
-        border-width: 0px;
-    }
 }
 
 main h1,
@@ -59,6 +63,16 @@ main>div {
     padding: 20px 10%;
 }
 
+
+/* Remove the border and margin of the main content if the width of the window gets too small */
+
+@media screen and (max-width:750px) {
+    main {
+        margin: 0;
+        border-width: 0px;
+    }
+}
+
 @media screen and (max-width: 900px) {
     main>div {
         padding: 20px 10px;
@@ -66,17 +80,20 @@ main>div {
 }
 
 
+/* #endregion */
+
+
 /* #region About Me */
 
 #pfp {
     display: grid;
+    grid-template-areas: "pfp tagline" "pfp about";
     grid-template-columns: 25% 75%;
     grid-template-rows: auto auto;
-    grid-template-areas: "pfp tagline" "pfp about";
     justify-content: center;
     align-items: center;
-    text-align: left;
     gap: 30px;
+    text-align: left;
 }
 
 #pfp img {
@@ -96,6 +113,9 @@ main>div {
     grid-area: about;
     align-self: flex-start;
 }
+
+
+/* Modify the layout of the intro section if the screen gets too small */
 
 @media screen and (max-width:1200px) {
     #pfp {
@@ -118,57 +138,69 @@ main>div {
 /* #region Project in Gallery */
 
 .project {
+    background-color: #334756;
+    /* Set layout of each project section */
     display: grid;
     grid-template-areas: "images title links" "images description description" "images video video";
     grid-template-columns: 2fr 2fr 2fr;
     grid-template-rows: auto auto auto;
-    gap: 20px;
-    background-color: #334756;
     justify-content: center;
     align-items: center;
-    border-radius: 10px;
+    gap: 20px;
     padding: 10px;
     margin: 10px;
+    /* Make the edges of the background rounded */
+    border-radius: 10px;
 }
 
 .project .title {
     grid-area: title;
+    /* Make sure the title is centered in its box */
     justify-self: center;
     align-self: center;
 }
 
 .project .links {
     grid-area: links;
+    /* The links need to be able to adjust when the screen changes, so make each of them part of a flexbox */
     display: flex;
     flex-flow: row wrap;
+    /* Make sure the link buttons are always as far to the right as possible */
     justify-content: right;
     align-self: center;
 }
 
 .project .images {
     grid-area: images;
+    /* Have the images appear at the top left of the project window, to the left of the title */
     align-self: flex-start;
 }
 
 .project .images img {
+    /* Set the width to a little less than max because it spills out the side of the project area otherwise */
     width: 95%;
     border: 5px solid #FF4C29;
     border-radius: 10px;
 }
 
 .project .description {
-    text-align: left;
     grid-area: description;
+    /* Give the text a bit of extra padding */
     padding: 0px 20px;
+    text-align: left;
 }
 
 .project .video {
     grid-area: video;
     justify-self: center;
+    /* Set the width to a little less than max because it spills out the side of the project area otherwise */
     width: 95%;
     border: 5px solid #FF4C29;
     border-radius: 10px;
 }
+
+
+/* Adjust the layout to a stright column once the screen gets smaller */
 
 @media screen and (max-width:1400px) {
     .project {
@@ -184,6 +216,7 @@ main>div {
 /* #region Contact Info */
 
 #contact {
+    /* Have the contact info automatically wrap and adjust to a smaller screen */
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
@@ -191,11 +224,15 @@ main>div {
 }
 
 #contact p {
+    /* Make sure the headers have a bit of space between the actual contact info */
     margin-top: 10px;
 }
 
 
 /* #endregion */
+
+
+/* #region Footer */
 
 footer {
     background-color: #334756;
@@ -210,12 +247,17 @@ footer p {
 }
 
 
+/* #endregion */
+
+
 /*#region Menu Bar*/
 
 .menubar {
     display: flex;
     flex-flow: row nowrap;
+    /* Make sure the menu bar fills the entire top part of the screen */
     align-items: stretch;
+    /* Make sure the menu bar only has a border on the bottom to differentate it from the rest of the page */
     border-width: 0 0 2px 0;
     border-style: solid;
     border-color: #FF4C29;
@@ -225,6 +267,7 @@ footer p {
     color: #FF4C29;
     margin: 10px;
     font-size: 2.5em;
+    /* Have the title part of the menu bar take up all left over room */
     flex: 1;
 }
 
@@ -232,6 +275,9 @@ footer p {
     display: flex;
     flex-flow: row nowrap;
 }
+
+
+/* Have the menu bar buttons move to a new line once the screen gets smaller */
 
 @media screen and (max-width:700px) {
     .menubar {
@@ -256,13 +302,13 @@ footer p {
 .button {
     display: block;
     background-color: #FF4C29;
+    /* Transition all aspects of the button object to all overridden ones once the mouse is hovered over it */
     transition: all 0.25s ease;
     border: 5px solid #CD3D21;
     border-radius: 10px;
     padding: 10px;
     margin: 10px;
     text-align: center;
-    font-weight: bold;
 }
 
 .button:hover {
@@ -278,6 +324,7 @@ footer p {
 
 a:link {
     color: black;
+    font-style: italic;
     text-decoration: underline;
 }
 
