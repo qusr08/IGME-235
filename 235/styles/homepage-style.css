@@ -1,18 +1,19 @@
+#about,
 header {
     text-align: center;
 }
 
-header p {
+#about p {
     padding-left: 20%;
     padding-right: 20%;
 }
 
-header h1 {
+#about h1 {
     /* page title color */
     color: #FACE7F;
 }
 
-header img {
+#about img {
     /* profile picture border color */
     border: 14px solid #911F27;
 }
