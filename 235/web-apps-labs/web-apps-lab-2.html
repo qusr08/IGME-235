@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>DOM-3</title>
+    <style>
+        body {
+            border: 1px solid gray;
+        }
+        
+        p b {
+            transform: rotate(20deg)
+        }
+    </style>
+</head>
+
+<body>
+    <h1>My Page</h1>
+    <h2>Info</h2>
+    <h2>Pictures</h2>
+    <h2>More Info</h2>
+    <p>Blah <b>Blah</b> Blah</p>
+    <p>Blah <b>Blah</b> Blah</p>
+    <p id="lastParagraph">Blah <b>Blah</b> Blah</p>
+    <footer>Copyright &copy; <b>20XX</b></footer>
+    <script>
+        "use strict";
+
+        // add your own code here.
+        document.querySelector("h1").innerHTML = "My UFO Page";
+        document.querySelector("h2").innerHTML = "My UFO Info";
+        document.querySelectorAll("h2")[1].innerHTML = "My UFO Pictures";
+        document.querySelectorAll("h2")[2].innerHTML = "";
+
+        document.body.style.fontFamily = "sans-serif";
+        document.body.style.color = "#AA0000";
+
+        let paragraph = document.querySelector("p");
+        paragraph.innerHTML = "Report your UFO sightings here: <a href='http://www.nuforc.org/'>http://www.nuforc.org/</a>";
+        paragraph.style.color = "green";
+        paragraph.style.fontWeight = "bold";
+        paragraph.style.fontSize = "2em";
+        paragraph.style.textTransform = "uppercase";
+        paragraph.style.textShadow = "3px 2px #A44";
+        
+        document.querySelectorAll("p")[1].innerHTML = "";
+        document.querySelectorAll("p")[2].innerHTML = "<img src='https://media.npr.org/assets/img/2021/06/04/ap21154653162696-c015233e9fc05e6adf5e303af924a9536a2f379f.jpg'>"
+        document.querySelector("footer").innerHTML = "Copyright &copy; <b>2021</b> Frank Alfano";
+    </script>
+</body>
+
+</html>
