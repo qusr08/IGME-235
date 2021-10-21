@@ -7,81 +7,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="homepage/styles/homepage-style.css">
-    <!-- <link rel="stylesheet" href="styles/homepage-style-v2.css"> -->
 
-    <title>IGME-235 Homepage</title>
+    <title>Frank Alfano Homepage</title>
 </head>
 
 <body>
     <header>
-        <h1>Frank Alfano's IGME-235 Homepage</h1>
-    </header>
-
-    <main>
-        <div id="about">
-            <img style="border-radius: 100%;" src="homepage/images/pfp.jpg" alt="Profile picture">
-            <p>
-                Hi! I’m a 2nd year Game Design and Development student from New Jersey.
-                <br><br>I really like to program and do math, so I spend a lot of my time doing exactly that. I would love to be able to develop indie games as a full time job, and I have a goal to develop a game and put it on Steam by the end of 2021!
-                Whether or not that deadline is met is still up for debate.
-                <br><br>Other things I like to do is play video games, ride my bike, and stargaze. Favorite video games are Rocket League, Minecraft, and Fez.
-            </p>
-        </div>
-        <hr>
-        <div id="project-list">
-            <div class="project">
-                <img src="homepage/images/project1-thumbnail.png" alt="Project Thumbnail">
-                <div class="project-details">
-                    <h3>
-                        <a href="/235/project1/index.html">
-                            Project 1 - Portfolio
-                        </a>
-                    </h3>
-                    <p>
-                        This is my portfolio which lists some of the projects I have worked on in the past! It also gives a good place for employers to go to see a quick little bit about me.
-                    </p>
-                </div>
-            </div>
-            <div class="project">
-                <img src="homepage/images/placeholder-image.png" alt="Project Thumbnail">
-                <div class="project-details">
-                    <h3>
-                        <a href="https://github.com/qusr08/IGME-235" target="_blank">
-                            Project Title
-                        </a>
-                    </h3>
-                    <p>
-                        text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text
-                    </p>
-                </div>
-            </div>
-            <div class="project">
-                <img src="homepage/images/placeholder-image.png" alt="Project Thumbnail">
-                <div class="project-details">
-                    <h3>
-                        <a href="https://github.com/qusr08/IGME-235" target="_blank">
-                            Project Title
-                        </a>
-                    </h3>
-                    <p>
-                        text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text
-                    </p>
-                </div>
-            </div>
-        </div>
-        <hr>
-        <div id="social-list">
-            <div class="social">
-                <a href="https://github.com/qusr08/IGME-235" target="_blank">
-                    <img src="homepage/images/github.jpg" alt="Github Logo">
-
-                    <p>
-                        IGME-235 Github Repo
-                    </p>
+        <div class="menubar">
+            <h1 class="menubar-title">Frank Alfano</h1>
+            <div class="menubar-buttons">
+                <a class="menubar-button" href="#about">
+                    <div>About</div>
+                </a>
+                <a class="menubar-button" href="#projects">
+                    <div>Projects</div>
+                </a>
+                <a class="menubar-button" href="#exercises">
+                    <div>Exercises</div>
                 </a>
             </div>
         </div>
+    </header>
+
+    <main>
+        <img class="logo-image" src="homepage/images/trevolte.png" alt="">
+        <div class="header-image">
+            <h1>IGME-235 Homepage</h1>
+            <h3>Frank Alfano</h3>
+            <h6><em>Game Developer</em></h6>
+        </div>
+
+        <div class="section-link" id="about"></div>
+        <div class="section-title">
+            <h3>About</h3>
+        </div>
+        <div class="about">
+            <img src="homepage/images/pfp.jpg" alt="">
+            <p>My name is Frank Alfano and I am a game developer! I have been programming video games since I was in 5th grade and love to work with math and computers. I like all aspects of game design, but programming is definitely my strongest skill.
+                I have been using Unity and C# to make most of my games, but I also know Java and Python as well as HTML, CSS, and Javascript for web development. My dream job would be to eventually get my own game studio off the ground, but any game
+                where I'm working on games would be fine with me. I want people to enjoy themselves and have fun, and video games are a way for me to do that.
+                <br><br> Other than computers, I like to ride my bike and enjoy the outdoors as much as possible. Also, I find space to be particularly interesting, so stargazing is another fun thing to do.</p>
+        </div>
+
+        <hr>
+
+        <div class="section-link" id="projects"></div>
+        <div class="section-title">
+            <h3>Projects</h3>
+            <h6><em>Full assignments that took longer to make</em></h6>
+        </div>
+        <div class="section-list projects">
+            <a class="project-button" href="/235/project1/index.html">
+                <div>Portfolio</div>
+            </a>
+            <a class="project-button" href="">
+                <div>Name Of Project</div>
+            </a>
+            <a class="project-button" href="">
+                <div>Name Of Project</div>
+            </a>
+        </div>
+
+        <hr>
+
+        <div class="section-link" id="exercises"></div>
+        <div class="section-title">
+            <h3>Exercises</h3>
+            <h6><em>Mini-projects and homework assignments</em></h6>
+        </div>
+        <div class="section-list exercises">
+            <a class="project-button" href="">
+                <div>Name Of Exercise</div>
+            </a>
+            <a class="project-button" href="">
+                <div>Name Of Exercise</div>
+            </a>
+            <a class="project-button" href="">
+                <div>Name Of Exercise</div>
+            </a>
+            <a class="project-button" href="">
+                <div>Name Of Exercise</div>
+            </a>
+            <a class="project-button" href="">
+                <div>Name Of Exercise</div>
+            </a>
+        </div>
     </main>
+
+    <footer>
+        <h3>Created 10/21/2021, last updated 10/21/2021 [v0.8]
+            <br> Made by Frank Alfano
+        </h3>
+    </footer>
 </body>
 
 </html>
