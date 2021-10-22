@@ -152,7 +152,7 @@ footer {
     color: white;
     background-color: rgba(0, 0, 0, 0.4);
     background-blend-mode: multiply;
-    background-image: url("/235/homepage/images/code-wallpaper.png");
+    background-image: url("../images/code-wallpaper.png");
     background-position: center;
 }
 
