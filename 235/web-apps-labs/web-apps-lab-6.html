@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Web Apps-4-HW</title>
+    <style>
+        body {
+            border: 1px solid gray;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>My Favorites</h1>
+    <h2>My Favorite Colors</h2>
+
+    <ol id="colorsList">
+
+    </ol>
+
+    <h2>My Favorite Foods</h2>
+
+    <ol id="foodsList">
+
+    </ol>
+
+    <h2>My Favorite Links</h2>
+
+    <ol id="linksList">
+
+    </ol>
+
+    <script>
+        "use strict";
+        let colors = ["red", "green", "blue", "purple", "pink"];
+        let foods = ["pasta", "mac n' cheese", "apple pie", "chicken pot pie", "meatballs"];
+
+        // Get the list for the color HTML elements
+        let colorList = document.getElementById("colorsList");
+        for (let i = 0; i < colors.length; i++) {
+            // Create a list item
+            let colorListItem = document.createElement("li");
+
+            // Set the text in the list element to the color name
+            colorListItem.innerHTML = colors[i];
+
+            // Append the new color list element
+            colorList.appendChild(colorListItem);
+        }
+
+        // Get the list for the food HTML elements
+        let foodList = document.getElementById("foodsList");
+        for (const food of foods) {
+            // Create a list item
+            let foodListItem = document.createElement("li");
+
+            // Set the text in the list element to the food name
+            foodListItem.innerHTML = food;
+
+            // Append the new food list element
+            foodList.appendChild(foodListItem);
+        }
+
+        // Optional - can you figure out how to pull both the key AND the value
+        // from the `links` object literal?
+        let links = {
+            "RIT": "http://www.rit.edu",
+            "RWAG": "https://www.facebook.com/RWAGclub",
+            "New Media Club": "http://newmediaclub.cias.rit.edu"
+        }
+
+        // Get the list for the link HTML elements
+        let linkList = document.getElementById("linksList");
+        for (let key in links) {
+            // Create a list item
+            let linkListItem = document.createElement("li");
+
+            // Set the HTML of the list item to be a link to the value of the key in the dictionary
+            linkListItem.innerHTML = "<a href=\"" + links[key] + "\">" + key + "</a>";
+
+            // Append this list item to the HTML element for all the list items
+            linkList.appendChild(linkListItem);
+        }
+    </script>
+</body>
+
+</html>

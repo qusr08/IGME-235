@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+        * {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            color: #EDEDED;
+        }
+        
+        body {
+            background-color: #171717;
+        }
+        
+        #content {
+            display: grid;
+            grid-template-areas: "header" "." "phrase" "button" "footer";
+            grid-template-rows: 2fr 5fr 2fr 1fr 0.5fr;
+            border: 10px solid #DA0037;
+            border-radius: 10px;
+            background-image: url("images/success-baby.jpg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            width: 50%;
+            margin: 5% auto;
+            gap: 0 20px;
+            padding: 10px 0;
+        }
+        
+        @media screen and (max-width:900px) {
+            #content {
+                width: 75%;
+            }
+        }
+        
+        @media screen and (max-width:700px) {
+            #content {
+                width: 95%;
+            }
+        }
+        
+        #header,
+        #phrase,
+        #footer {
+            text-align: center;
+            background-color: #44444480;
+            padding: 10px;
+            /* white-space: nowrap;
+            text-overflow: ellipsis; */
+        }
+        
+        #header {
+            grid-area: header;
+            font-size: 4em;
+        }
+        
+        #phrase {
+            grid-area: phrase;
+            font-size: 2em;
+            font-weight: bold;
+        }
+        
+        #button {
+            grid-area: button;
+            transition: background-color 0.5s ease;
+            background-color: #DA0037;
+            font-size: 3em;
+            border: 0px solid #DA0037;
+            border-radius: 10px;
+            margin: 10px 15%;
+        }
+        
+        #button:hover {
+            background-color: #a10028;
+        }
+        
+        #button:active {
+            background-color: #f3003d;
+        }
+        
+        #footer {
+            grid-area: footer;
+        }
+    </style>
+
+    <title>Random Phrases</title>
+</head>
+
+<body>
+    <div id="content">
+        <h1 id="header"></h1>
+        <p id="phrase"></p>
+        <button id="button">Reload!</button>
+        <p id="footer">Made by Frank Alfano</p>
+    </div>
+
+    <script>
+        let headers = ["LET'S F%$@#*$ GOO", "SUCCESS", "OH MY GODD"]
+        let phrases = ["Totally didn't finish this assignment at 11:58!", "My code works! :)", "Drank 4 Monster Energy's today!", "Only cried twice during this assignment! New lowest!", "Procrastinated so hard for this!"];
+
+        function displayQuote() {
+            document.getElementById("header").innerHTML = headers[Math.floor(Math.random() * headers.length)];
+            document.getElementById("phrase").innerHTML = phrases[Math.floor(Math.random() * phrases.length)];
+        }
+
+        window.onload = () => {
+            displayQuote();
+        }
+
+        document.getElementById("button").onclick = displayQuote;
+    </script>
+</body>
+
+</html>
