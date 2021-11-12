@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&family=Roboto:wght@100&family=Zen+Kurenaido&display=swap');
+:root {
+    --color1: #1C0C5B;
+    --color2: #3D2C8D;
+    --color3: #916BBF;
+    --color4: #C996CC;
+}
+
+* {
+    margin: 0;
+    font-family: "Open Sans";
+    color: var(--color4);
+}
+
+p {
+    font-size: 1.5em;
+}
+
+header {
+    padding-bottom: 20px;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    text-align: center;
+}
+
+header>* {
+    margin: 20px 10vw;
+}
+
+header>* {
+    filter: drop-shadow(5px 5px 0 var(--color3)) drop-shadow(5px 5px 0 var(--color2)) drop-shadow(5px 5px 0 var(--color1));
+}
+
+body {
+    padding: 4vw;
+    text-align: center;
+    background-color: var(--color1);
+}
+
+.section {
+    margin: 2vh auto;
+    padding: 1em;
+    width: fit-content;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2vh;
+    border-radius: 10px;
+    background-color: var(--color2);
+    filter: drop-shadow(5px 5px 0 var(--color3));
+}
+
+.difficulty {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 2vh;
+}
+
+.answers {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 2vh;
+}
+
+.button {
+    position: relative;
+    transform: translate(-5px, -5px);
+    transition: all 0.25s ease;
+    width: fit-content;
+    padding: 0.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 2em;
+    border-radius: 5px;
+    color: var(--color4);
+    background-color: var(--color3);
+    filter: drop-shadow(5px 5px 0 var(--color4));
+}
+
+.button:hover {
+    transform: translate(0px, 0px);
+    color: var(--color3);
+    background-color: var(--color4);
+    filter: drop-shadow(0px 0px 0 var(--color3));
+}
+
+.button:active {
+    transform: translate(5px, 5px);
+    color: var(--color2);
+    background-color: var(--color3);
+    filter: drop-shadow(-5px -5px 0 var(--color1));
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:visited {}
+
+a:focus {}
+
+a:hover {}
+
+a:active {}
