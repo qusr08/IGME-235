@@ -224,7 +224,20 @@ Object.defineProperty(String.prototype, 'capitalize', {
 // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 Object.defineProperty(Array.prototype, 'shuffle', {
     value: function() {
-        return this.map((value) => ({ value, sort: Math.random() })).sort((a, b) => a.sort - b.sort).map(({ value }) => value);
+        let currentIndex = this.length,
+            randomIndex;
+
+        // While there remain elements to shuffle...
+        while (currentIndex != 0) {
+            // Pick a remaining element...
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+
+            // And swap it with the current element.
+            [this[currentIndex], this[randomIndex]] = [
+                this[randomIndex], this[currentIndex]
+            ];
+        }
     },
     enumerable: false
 })
