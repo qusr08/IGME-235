@@ -1,17 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&family=Roboto:wght@100&family=Zen+Kurenaido&display=swap');
-
 :root {
-    --color1: #0E0533;
-    --color2: #1C0C5B;
-    --color3: #3D2C8D;
-    --color4: #916BBF;
-    --color5: #C996CC;
+    --color1: #082509;
+    --color2: #0d440e;
+    --color3: #125C13;
+    --color4: #336614;
+    --color5: #3E7C17;
+    --color6: #F4A442;
+    --color7: #a77130;
+    --color8: #E8E1D9;
+    --color9: #588ecf;
+    --color10: #0b5bbd;
+    --color11: #97938e;
 }
 
 * {
     margin: 0;
     font-family: "Open Sans";
-    color: var(--color5);
+    color: var(--color8);
 }
 
 p {
@@ -31,7 +36,7 @@ header>* {
 }
 
 header>* {
-    filter: drop-shadow(5px 5px 0 var(--color4)) drop-shadow(5px 5px 0 var(--color3)) drop-shadow(5px 5px 0 var(--color2));
+    filter: drop-shadow(5px 5px 0 var(--color11));
 }
 
 body {
@@ -44,44 +49,65 @@ body {
     padding: 4vw;
     text-align: center;
     border-radius: 10px;
-    background-color: var(--color2);
-    filter: drop-shadow(5px 5px 0 var(--color3));
+    background-color: var(--color3);
+    filter: drop-shadow(5px 5px 0 var(--color2));
 }
 
 .section {
     margin: 2vh auto;
     padding: 1em;
-    width: fit-content;
+    transition: all 0.25s ease;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
     gap: 2vh;
     border-radius: 10px;
-    background-color: var(--color3);
+    background-color: var(--color5);
     filter: drop-shadow(5px 5px 0 var(--color4));
 }
 
-.difficulty-buttons,
-.category-buttons {
+.difficulty-buttons {
+    width: 100%;
     display: grid;
     grid-template-rows: 1fr;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2vh;
+}
+
+.category-buttons {
+    width: 100%;
+    display: grid;
+    grid-auto-rows: 1fr;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 2vh;
 }
 
 .answer-buttons {
+    width: 100%;
     display: grid;
     grid-template-rows: 1fr 1fr;
     grid-template-columns: 1fr 1fr;
     gap: 2vh;
 }
 
+.images {
+    width: 100%;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2vh;
+}
+
+.images>* {
+    width: 100%;
+    border-radius: 10px;
+}
+
 .button {
     position: relative;
     transform: translate(-5px, -5px);
     transition: all 0.25s ease;
-    width: max(fit-content, 100%);
     padding: 0.5em;
     display: flex;
     justify-content: center;
@@ -89,34 +115,55 @@ body {
     font-weight: bold;
     font-size: 2em;
     border-radius: 5px;
-    color: var(--color5);
-    background-color: var(--color4);
-    filter: drop-shadow(5px 5px 0 var(--color5));
+    color: var(--color8);
+    background-color: var(--color6);
+    filter: drop-shadow(5px 5px 0 var(--color7));
 }
 
 .button:hover {
     transform: translate(0px, 0px);
-    color: var(--color4);
-    background-color: var(--color5);
-    filter: drop-shadow(0px 0px 0 var(--color4));
+    color: var(--color6);
+    background-color: var(--color8);
+    filter: drop-shadow(0px 0px 0 var(--color8));
 }
 
 .button:active {
     transform: translate(5px, 5px);
-    color: var(--color3);
-    background-color: var(--color4);
-    filter: drop-shadow(-5px -5px 0 var(--color2));
+    color: var(--color8);
+    background-color: var(--color7);
+    filter: drop-shadow(-5px -5px 0 var(--color4));
+}
+
+.button.selected-button {
+    color: var(--color8);
+    background-color: var(--color9);
+    filter: drop-shadow(5px 5px 0 var(--color10));
+}
+
+.button.selected-button:hover {
+    color: var(--color9);
+    background-color: var(--color8);
+    filter: drop-shadow(0px 0px 0 var(--color8));
+}
+
+.button.selected-button:active {
+    color: var(--color8);
+    background-color: var(--color10);
+    filter: drop-shadow(-5px -5px 0 var(--color4));
 }
 
 @media screen and (max-width:900px) {
-    .difficulty-buttons,
-    .category-buttons {
-        grid-template-rows: 1fr 1fr 1fr;
+    .difficulty-buttons {
         grid-template-columns: 1fr;
+        grid-template-rows: repeat(3, 1fr);
     }
     .answer-buttons {
         grid-template-rows: 1fr 1fr 1fr 1fr;
         grid-template-columns: 1fr;
+    }
+    .images {
+        display: flex;
+        flex-flow: column nowrap;
     }
 }
 

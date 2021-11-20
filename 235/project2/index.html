@@ -16,51 +16,66 @@
     <div id="menu">
         <header>
             <h1 style="font-size: 4em;">RANDOM TRIVIA GAME THAT I COULDN'T THINK OF A BETTER NAME FOR</h1>
-            <h1 style="font-size: 3em;">MADE BY FRANK ALFANO</h1>
+            <h1 style="font-size: 2.5em;">MADE BY FRANK ALFANO</h1>
         </header>
         <div class="section">
+            <h1>Made with Open Trivia DB API --- Project Version v1.2.4</h1>
+        </div>
+        <div class="section">
             <h1>Description / How To Play</h1>
-            <p>In this game, you will be given 1 minute to answer as many questions as you can.
-                <br><br>You can select which trivia category you want below. Choose "General Knowledge" for a variety of topics. You can also select the difficulty of the questions.
-                <br><br>If you get a question right, you gain 5 seconds back to your timer, plus some points. If you get a question wrong, you lost 5 seconds and gain no points. The faster you answer a question, the more points you get! You gain more
-                points per question depending on how high you set the difficulty as well. When you run out of time, the game is over!
-                <br><br>The goal is to get as many points as possible!
+            <p>In this very original game, you will be given 1 minute to answer as many questions as you can.
+                <br><br>You can select which trivia categories you want as well as the difficulty of the questions below. Choose "General Knowledge" for a variety of topics.
+                <br><br>If you get a question right, you are rewarded points as well as time back to the timer. The faster you answer the question, the more points you get. If you get a question wrong, you do not gain any points and lose time
+                from the timer.
+                <br><br>You will get more points per question as well as gain or lose more time depending on the difficulty you set. So, the harder the difficulty, the more points you get for a correct question, but the more time you lose if you get a
+                question wrong.
+                <br><br>Your goal is to get as many points as possible!
             </p>
-        </div>
-        <div class="section">
-            <h1 id="difficulty">Difficulty: Medium</h1>
-            <div class="difficulty-buttons">
-                <a class="button" href="javascript:setDifficulty('easy')">Easy</a>
-                <a class="button" href="javascript:setDifficulty('medium')">Medium</a>
-                <a class="button" href="javascript:setDifficulty('hard')">Hard</a>
-            </div>
-        </div>
-        <div class="section">
-            <h1 id="category">Category: General Knowledge</h1>
-            <div class="category-buttons">
-                <a class="button" href="javascript:setCategory('General Knowledge')">General Knowledge</a>
-                <a class="button" href="javascript:setCategory('Art')">Art</a>
-                <a class="button" href="javascript:setCategory('History')">History</a>
-                <a class="button" href="javascript:setCategory('Mythology')">Mythology</a>
-                <a class="button" href="javascript:setCategory('Sports')">Sports</a>
-                <a class="button" href="javascript:setCategory('Geography')">Geography</a>
-                <a class="button" href="javascript:setCategory('Celebrities')">Celebrities</a>
-                <a class="button" href="javascript:setCategory('Animals')">Animals</a>
-                <a class="button" href="javascript:setCategory('Vehicles')">Vehicles</a>
-            </div>
         </div>
         <div class="section">
             <h1 id="highscore">Highscore: 0</h1>
             <a class="button" id="start-button" href="javascript:setGameState('game')">Start!</a>
         </div>
         <div class="section">
-            <h1>Made with Open Trivia DB API --- Project Version v1.0.1</h1>
+            <h1 id="difficulty">Difficulty</h1>
+            <div id="difficulty-buttons" class="difficulty-buttons">
+                <a class="button" href="javascript:setDifficulty(0)">Easy</a>
+                <a class="button" href="javascript:setDifficulty(1)">Medium</a>
+                <a class="button" href="javascript:setDifficulty(2)">Hard</a>
+            </div>
+        </div>
+        <div class="section">
+            <h1 id="category">Category</h1>
+            <div id="category-buttons" class="category-buttons">
+            </div>
+        </div>
+        <div class="section">
+            <h1>Documentation / Process</h1>
+            <p>
+                As soon as I saw the Open Trivia API, I knew that I wanted to do a trivia game. I'm a big fan of trivia and it was fun to be able to make a small trivia game.
+                <br><br>I had a lot of plans for this, with animations and maybe some power-up features, but I definitely got a bit carried away with the ideas. I didn't end up implementing everything I wanted to (maybe I will in the future), but what
+                I have right now I am proud of. I spent a lot of time making sure the UI looked nice and making sure everything worked (which took a lot of hours). I know the code isn't the best and could 100% be optimized further, but it's good enough
+                :).
+                <br><br>I didn't use any tutorials or external resources (besides online forums for some coding help). I started by making the trivia game get questions from the API without any UI, and only using the console. At the time, even after the
+                exercise on accessing external sites, I still wasn't sure exactly how it worked. I did a lot of testing and ultimately settled on the code I have now. I did some very basic drawings of the general layout which are shown below:
+            </p>
+            <div class="images">
+                <img src="images/design1.jpg" alt="Picture of Website Design">
+                <img src="images/design2.jpg" alt="Picture of Website Design">
+            </div>
+            <p>
+                As you can see, I had a bit of a bigger ambition for the look of the project. Overall, though, I think this project was a really nice way to get myself very familiar with HTML, CSS, and Javascript. I'm planning to go all out on Project 3, and I know that
+                the knowledge I gained from this project will help me out.
+            </p>
         </div>
     </div>
     <div id="game">
         <div class="section">
             <h1 id="question-number">Question #0</h1>
             <p id="question">Question?</p>
+        </div>
+        <div class="section">
+            <p id="score">Score: 0</p>
         </div>
         <div class="section">
             <p id="time">Time Remaining: 0 s</p>
@@ -72,9 +87,6 @@
                 <a class="button" href="javascript:selectAnswer(2)">Answer</a>
                 <a class="button" href="javascript:selectAnswer(3)">Answer</a>
             </div>
-        </div>
-        <div class="section">
-            <p id="score">Score: 0</p>
         </div>
     </div>
 </body>

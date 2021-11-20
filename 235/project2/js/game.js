@@ -1,11 +1,4 @@
-let menuDiv;
-let menuDifficulty;
-let menuCategory;
-let menuHighscore;
-
-let categoryId;
-let correctAnswerIndex;
-let selectedAnswerIndex;
+/*jshint esversion: 6 */
 
 let gameDiv;
 let gameTime;
@@ -14,13 +7,39 @@ let gameQuestionNumber;
 let gameQuestion;
 let gameAnswerButtons;
 
+let menuDiv;
+
+let menuHighscore;
+
+let menuCategory;
+let menuCategoryButtons;
+let menuCategoryButtonsList = [];
+
+let menuDifficulty;
+let menuDifficultyButtons;
+let menuDifficultyButtonsList = [];
+
+let categoryDict = [];
+
+let selectedCategoryList = [];
+let selectedDifficulty;
+let correctAnswerIndex;
+let selectedAnswerIndex;
+
+let score;
+let time;
+let highscore;
+let questionNumber;
+
 window.onload = () => {
     // Get all html elements
     gameDiv = document.getElementById("game");
     menuDiv = document.getElementById("menu");
 
     menuDifficulty = document.getElementById("difficulty");
+    menuDifficultyButtons = document.getElementById("difficulty-buttons");
     menuCategory = document.getElementById("category");
+    menuCategoryButtons = document.getElementById("category-buttons");
     menuHighscore = document.getElementById("highscore");
 
     gameTime = document.getElementById("time");
@@ -29,14 +48,11 @@ window.onload = () => {
     gameQuestion = document.getElementById("question");
     gameAnswerButtons = document.getElementById("answers").children;
 
-    // Set defaults when the page loads
-    setDifficulty("medium");
-    setCategory("general knowledge");
-    setHighscore(0);
-    setGameState("menu");
-}
+    // Load categories from the api
+    loadContent();
+};
 
-function setCategory(category) {
+function loadContent() {
     let xhr = new XMLHttpRequest();
 
     xhr.onload = (e) => {
@@ -44,69 +60,71 @@ function setCategory(category) {
         let xhr = e.target;
         let obj = JSON.parse(xhr.responseText).trivia_categories;
 
-        // Look up the category id based on the input category name
+        // Loop through each category and save the id of it to a dictionary
         for (let i = 0; i < obj.length; i++) {
-            if (obj[i].name.toLowerCase() == category.toLowerCase()) {
-                categoryId = obj[i].id;
-                break;
-            }
+            let name = obj[i].name.toLowerCase().replace("entertainment: ", "").replace("science: ", "");
+            let id = obj[i].id;
+            categoryDict.push({ name: name, id: id });
+
+            // Create html element for the category buttons
+            let categoryButton = document.createElement("a");
+            categoryButton.classList.add("button");
+            categoryButton.href = `javascript:toggleCategory(${i})`;
+            categoryButton.innerHTML = name.capitalize();
+
+            // Add it to the list of category buttons
+            menuCategoryButtons.appendChild(categoryButton);
+            menuCategoryButtonsList.push(categoryButton);
         }
 
-        menuCategory.innerHTML = `Category: ${category.capitalize()}`;
+        // Add difficulty buttons to a list
+        for (let i = 0; i < menuDifficultyButtons.children.length; i++) {
+            menuDifficultyButtonsList.push(menuDifficultyButtons.children[i]);
+        }
+
+        setup();
     };
 
     xhr.open("GET", `https://opentdb.com/api_category.php`);
     xhr.send();
 }
 
-function getCategoryName() {
-    return menuCategory.innerHTML.split(" ")[1].toLowerCase();
+function setup() {
+    // Set defaults when the page loads
+    setDifficulty(1);
+    toggleCategory(0);
+    setGameState("menu");
+
+    // Load the highscore from localStorage (if it exists)
+    let localHighscore = Number(localStorage.getItem("highscore"));
+    if (localHighscore != null) {
+        setHighscore(localHighscore);
+    } else {
+        setHighscore(0);
+    }
 }
 
-function setDifficulty(difficulty) {
-    menuDifficulty.innerHTML = `Difficulty: ${difficulty.capitalize()}`;
-}
+// Toggle whether or not a category can appear in the game
+function toggleCategory(categoryIndex) {
+    // Get the index in the currently active category arrays 
+    let index = selectedCategoryList.indexOf(Number(categoryIndex));
+    categoryIndex = Number(categoryIndex);
 
-function getDifficulty() {
-    return menuDifficulty.innerHTML.split(" ")[1].toLowerCase();
-}
+    // If the index is -1, then add it to the list
+    // If the index is not -1, then remove it from the list
+    // This makes it so each of the categories are toggled
+    if (index != -1) {
+        // Make sure at least 1 category is selected at all times
+        if (selectedCategoryList.length > 1) {
+            selectedCategoryList.splice(index, 1);
+            menuCategoryButtonsList[categoryIndex].classList.remove("selected-button");
+        }
+    } else {
+        selectedCategoryList.push(categoryIndex);
+        menuCategoryButtonsList[categoryIndex].classList.add("selected-button");
+    }
 
-function setScore(score) {
-    gameScore.innerHTML = `Score: ${score.toFixed(0)}`;
-}
-
-function getScore() {
-    return Number(gameScore.innerHTML.split(" ")[1]);
-}
-
-function setTime(time) {
-    gameTime.innerHTML = `Time Remaining: ${time.toFixed(1)} s`;
-}
-
-function getTime() {
-    return Number(gameTime.innerHTML.split(" ")[2]);
-}
-
-function setHighscore(highscore) {
-    menuHighscore.innerHTML = `Highscore: ${highscore.toFixed(0)}`;
-
-    // do something with localStorage idfk
-}
-
-function getHighscore() {
-    return Number(menuHighscore.innerHTML.split(" ")[1]);
-}
-
-function setQuestionNumber(number) {
-    gameQuestionNumber.innerHTML = `Question #${number.toFixed(0)}`;
-}
-
-function getQuestionNumber() {
-    return Number(gameQuestionNumber.innerHTML.split("#")[1]);
-}
-
-function setQuestion(question) {
-    gameQuestion.innerHTML = question;
+    menuCategory.innerHTML = `Category <em>[${selectedCategoryList.length} selected]</em>`;
 }
 
 function setGameState(gamestate) {
@@ -122,7 +140,8 @@ function setGameState(gamestate) {
         setQuestionNumber(0);
 
         let startTime = time;
-        let difficultyModifier = (getDifficulty() == "easy") ? 1 : ((getDifficulty() == "medium") ? 2 : 3);
+        let difficultyModifier = selectedDifficulty;
+        let answerTime = 0;
         correctAnswerIndex = -1;
         selectedAnswerIndex = -1;
 
@@ -131,11 +150,10 @@ function setGameState(gamestate) {
             // To fix this, get another question from the api and update the html elements
             if (correctAnswerIndex == -1) {
                 getQuestion();
-
-                startTime = getTime();
+                startTime = time;
             } else {
                 // If the selected answer is not equal to -1, then the player has selected an answer choice to the question
-                if (selectedAnswerIndex != -1) {
+                if (answerTime == 0 && selectedAnswerIndex != -1) {
                     // Check to see if the answer choice that the player selected is the same as the correct one
                     let isCorrect = (selectedAnswerIndex == correctAnswerIndex);
 
@@ -143,27 +161,37 @@ function setGameState(gamestate) {
                     // If the player is wrong, then remove time
                     if (isCorrect) {
                         // I want the player to get more points the faster they answer a question, so I mapped the time it takes the player to answer to a function
-                        // Score function is AMe^(-x), where M is the difficulty modifier, A is some value to make the score bigger, and x is the time since the question appeared
-                        setScore(getScore() + (50 * difficultyModifier * Math.exp(getTime() - startTime)));
-                        setTime(getTime() + 5);
+                        let timeBonus = (1 - ((time - startTime) / 20)) * 50;
+                        if (timeBonus < 0) {
+                            timeBonus = 0;
+                        }
+
+                        addScore((timeBonus + 50) * difficultyModifier);
+                        addTime(5 * (3 - difficultyModifier));
                     } else {
-                        setTime(getTime() - 5);
+                        addTime(-5 * (difficultyModifier + 1));
                     }
 
+                    setQuestion(isCorrect ? "Correct! :)" : "Incorrect! :(");
+                    answerTime = time;
+                }
+
+                if (answerTime != 0 && answerTime - time > 0.5) {
                     // Reset the selected answer choices, which will prompt a new question to appear
                     correctAnswerIndex = -1;
                     selectedAnswerIndex = -1;
+                    answerTime = 0;
                 }
             }
 
             // Keep subtracting time from the clock
-            setTime(getTime() - 0.1);
+            addTime(-0.1);
 
             // If the time reaches 0, the player loses
-            if (getTime() <= 0) {
+            if (time <= 0) {
                 // If the player got a new highscore, then set the highscore on the menu page equal to that
-                if (getScore() > getHighscore()) {
-                    setHighscore(getScore());
+                if (score > highscore) {
+                    setHighscore(score);
                 }
 
                 setGameState("menu");
@@ -174,6 +202,8 @@ function setGameState(gamestate) {
 }
 
 function getQuestion() {
+    correctAnswerIndex = -2;
+
     let xhr = new XMLHttpRequest();
 
     xhr.onload = (e) => {
@@ -194,18 +224,80 @@ function getQuestion() {
 
         // Set the question and answer html elements
         setQuestion(obj.question);
-        setQuestionNumber(getQuestionNumber() + 1);
+        setQuestionNumber(questionNumber + 1);
         for (let i = 0; i < answerChoices.length; i++) {
             gameAnswerButtons[i].innerHTML = answerChoices[i];
         }
     };
 
-    xhr.open("GET", `https://opentdb.com/api.php?amount=1&category=${categoryId}&difficulty=${getDifficulty()}&type=multiple`);
+    let randomCategory = selectedCategoryList[Math.floor(Math.random() * selectedCategoryList.length)];
+    let categoryId = categoryDict[randomCategory].id;
+
+    xhr.open("GET", `https://opentdb.com/api.php?amount=1&category=${categoryId}&difficulty=${getDifficultyName()}&type=multiple`);
     xhr.send();
 }
 
 function selectAnswer(index) {
     selectedAnswerIndex = index;
+}
+
+function setDifficulty(difficulty) {
+    if (menuCategoryButtonsList[selectedDifficulty] != undefined) {
+        menuDifficultyButtonsList[selectedDifficulty].classList.remove("selected-button");
+    }
+
+    selectedDifficulty = Number(difficulty);
+    menuDifficultyButtonsList[selectedDifficulty].classList.add("selected-button");
+
+    menuDifficulty.innerHTML = `Difficulty <em>[x${difficulty + 1} score]</em>`;
+}
+
+function getDifficultyName() {
+    switch (selectedDifficulty) {
+        case 0:
+            return "easy";
+        case 1:
+            return "medium";
+        case 2:
+            return "hard";
+        default:
+            return "";
+    }
+}
+
+function setScore(value) {
+    score = value;
+    gameScore.innerHTML = `Score: ${value.toFixed(0)}`;
+}
+
+function addScore(value) {
+    setScore(score + value);
+}
+
+function setTime(value) {
+    time = value;
+    gameTime.innerHTML = `Time Remaining: ${value.toFixed(1)} s`;
+}
+
+function addTime(value) {
+    setTime(time + value);
+}
+
+function setHighscore(value) {
+    highscore = value;
+    menuHighscore.innerHTML = `Highscore: ${value.toFixed(0)}`;
+
+    // Save the value to localStorage
+    localStorage.setItem("highscore", highscore);
+}
+
+function setQuestionNumber(number) {
+    questionNumber = number;
+    gameQuestionNumber.innerHTML = `Question #${number.toFixed(0)}`;
+}
+
+function setQuestion(question) {
+    gameQuestion.innerHTML = question;
 }
 
 // https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
@@ -240,4 +332,4 @@ Object.defineProperty(Array.prototype, 'shuffle', {
         }
     },
     enumerable: false
-})
+});
