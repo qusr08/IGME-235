@@ -1,0 +1,53 @@
+@font-face {
+    font-family: '5pixel';
+    src: url('../fonts/webfontkit-5pixel/5pixel-webfont.woff2') format('woff2'), url('../fonts/webfontkit-5pixel/5pixel-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --color1: #E7E0C9;
+    --color2: #C1CFC0;
+    --color3: #6B7AA1;
+    --color4: #11324D;
+}
+
+* {
+    margin: 0;
+    font-family: "5pixel";
+    color: var(--color1);
+}
+
+p {
+    font-size: 1.5em;
+    padding-top: max(1vh, 10px);
+    color: var(--color2);
+}
+
+body {
+    margin: max(5vh, 10px) max(5vw, 10px);
+    background-color: var(--color4);
+}
+
+h1 {
+    filter: drop-shadow(5px 5px 0 black);
+}
+
+.info-section {
+    margin: max(3vh, 10px) 0;
+    padding: max(1vh, 10px) max(1vw, 10px);
+    background-color: var(--color3);
+    filter: drop-shadow(10px 10px 0 black);
+}
+
+.gallery {
+    width: 100%;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2vh;
+}
+
+.gallery>img {
+    width: 100%;
+}
