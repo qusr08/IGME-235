@@ -11,3 +11,15 @@ function indexOf2DArrayValue(array, value) {
 
     return -1;
 }
+
+function add2DArray (array1, array2) {
+    return [array1[0] + array2[0], array1[1] + array2[1]];
+}
+
+function equal2DArray (array1, array2) {
+    return (array1[0] == array2[0] && array1[1] == array2[1]);
+}
+
+function randRange (min, max) {
+    return (Math.random() * (max - min)) + min;
+}

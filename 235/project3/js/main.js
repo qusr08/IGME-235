@@ -8,7 +8,10 @@ const app = new PIXI.Application({
 });
 document.body.appendChild(app.view);
 
+let stage;
 let gameScene;
+
+let mousePosition = [];
 
 // Load sprites and other assets
 app.loader.add([
@@ -25,18 +28,30 @@ const SCENE_WIDTH = app.view.width;
 const SCENE_HEIGHT = app.view.height;
 
 function setup() {
+    stage = app.stage;
+    
+    // Add interactions
+    stage.interactive = true;
+    stage.on("pointermove", (e) => {
+        // Update mouse position variable
+        let data = e.data.global;
+        mousePosition = [data.x, data.y];
+    });
+
     gameScene = new PIXI.Container();
-    app.stage.addChild(gameScene);
+    stage.addChild(gameScene);
 
     // Load sprites on spritesheets into variables
     console.log("Loading Sprites ...");
     Sprites.loadSprites();
 
+    // Generate a level
     Map.generateLevel(gameScene);
 
-    // app.view.onclick = Map.generateLevel;
-
-    gameScene.addChild(new ChessPiece(100, 100));
+    // Add the game loop to repeat as the application is running
+    app.ticker.add(game);
 }
 
-function game() {}
+function game() {
+    
+}
