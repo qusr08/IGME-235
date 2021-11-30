@@ -2,8 +2,8 @@
 "use strict";
 
 const app = new PIXI.Application({
-    width: 1280,
-    height: 720,
+    width: Map.SCENE_WIDTH,
+    height: Map.SCENE_HEIGHT,
     backgroundColor: 0x141414
 });
 document.body.appendChild(app.view);
@@ -24,12 +24,9 @@ app.loader.load();
 // Change Pixi.js settings
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
-const SCENE_WIDTH = app.view.width;
-const SCENE_HEIGHT = app.view.height;
-
 function setup() {
     stage = app.stage;
-    
+
     // Add interactions
     stage.interactive = true;
     stage.on("pointermove", (e) => {
@@ -45,6 +42,8 @@ function setup() {
     console.log("Loading Sprites ...");
     Sprites.loadSprites();
 
+    new Box(Map.LEVEL_SCREEN_WIDTH, 0, Map.SCENE_WIDTH - Map.LEVEL_SCREEN_WIDTH, Map.SCENE_HEIGHT, 0xFFFFFF, gameScene);
+
     // Generate a level
     Map.generateLevel(gameScene);
 
@@ -53,5 +52,5 @@ function setup() {
 }
 
 function game() {
-    
+
 }

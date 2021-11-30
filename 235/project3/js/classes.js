@@ -35,12 +35,21 @@ class Sprites {
 }
 
 class Map {
-    static TILE_SIZE = 64; // The pixel size of each tile
-    static GEN_LEVEL_WIDTH = 17; // The level width in tiles
-    static GEN_LEVEL_HEIGHT = 9; // The level height in tiles
-    static GEN_LEVEL_ITER = parseInt(this.TILE_SIZE / 1.5); // The minimum number of tiles for each level
+    // The size of the game window in pixel
+    static SCENE_WIDTH = 1280;
+    static SCENE_HEIGHT = 720;
 
-    // Variables for the 4 cardinal directions (just to make checking directions more legible)
+    static TILE_SIZE = 64; // The pixel size of each tile
+    static GEN_LEVEL_WIDTH = 11; // The level width in tiles
+    static GEN_LEVEL_HEIGHT = 9; // The level height in tiles
+    static GEN_LEVEL_ITER = parseInt((this.GEN_LEVEL_WIDTH * this.GEN_LEVEL_HEIGHT) / 3); // The minimum number of tiles for each level
+    static LEVEL_BORDER = parseInt((this.SCENE_HEIGHT - (this.TILE_SIZE * this.GEN_LEVEL_HEIGHT)) / 2); // The border of the map around the edge of the screen
+
+    // The size of the level in pixels
+    static LEVEL_SCREEN_WIDTH = (this.LEVEL_BORDER * 2) + (this.GEN_LEVEL_WIDTH * this.TILE_SIZE);
+    static LEVEL_SCREEN_HEIGHT = (this.LEVEL_BORDER * 2) + (this.GEN_LEVEL_HEIGHT * this.TILE_SIZE);
+
+    // Variables for the 4 cardinal directions (just to make directions more legible)
     static UP = [0, 1];
     static RIGHT = [1, 0];
     static DOWN = [0, -1];
@@ -50,20 +59,20 @@ class Map {
     static BLACK_PIECES = [];
     static WHITE_PIECES = [];
 
-    static generateLevel(gameScene) {
+    static generateLevel(scene) {
         console.log(`Level Generation Started [${this.GEN_LEVEL_WIDTH} x ${this.GEN_LEVEL_HEIGHT}]`);
         let genStartTime = Date.now();
 
         // Clear the previous level positions and pieces
-        this.TILE_POSITIONS.forEach(e => e.forEach(f => gameScene.removeChild(f)));
+        this.TILE_POSITIONS.forEach(e => e.forEach(f => scene.removeChild(f)));
         this.TILE_POSITIONS = Array.from(Array(this.GEN_LEVEL_WIDTH), () => new Array(this.GEN_LEVEL_HEIGHT));
-        this.BLACK_PIECES.forEach(e => gameScene.removeChild(e));
+        this.BLACK_PIECES.forEach(e => scene.removeChild(e));
         this.BLACK_PIECES = [];
-        this.WHITE_PIECES.forEach(e => gameScene.removeChild(e));
+        this.WHITE_PIECES.forEach(e => scene.removeChild(e));
         this.WHITE_PIECES = [];
 
         let levelPositions = [];
-        let pos = [0, 0];
+        let pos = [Math.floor(Map.GEN_LEVEL_WIDTH / 2), Math.floor(Map.GEN_LEVEL_HEIGHT / 2)];
 
         console.log("Creating Tile Positions ...");
 
@@ -82,16 +91,16 @@ class Map {
             let posDown = add2DArray(pos, this.DOWN);
             let posLeft = add2DArray(pos, this.LEFT);
 
-            if (posUp[1] < this.GEN_LEVEL_HEIGHT / 2 && !contains2DArrayValue(levelPositions, posUp)) {
+            if (posUp[1] < this.GEN_LEVEL_HEIGHT && !contains2DArrayValue(levelPositions, posUp)) {
                 availableDirections.push(posUp);
             }
-            if (posRight[0] < this.GEN_LEVEL_WIDTH / 2 && !contains2DArrayValue(levelPositions, posRight)) {
+            if (posRight[0] < this.GEN_LEVEL_WIDTH && !contains2DArrayValue(levelPositions, posRight)) {
                 availableDirections.push(posRight);
             }
-            if (posDown[1] > -this.GEN_LEVEL_HEIGHT / 2 && !contains2DArrayValue(levelPositions, posDown)) {
+            if (posDown[1] >= 0 && !contains2DArrayValue(levelPositions, posDown)) {
                 availableDirections.push(posDown);
             }
-            if (posLeft[0] > -this.GEN_LEVEL_WIDTH / 2 && !contains2DArrayValue(levelPositions, posLeft)) {
+            if (posLeft[0] >= 0 && !contains2DArrayValue(levelPositions, posLeft)) {
                 availableDirections.push(posLeft);
             }
 
@@ -117,7 +126,7 @@ class Map {
                     let currX = levelPositions[i][0] + x;
 
                     // If the current x position is out of bounds of the level, then go to the next x value
-                    if (Math.abs(currX) > this.GEN_LEVEL_WIDTH / 2) {
+                    if (!inRange(currX, 0, this.GEN_LEVEL_WIDTH - 1)) {
                         continue;
                     }
 
@@ -126,7 +135,7 @@ class Map {
                         let currY = levelPositions[i][1] + y;
 
                         // If the current y position is out of bounds of the level, then go to the next y value
-                        if (Math.abs(currY) > this.GEN_LEVEL_HEIGHT / 2) {
+                        if (!inRange(currY, 0, this.GEN_LEVEL_HEIGHT - 1)) {
                             continue;
                         }
 
@@ -152,13 +161,13 @@ class Map {
         // Place tile sprites
         for (let i = 0; i < levelPositions.length; i++) {
             // Create the tile object
-            let tile = new Tile(this.TILE_SIZE, ((levelPositions[i][0] + levelPositions[i][1]) % 2 == 0 ? 0xADBD8F : 0x6F8F72), levelPositions[i]);
+            let tilePos = levelPositions[i];
+            let tile = new Tile(this.TILE_SIZE, ((tilePos[0] + tilePos[1]) % 2 == 0 ? 0xADBD8F : 0x6F8F72), tilePos);
 
             // Add the tile to its position in the array
-            let tileArryPos = this.convertTileToArrayPos(levelPositions[i]);
-            this.TILE_POSITIONS[tileArryPos[0]][tileArryPos[1]] = tile;
+            this.TILE_POSITIONS[tilePos[0]][tilePos[1]] = tile;
 
-            gameScene.addChild(tile);
+            scene.addChild(tile);
         }
 
         // Calculate the number of pieces to spawn based on the size of the map
@@ -166,7 +175,7 @@ class Map {
         // A list of all the available positions for a piece to spawn
         let availablePositions = levelPositions;
 
-        console.log(`Placing Pieces ... [${numPieces}]`);
+        console.log(`Placing Black Pieces ... [${numPieces}]`);
 
         // Place random pieces on the chess board
         for (let i = 0; i < numPieces; i++) {
@@ -181,12 +190,10 @@ class Map {
             let pieceType = Math.floor(randRange(ChessPiece.PieceType.ROOK, ChessPiece.PieceType.KING + 1));
             let piece = new ChessPiece(pieceType, ChessPiece.PieceColor.BLACK, pieceTilePos);
 
-            // Add the piece to its position in the array
-            // Also make sure the tile beneath the piece has its "hasPiece" variable set to true
-            let pieceArrayPos = this.convertTileToArrayPos(pieceTilePos);
+            // Make sure the tile beneath the piece has its "hasPiece" variable set to true
             this.BLACK_PIECES.push(piece);
 
-            gameScene.addChild(piece);
+            scene.addChild(piece);
         }
 
         // Update available tiles for each piece on the board
@@ -197,48 +204,29 @@ class Map {
         console.log(`Level Generation Complete [${Date.now() - genStartTime}ms]`);
     }
 
-    static convertArrayToScreenPos(arrayPos) {
-        return this.convertTileToScreenPos(this.convertArrayToTilePos(arrayPos));
-    }
-
-    static convertTileToArrayPos(tilePos) {
-        let x = tilePos[0] + Math.floor(this.GEN_LEVEL_WIDTH / 2);
-        let y = tilePos[1] + Math.floor(this.GEN_LEVEL_HEIGHT / 2);
-
-        return [x, y];
-    }
-
-    static convertArrayToTilePos(arrayPos) {
-        let x = arrayPos[0] - Math.floor(this.GEN_LEVEL_WIDTH / 2);
-        let y = arrayPos[1] - Math.floor(this.GEN_LEVEL_HEIGHT / 2);
-
-        return [x, y];
-    }
-
     static convertTileToScreenPos(tilePos) {
-        let x = (SCENE_WIDTH / 2) + (tilePos[0] * this.TILE_SIZE);
-        let y = (SCENE_HEIGHT / 2) + (tilePos[1] * this.TILE_SIZE);
+        let x = this.LEVEL_BORDER + (tilePos[0] * this.TILE_SIZE);
+        let y = this.LEVEL_BORDER + (tilePos[1] * this.TILE_SIZE);
 
         return [x, y];
     }
 
     static convertScreenToTilePos(screenPos) {
-        let x = (screenPos[0] - (SCENE_WIDTH / 2)) / this.TILE_SIZE;
-        let y = (screenPos[1] - (SCENE_HEIGHT / 2)) / this.TILE_SIZE;
+        let x = (screenPos[0] - this.LEVEL_BORDER) / this.TILE_SIZE;
+        let y = (screenPos[1] - this.LEVEL_BORDER) / this.TILE_SIZE;
 
         return [x, y];
     }
 
     static tileIsAvailable(tilePos) {
         // Check to make sure the tiles are within the bounds of the map
-        if (Math.abs(tilePos[0]) >= this.GEN_LEVEL_WIDTH / 2 || Math.abs(tilePos[1]) >= this.GEN_LEVEL_HEIGHT / 2) {
+        if (!inRange(tilePos[0], 0, this.GEN_LEVEL_WIDTH - 1) || !inRange(tilePos[1], 0, this.GEN_LEVEL_HEIGHT - 1)) {
             return false;
         }
 
         // Get the tile and make sure it exists and doesn't have a piece on it
         // If a tile meets that criteria, then it is available
-        let tileArrayPos = this.convertTileToArrayPos(tilePos);
-        let tile = this.TILE_POSITIONS[tileArrayPos[0]][tileArrayPos[1]];
+        let tile = this.TILE_POSITIONS[tilePos[0]][tilePos[1]];
         return (tile != undefined && !tile.hasPiece());
     }
 }
@@ -278,7 +266,6 @@ class ChessPiece extends PIXI.Sprite {
         };
         super(sprite());
 
-        this.anchor.set(0.5, 0.5);
         this.scale.set(Map.TILE_SIZE / Sprites.TEXTURE_SIZE);
 
         this.pieceType = pieceType;
@@ -287,8 +274,7 @@ class ChessPiece extends PIXI.Sprite {
         this.tilePos = tilePos;
 
         // Set the tile that this piece is on to 
-        let arrayPos = Map.convertTileToArrayPos(tilePos);
-        Map.TILE_POSITIONS[arrayPos[0]][arrayPos[1]].piece = this;
+        Map.TILE_POSITIONS[tilePos[0]][tilePos[1]].piece = this;
 
         let screenPos = Map.convertTileToScreenPos(tilePos);
         this.x = screenPos[0];
@@ -353,8 +339,8 @@ class ChessPiece extends PIXI.Sprite {
         }
     }
 
-    moveToTile (tilePos) {
-        
+    moveToTile(tilePos) {
+
     }
 
     #addTilesInLine(additiveArray) {
@@ -368,8 +354,7 @@ class ChessPiece extends PIXI.Sprite {
         // If the tile is available, meaning it doesnt have a piece on it and it isnt undefined, then add it to the available tiles array for this piece
         if (Map.tileIsAvailable(tilePos)) {
             // Get the tile object
-            let tileArrayPos = Map.convertTileToArrayPos(tilePos);
-            let tile = Map.TILE_POSITIONS[tileArrayPos[0]][tileArrayPos[1]];
+            let tile = Map.TILE_POSITIONS[tilePos[0]][tilePos[1]];
 
             // Add the tile to the array
             this.availableTiles.push(tile);
@@ -394,7 +379,7 @@ class Tile extends PIXI.Graphics {
         this.y = screenPos[1];
 
         this.beginFill(color);
-        this.drawRect(-size / 2, -size / 2, size, size);
+        this.drawRect(0, 0, size, size);
         this.endFill();
 
         // Add interaction
@@ -421,5 +406,23 @@ class Tile extends PIXI.Graphics {
 
     hasPiece() {
         return (this.piece != undefined);
+    }
+}
+
+class Box extends PIXI.Graphics {
+    constructor(x, y, width, height, color, scene) {
+        super();
+
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.color = color;
+
+        this.beginFill(color);
+        this.drawRect(0, 0, width, height);
+        this.endFill();
+
+        scene.addChild(this);
     }
 }
