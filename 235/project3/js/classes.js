@@ -56,8 +56,7 @@ class Map {
     static LEFT = [-1, 0];
 
     static TILE_POSITIONS = Array.from(Array(this.GEN_LEVEL_WIDTH), () => new Array(this.GEN_LEVEL_HEIGHT));
-    static BLACK_PIECES = [];
-    static WHITE_PIECES = [];
+    static PIECES = [];
 
     static generateLevel(scene) {
         console.log(`Level Generation Started [${this.GEN_LEVEL_WIDTH} x ${this.GEN_LEVEL_HEIGHT}]`);
@@ -66,10 +65,8 @@ class Map {
         // Clear the previous level positions and pieces
         this.TILE_POSITIONS.forEach(e => e.forEach(f => scene.removeChild(f)));
         this.TILE_POSITIONS = Array.from(Array(this.GEN_LEVEL_WIDTH), () => new Array(this.GEN_LEVEL_HEIGHT));
-        this.BLACK_PIECES.forEach(e => scene.removeChild(e));
-        this.BLACK_PIECES = [];
-        this.WHITE_PIECES.forEach(e => scene.removeChild(e));
-        this.WHITE_PIECES = [];
+        this.PIECES.forEach(e => scene.removeChild(e));
+        this.PIECES = [];
 
         let levelPositions = [];
         let pos = [Math.floor(Map.GEN_LEVEL_WIDTH / 2), Math.floor(Map.GEN_LEVEL_HEIGHT / 2)];
@@ -162,7 +159,7 @@ class Map {
         for (let i = 0; i < levelPositions.length; i++) {
             // Create the tile object
             let tilePos = levelPositions[i];
-            let tile = new Tile(this.TILE_SIZE, ((tilePos[0] + tilePos[1]) % 2 == 0 ? 0xADBD8F : 0x6F8F72), tilePos);
+            let tile = new Tile(this.TILE_SIZE, ((tilePos[0] + tilePos[1]) % 2 == 0 ? BOARD_COLOR_1 : BOARD_COLOR_2), tilePos);
 
             // Add the tile to its position in the array
             this.TILE_POSITIONS[tilePos[0]][tilePos[1]] = tile;
@@ -191,14 +188,14 @@ class Map {
             let piece = new ChessPiece(pieceType, ChessPiece.PieceColor.BLACK, pieceTilePos);
 
             // Make sure the tile beneath the piece has its "hasPiece" variable set to true
-            this.BLACK_PIECES.push(piece);
+            this.PIECES.push(piece);
 
             scene.addChild(piece);
         }
 
         // Update available tiles for each piece on the board
-        for (let i = 0; i < this.BLACK_PIECES.length; i++) {
-            this.BLACK_PIECES[i].updateAvailableTiles();
+        for (let i = 0; i < this.PIECES.length; i++) {
+            this.PIECES[i].updateAvailableTiles();
         }
 
         console.log(`Level Generation Complete [${Date.now() - genStartTime}ms]`);
@@ -229,6 +226,12 @@ class Map {
         let tile = this.TILE_POSITIONS[tilePos[0]][tilePos[1]];
         return (tile != undefined && !tile.hasPiece());
     }
+
+    static updatePiecePositions() {
+        for (let i = 0; i < this.PIECES.length; i++) {
+            this.PIECES[i].updateAvailableTiles();
+        }
+    }
 }
 
 class ChessPiece extends PIXI.Sprite {
@@ -246,111 +249,144 @@ class ChessPiece extends PIXI.Sprite {
         BLACK: 6
     };
 
+    static PIECE_MOVE_SPEED = 5; // How many pixels the piece moves per frame
+
     constructor(pieceType, pieceColor, tilePos) {
         let sprite = e => {
             switch (pieceType + pieceColor) {
-                case 0: return Sprites.WHITE_PAWN;
-                case 1: return Sprites.WHITE_ROOK;
-                case 2: return Sprites.WHITE_KNIGHT;
-                case 3: return Sprites.WHITE_BISHOP;
-                case 4: return Sprites.WHITE_QUEEN;
-                case 5: return Sprites.WHITE_KING;
-                case 6: return Sprites.BLACK_PAWN;
-                case 7: return Sprites.BLACK_ROOK;
-                case 8: return Sprites.BLACK_KNIGHT;
-                case 9: return Sprites.BLACK_BISHOP;
-                case 10: return Sprites.BLACK_QUEEN;
-                case 11: return Sprites.BLACK_KING;
-                default: return Sprites.WHITE_PAWN;
+                case 0:
+                    return Sprites.WHITE_PAWN;
+                case 1:
+                    return Sprites.WHITE_ROOK;
+                case 2:
+                    return Sprites.WHITE_KNIGHT;
+                case 3:
+                    return Sprites.WHITE_BISHOP;
+                case 4:
+                    return Sprites.WHITE_QUEEN;
+                case 5:
+                    return Sprites.WHITE_KING;
+                case 6:
+                    return Sprites.BLACK_PAWN;
+                case 7:
+                    return Sprites.BLACK_ROOK;
+                case 8:
+                    return Sprites.BLACK_KNIGHT;
+                case 9:
+                    return Sprites.BLACK_BISHOP;
+                case 10:
+                    return Sprites.BLACK_QUEEN;
+                case 11:
+                    return Sprites.BLACK_KING;
+                default:
+                    return Sprites.WHITE_PAWN;
             }
         };
         super(sprite());
 
+        this.anchor.set(0.5);
         this.scale.set(Map.TILE_SIZE / Sprites.TEXTURE_SIZE);
 
         this.pieceType = pieceType;
         this.pieceColor = pieceColor;
         this.availableTiles = [];
         this.tilePos = tilePos;
+        this.toTilePos = tilePos;
 
-        // Set the tile that this piece is on to 
-        Map.TILE_POSITIONS[tilePos[0]][tilePos[1]].piece = this;
-
-        let screenPos = Map.convertTileToScreenPos(tilePos);
-        this.x = screenPos[0];
-        this.y = screenPos[1];
+        this.moveToTile(tilePos);
     }
 
     updateAvailableTiles() {
         // Clear the currently available tiles
         this.availableTiles = [];
 
+        // Based on the piece type, add board tiles to a list of possible tiles that the piece can move to
         switch (this.pieceType) {
             case ChessPiece.PieceType.PAWN:
                 break;
             case ChessPiece.PieceType.ROOK:
-                this.#addTilesInLine(Map.UP);
-                this.#addTilesInLine(Map.RIGHT);
-                this.#addTilesInLine(Map.DOWN);
-                this.#addTilesInLine(Map.LEFT);
+                this._addTilesInLine(Map.UP);
+                this._addTilesInLine(Map.RIGHT);
+                this._addTilesInLine(Map.DOWN);
+                this._addTilesInLine(Map.LEFT);
 
                 break;
             case ChessPiece.PieceType.KNIGHT:
-                this.#tryAddTile(add2DArray(this.tilePos, [1, 2]));
-                this.#tryAddTile(add2DArray(this.tilePos, [-1, 2]));
-                this.#tryAddTile(add2DArray(this.tilePos, [2, 1]));
-                this.#tryAddTile(add2DArray(this.tilePos, [2, -1]));
-                this.#tryAddTile(add2DArray(this.tilePos, [1, -2]));
-                this.#tryAddTile(add2DArray(this.tilePos, [-1, -2]));
-                this.#tryAddTile(add2DArray(this.tilePos, [-2, 1]));
-                this.#tryAddTile(add2DArray(this.tilePos, [-2, -1]));
+                this._tryAddTile(add2DArray(this.tilePos, [1, 2]));
+                this._tryAddTile(add2DArray(this.tilePos, [-1, 2]));
+                this._tryAddTile(add2DArray(this.tilePos, [2, 1]));
+                this._tryAddTile(add2DArray(this.tilePos, [2, -1]));
+                this._tryAddTile(add2DArray(this.tilePos, [1, -2]));
+                this._tryAddTile(add2DArray(this.tilePos, [-1, -2]));
+                this._tryAddTile(add2DArray(this.tilePos, [-2, 1]));
+                this._tryAddTile(add2DArray(this.tilePos, [-2, -1]));
 
                 break;
             case ChessPiece.PieceType.BISHOP:
-                this.#addTilesInLine([1, 1]);
-                this.#addTilesInLine([1, -1]);
-                this.#addTilesInLine([-1, -1]);
-                this.#addTilesInLine([-1, 1]);
+                this._addTilesInLine([1, 1]);
+                this._addTilesInLine([1, -1]);
+                this._addTilesInLine([-1, -1]);
+                this._addTilesInLine([-1, 1]);
 
                 break;
             case ChessPiece.PieceType.QUEEN:
-                this.#addTilesInLine(Map.UP);
-                this.#addTilesInLine(Map.RIGHT);
-                this.#addTilesInLine(Map.DOWN);
-                this.#addTilesInLine(Map.LEFT);
+                this._addTilesInLine(Map.UP);
+                this._addTilesInLine(Map.RIGHT);
+                this._addTilesInLine(Map.DOWN);
+                this._addTilesInLine(Map.LEFT);
 
-                this.#addTilesInLine([1, 1]);
-                this.#addTilesInLine([1, -1]);
-                this.#addTilesInLine([-1, -1]);
-                this.#addTilesInLine([-1, 1]);
+                this._addTilesInLine([1, 1]);
+                this._addTilesInLine([1, -1]);
+                this._addTilesInLine([-1, -1]);
+                this._addTilesInLine([-1, 1]);
 
                 break;
             case ChessPiece.PieceType.KING:
-                this.#tryAddTile(add2DArray(this.tilePos, [1, 1]));
-                this.#tryAddTile(add2DArray(this.tilePos, [1, 0]));
-                this.#tryAddTile(add2DArray(this.tilePos, [1, -1]));
-                this.#tryAddTile(add2DArray(this.tilePos, [0, -1]));
-                this.#tryAddTile(add2DArray(this.tilePos, [-1, -1]));
-                this.#tryAddTile(add2DArray(this.tilePos, [-1, 0]));
-                this.#tryAddTile(add2DArray(this.tilePos, [-1, 1]));
-                this.#tryAddTile(add2DArray(this.tilePos, [0, 1]));
+                this._tryAddTile(add2DArray(this.tilePos, [1, 1]));
+                this._tryAddTile(add2DArray(this.tilePos, [1, 0]));
+                this._tryAddTile(add2DArray(this.tilePos, [1, -1]));
+                this._tryAddTile(add2DArray(this.tilePos, [0, -1]));
+                this._tryAddTile(add2DArray(this.tilePos, [-1, -1]));
+                this._tryAddTile(add2DArray(this.tilePos, [-1, 0]));
+                this._tryAddTile(add2DArray(this.tilePos, [-1, 1]));
+                this._tryAddTile(add2DArray(this.tilePos, [0, 1]));
 
                 break;
         }
     }
 
-    moveToTile(tilePos) {
+    moveToTile(toTilePos, doAnimation = false) {
+        this.toTilePos = toTilePos;
+
+        if (doAnimation) {
+            piecesToAnimate.push(this);
+        } else {
+            this.getTile().piece = undefined;
+            this.tilePos = toTilePos;
+            this.getTile().piece = this;
+
+            let screenPos = Map.convertTileToScreenPos(this.tilePos);
+            this.x = screenPos[0] + (Map.TILE_SIZE / 2);
+            this.y = screenPos[1] + (Map.TILE_SIZE / 2);
+        }
+    }
+
+    animate() {
 
     }
 
-    #addTilesInLine(additiveArray) {
+    getTile() {
+        return Map.TILE_POSITIONS[this.tilePos[0]][this.tilePos[1]];
+    }
+
+    _addTilesInLine(additiveArray) {
         let tempTilePos = this.tilePos;
         do {
             tempTilePos = add2DArray(tempTilePos, additiveArray);
-        } while (this.#tryAddTile(tempTilePos));
+        } while (this._tryAddTile(tempTilePos));
     }
 
-    #tryAddTile(tilePos) {
+    _tryAddTile(tilePos) {
         // If the tile is available, meaning it doesnt have a piece on it and it isnt undefined, then add it to the available tiles array for this piece
         if (Map.tileIsAvailable(tilePos)) {
             // Get the tile object
@@ -384,33 +420,108 @@ class Tile extends PIXI.Graphics {
 
         // Add interaction
         this.interactive = true;
-        this.mouseover = (e) => {
-            if (this.hasPiece()) {
-                for (let i = 0; i < this.piece.availableTiles.length; i++) {
-                    this.piece.availableTiles[i].tint = 0xFF6666;
-                }
-            }
-
-            this.tint = 0x666666;
-        }
-        this.mouseout = (e) => {
-            if (this.hasPiece()) {
-                for (let i = 0; i < this.piece.availableTiles.length; i++) {
-                    this.piece.availableTiles[i].tint = 0xFFFFFF;
-                }
-            }
-
-            this.tint = 0xFFFFFF;
-        }
+        this.mouseover = this._mouseEnter;
+        this.mouseout = this._mouseExit;
+        this.click = this._mouseClick;
     }
 
     hasPiece() {
         return (this.piece != undefined);
     }
+
+    _mouseEnter(e) {
+        // Set the tint of this current tile
+        this.tint = 0x666666;
+
+        // If there is not a currently selected tile, check to see if there is a piece on this tile
+        if (currMovingPiece == undefined) {
+            // If there is a piece, then highlight the piece's available moves
+            if (this.hasPiece()) {
+                this._setTilesTint(this.piece.availableTiles, AVAIL_TINT);
+            }
+        } else {
+            // If there is a selected tile, check to see if this tile is either the selected tile or a tile that the selected piece could move to
+            if (this.piece == currMovingPiece || currMovingPiece.availableTiles.includes(this)) {
+                this.tint = SELECT_TINT;
+            }
+        }
+    }
+
+    _mouseExit(e) {
+        // Reset the tint of this current tile
+        this.tint = 0xFFFFFF;
+
+        // If there is not a currently selected tile, check to see if there is a piece on this tile
+        if (currMovingPiece == undefined) {
+            // If there is a piece, then make sure to reset the tiles that involve is available moves since the mouse is now moving off of this tile
+            if (this.hasPiece()) {
+                this._setTilesTint(this.piece.availableTiles, 0xFFFFFF);
+            }
+        } else {
+            // If there is a selected tile, check to see if this tile is the selected tile or a available tile. Each case will result in a different color
+            if (this.piece == currMovingPiece) {
+                this.tint = SELECT_TINT;
+            } else if (currMovingPiece.availableTiles.includes(this)) {
+                this.tint = AVAIL_TINT;
+            }
+        }
+    }
+
+    _mouseClick(e) {
+        if (currMovingPiece != undefined) {
+            if (currMovingPiece.availableTiles.includes(this)) {
+                this._setTilesTint(currMovingPiece.availableTiles, 0xFFFFFF);
+                currMovingPiece.getTile().tint = 0xFFFFFF;
+
+                currMovingPiece.moveToTile(this.tilePos);
+
+                Map.updatePiecePositions();
+
+                currMovingPiece = undefined;
+            } else if (currMovingPiece.getTile() == this) {
+                currMovingPiece.moveToTile(this.tilePos);
+
+                currMovingPiece = undefined;
+            }
+        } else if (this.piece != undefined) {
+            currMovingPiece = this.piece;
+            currMovingPiece.bringToFront();
+        }
+
+        this._mouseEnter();
+
+        // // When the mouse clicks, and there is a piece on this tile, then make this tile the currently selected tile
+        // if (this.piece != undefined) {
+        //     // If there was already a selected tile, then make sure to reset the hightlighted tiles for that piece
+        //     if (Tile._SELECTED_TILE != undefined) {
+        //         this._setTilesTint(Tile._SELECTED_TILE.piece.availableTiles, 0xFFFFFF);
+        //         Tile._SELECTED_TILE.tint = 0xFFFFFF;
+        //     }
+
+        //     // Set the selected tile to this tile
+        //     Tile._SELECTED_TILE = this;
+
+        //     // Highlight the currently selected piece's avaiable moves
+        //     this._setTilesTint(Tile._SELECTED_TILE.piece.availableTiles, AVAIL_TINT);
+        //     this.tint = SELECT_TINT;
+        // } else if (Tile._SELECTED_TILE != undefined) {
+        //     // If the mouse clicks and there is a currently selected tile but no piece on this tile, then reset the selected tile
+        //     this._setTilesTint(Tile._SELECTED_TILE.piece.availableTiles, 0xFFFFFF);
+        //     Tile._SELECTED_TILE.tint = 0xFFFFFF;
+
+        //     Tile._SELECTED_TILE = undefined;
+        // }
+    }
+
+    _setTilesTint(tiles, tint) {
+        for (let i = 0; i < tiles.length; i++) {
+            tiles[i].tint = tint;
+        }
+    }
 }
 
-class Box extends PIXI.Graphics {
-    constructor(x, y, width, height, color, scene) {
+class Panel extends PIXI.Graphics {
+    constructor(x, y, width, height, color) {
         super();
 
         this.x = x;
@@ -422,7 +533,5 @@ class Box extends PIXI.Graphics {
         this.beginFill(color);
         this.drawRect(0, 0, width, height);
         this.endFill();
-
-        scene.addChild(this);
     }
 }

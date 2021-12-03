@@ -4,7 +4,7 @@
 const app = new PIXI.Application({
     width: Map.SCENE_WIDTH,
     height: Map.SCENE_HEIGHT,
-    backgroundColor: 0x141414
+    backgroundColor: 0x171717
 });
 document.body.appendChild(app.view);
 
@@ -12,6 +12,9 @@ let stage;
 let gameScene;
 
 let mousePosition = [];
+
+let currMovingPiece = undefined;
+let piecesToAnimate = [];
 
 // Load sprites and other assets
 app.loader.add([
@@ -24,6 +27,21 @@ app.loader.load();
 // Change Pixi.js settings
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
+PIXI.Sprite.prototype.bringToFront = function() {
+    if (this.parent) {
+        var parent = this.parent;
+        parent.removeChild(this);
+        parent.addChild(this);
+    }
+}
+
+// Colors
+const BOARD_COLOR_1 = 0xADBD8F;
+const BOARD_COLOR_2 = 0x6F8F72;
+const HOVER_TINT = 0x666666;
+const SELECT_TINT = 0xFFFF66;
+const AVAIL_TINT = 0xFF6666;
+
 function setup() {
     stage = app.stage;
 
@@ -35,6 +53,8 @@ function setup() {
         mousePosition = [data.x, data.y];
     });
 
+    app.view.onclick = (e) => {}
+
     gameScene = new PIXI.Container();
     stage.addChild(gameScene);
 
@@ -42,7 +62,7 @@ function setup() {
     console.log("Loading Sprites ...");
     Sprites.loadSprites();
 
-    new Box(Map.LEVEL_SCREEN_WIDTH, 0, Map.SCENE_WIDTH - Map.LEVEL_SCREEN_WIDTH, Map.SCENE_HEIGHT, 0xFFFFFF, gameScene);
+    gameScene.addChild(new Panel(Map.LEVEL_SCREEN_WIDTH, 0, Map.SCENE_WIDTH - Map.LEVEL_SCREEN_WIDTH, Map.SCENE_HEIGHT, 0x444444));
 
     // Generate a level
     Map.generateLevel(gameScene);
@@ -52,5 +72,8 @@ function setup() {
 }
 
 function game() {
-
+    if (currMovingPiece != undefined) {
+        currMovingPiece.x = mousePosition[0];
+        currMovingPiece.y = mousePosition[1];
+    }
 }
