@@ -40,7 +40,7 @@ class Map {
     static SCENE_HEIGHT = 720;
 
     static TILE_SIZE = 64; // The pixel size of each tile
-    static GEN_LEVEL_WIDTH = 11; // The level width in tiles
+    static GEN_LEVEL_WIDTH = 17; // 11; // The level width in tiles
     static GEN_LEVEL_HEIGHT = 9; // The level height in tiles
     static GEN_LEVEL_ITER = parseInt((this.GEN_LEVEL_WIDTH * this.GEN_LEVEL_HEIGHT) / 3); // The minimum number of tiles for each level
     static LEVEL_BORDER = parseInt((this.SCENE_HEIGHT - (this.TILE_SIZE * this.GEN_LEVEL_HEIGHT)) / 2); // The border of the map around the edge of the screen
@@ -56,7 +56,8 @@ class Map {
     static LEFT = [-1, 0];
 
     static TILE_POSITIONS = Array.from(Array(this.GEN_LEVEL_WIDTH), () => new Array(this.GEN_LEVEL_HEIGHT));
-    static PIECES = [];
+    static BLACK_PIECES = [];
+    static WHITE_PIECES = [];
 
     static generateLevel(scene) {
         console.log(`Level Generation Started [${this.GEN_LEVEL_WIDTH} x ${this.GEN_LEVEL_HEIGHT}]`);
@@ -65,8 +66,10 @@ class Map {
         // Clear the previous level positions and pieces
         this.TILE_POSITIONS.forEach(e => e.forEach(f => scene.removeChild(f)));
         this.TILE_POSITIONS = Array.from(Array(this.GEN_LEVEL_WIDTH), () => new Array(this.GEN_LEVEL_HEIGHT));
-        this.PIECES.forEach(e => scene.removeChild(e));
-        this.PIECES = [];
+        this.BLACK_PIECES.forEach(e => scene.removeChild(e));
+        this.BLACK_PIECES = [];
+        this.WHITE_PIECES.forEach(e => scene.removeChild(e));
+        this.WHITE_PIECES = [];
 
         let levelPositions = [];
         let pos = [Math.floor(Map.GEN_LEVEL_WIDTH / 2), Math.floor(Map.GEN_LEVEL_HEIGHT / 2)];
@@ -185,18 +188,13 @@ class Map {
             // Create piece object
             // Generate a random piece between a rook and a king (leaving out pawn)
             let pieceType = Math.floor(randRange(ChessPiece.PieceType.ROOK, ChessPiece.PieceType.KING + 1));
-            let piece = new ChessPiece(pieceType, ChessPiece.PieceColor.BLACK, pieceTilePos);
+            let piece = new ChessPiece(pieceType, ChessPiece.PieceColor.BLACK, pieceTilePos, scene);
 
-            // Make sure the tile beneath the piece has its "hasPiece" variable set to true
-            this.PIECES.push(piece);
-
-            scene.addChild(piece);
+            Map.BLACK_PIECES.push(piece);
         }
 
         // Update available tiles for each piece on the board
-        for (let i = 0; i < this.PIECES.length; i++) {
-            this.PIECES[i].updateAvailableTiles();
-        }
+        this.updatePiecePositions();
 
         console.log(`Level Generation Complete [${Date.now() - genStartTime}ms]`);
     }
@@ -216,21 +214,27 @@ class Map {
     }
 
     static tileIsAvailable(tilePos) {
-        // Check to make sure the tiles are within the bounds of the map
-        if (!inRange(tilePos[0], 0, this.GEN_LEVEL_WIDTH - 1) || !inRange(tilePos[1], 0, this.GEN_LEVEL_HEIGHT - 1)) {
-            return false;
-        }
-
-        // Get the tile and make sure it exists and doesn't have a piece on it
-        // If a tile meets that criteria, then it is available
-        let tile = this.TILE_POSITIONS[tilePos[0]][tilePos[1]];
-        return (tile != undefined && !tile.hasPiece());
+        // Get the tile and make sure it exists
+        return (this.getTile(tilePos) != undefined);
     }
 
     static updatePiecePositions() {
-        for (let i = 0; i < this.PIECES.length; i++) {
-            this.PIECES[i].updateAvailableTiles();
+        for (let i = 0; i < this.BLACK_PIECES.length; i++) {
+            this.BLACK_PIECES[i].updateAvailableTiles();
         }
+
+        for (let i = 0; i < this.WHITE_PIECES.length; i++) {
+            this.WHITE_PIECES[i].updateAvailableTiles();
+        }
+    }
+
+    static getTile(tilePos) {
+        // Check to make sure the tiles are within the bounds of the map
+        if (!inRange(tilePos[0], 0, this.GEN_LEVEL_WIDTH - 1) || !inRange(tilePos[1], 0, this.GEN_LEVEL_HEIGHT - 1)) {
+            return undefined;
+        }
+
+        return this.TILE_POSITIONS[tilePos[0]][tilePos[1]];
     }
 }
 
@@ -249,9 +253,9 @@ class ChessPiece extends PIXI.Sprite {
         BLACK: 6
     };
 
-    static PIECE_MOVE_SPEED = 5; // How many pixels the piece moves per frame
+    static PIECE_MOVE_SPEED = 4; // How many pixels the piece moves per frame
 
-    constructor(pieceType, pieceColor, tilePos) {
+    constructor(pieceType, pieceColor, tilePos, scene) {
         let sprite = e => {
             switch (pieceType + pieceColor) {
                 case 0:
@@ -287,11 +291,15 @@ class ChessPiece extends PIXI.Sprite {
         this.anchor.set(0.5);
         this.scale.set(Map.TILE_SIZE / Sprites.TEXTURE_SIZE);
 
+        this.scene = scene;
         this.pieceType = pieceType;
         this.pieceColor = pieceColor;
         this.availableTiles = [];
         this.tilePos = tilePos;
         this.toTilePos = tilePos;
+        this.canManualMove = (this.pieceColor == ChessPiece.PieceColor.WHITE);
+
+        scene.addChild(this);
 
         this.moveToTile(tilePos);
     }
@@ -355,29 +363,56 @@ class ChessPiece extends PIXI.Sprite {
         }
     }
 
+    canMove() {
+        return ((this.pieceColor == ChessPiece.PieceColor.WHITE && isPlayersTurn) || (this.pieceColor == ChessPiece.PieceColor.BLACK && !isPlayersTurn));
+    }
+
     moveToTile(toTilePos, doAnimation = false) {
         this.toTilePos = toTilePos;
 
         if (doAnimation) {
-            piecesToAnimate.push(this);
+            // piecesToAnimate.push(this);
         } else {
-            this.getTile().piece = undefined;
+            let currTile = Map.getTile(this.tilePos);
+            if (currTile != undefined) {
+                currTile.setPiece(undefined);
+            }
+
+            let toTile = Map.getTile(this.toTilePos);
+            if (toTile != undefined) {
+                toTile.setPiece(this);
+            }
+
             this.tilePos = toTilePos;
-            this.getTile().piece = this;
 
             let screenPos = Map.convertTileToScreenPos(this.tilePos);
             this.x = screenPos[0] + (Map.TILE_SIZE / 2);
             this.y = screenPos[1] + (Map.TILE_SIZE / 2);
         }
+
+        // Update all of the available tiles for each piece on the board
+        Map.updatePiecePositions();
     }
 
-    animate() {
+    // animate() {
+    //     let toScreenPos = Map.convertTileToScreenPos(this.toTilePos);
+    //     let currScreenPos = [this.x, this.y];
 
-    }
+    //     if (!equal2DArray(toScreenPos, currScreenPos)) {
+    //         let xDiff = currScreenPos[0] - toScreenPos[0];
+    //         let yDiff = currScreenPos[1] - toScreenPos[1];
 
-    getTile() {
-        return Map.TILE_POSITIONS[this.tilePos[0]][this.tilePos[1]];
-    }
+    //         let moveX = xDiff / Math.abs(xDiff) * ChessPiece.PIECE_MOVE_SPEED;
+    //         let moveY = yDiff / Math.abs(yDiff) * ChessPiece.PIECE_MOVE_SPEED;
+
+    //         this.x += moveX;
+    //         this.y += moveY;
+    //     } else {
+    //         return false;
+    //     }
+
+    //     return true;
+    // }
 
     _addTilesInLine(additiveArray) {
         let tempTilePos = this.tilePos;
@@ -387,18 +422,53 @@ class ChessPiece extends PIXI.Sprite {
     }
 
     _tryAddTile(tilePos) {
+        // Get the tile object
+        let tile = Map.getTile(tilePos);
+
         // If the tile is available, meaning it doesnt have a piece on it and it isnt undefined, then add it to the available tiles array for this piece
-        if (Map.tileIsAvailable(tilePos)) {
-            // Get the tile object
-            let tile = Map.TILE_POSITIONS[tilePos[0]][tilePos[1]];
+        // Also, if the piece that it is on currently has an opposing piece on it, that counts as an available tile but nothing past that
+        if (tile != undefined) {
+            if (!tile.hasPiece()) {
+                // Add the tile to the array
+                this.availableTiles.push(tile);
 
-            // Add the tile to the array
-            this.availableTiles.push(tile);
+                return true;
+            } else if (tile.piece.pieceColor != this.pieceColor) {
+                // Add the tile to the array
+                this.availableTiles.push(tile);
 
-            return true;
+                return false;
+            }
         }
 
         return false;
+    }
+
+    destroy() {
+        this.scene.removeChild(this);
+
+        switch (this.pieceColor) {
+            case ChessPiece.PieceColor.BLACK:
+                Map.BLACK_PIECES.splice(Map.BLACK_PIECES.indexOf(this), 1);
+
+                win = (Map.BLACK_PIECES.length == 0);
+
+                break;
+            case ChessPiece.PieceColor.WHITE:
+                Map.WHITE_PIECES.splice(Map.WHITE_PIECES.indexOf(this), 1);
+
+                lose = (Map.WHITE_PIECES.length == 0);
+
+                break;
+        }
+
+        if (win) {
+            console.log("!!! You Win! Refresh the page to play again!");
+        }
+
+        if (lose) {
+            console.log("!!! You Lose! Refresh the page to try again!");
+        }
     }
 }
 
@@ -408,7 +478,7 @@ class Tile extends PIXI.Graphics {
 
         this.tilePos = tilePos;
         this.color = color;
-        this.piece = undefined;
+        this.setPiece(undefined);
 
         let screenPos = Map.convertTileToScreenPos(tilePos);
         this.x = screenPos[0];
@@ -427,6 +497,16 @@ class Tile extends PIXI.Graphics {
 
     hasPiece() {
         return (this.piece != undefined);
+    }
+
+    setPiece(piece) {
+        if (piece != undefined && this.hasPiece()) {
+            console.log("!!! Piece taken!");
+
+            this.piece.destroy();
+        }
+
+        this.piece = piece;
     }
 
     _mouseEnter(e) {
@@ -468,54 +548,68 @@ class Tile extends PIXI.Graphics {
     }
 
     _mouseClick(e) {
+        // If there is a piece currently being moved and the mouse is clicked on this tile
         if (currMovingPiece != undefined) {
+            // As long as this tile is included within the moving piece's available tiles, place the piece on this tile
             if (currMovingPiece.availableTiles.includes(this)) {
+                // Reset the tinted tiles
                 this._setTilesTint(currMovingPiece.availableTiles, 0xFFFFFF);
-                currMovingPiece.getTile().tint = 0xFFFFFF;
+                Map.getTile(currMovingPiece.tilePos).tint = 0xFFFFFF;
 
+                // Move the piece to this tile
                 currMovingPiece.moveToTile(this.tilePos);
 
+                // Update all of the available tiles for each piece on the board
+                Map.updatePiecePositions();
+
+                isPlayersTurn = (this.piece == ChessPiece.PieceColor.BLACK);
+
+                currMovingPiece = undefined;
+            } else if (Map.getTile(currMovingPiece.tilePos) == this) {
+                // If the piece is placed back at the same tile it started on, don't update anything because nothing changed
+                currMovingPiece.moveToTile(this.tilePos);
+
+                currMovingPiece = undefined;
+            } else if (equal2DArray(currMovingPiece.tilePos, [-1, -1]) && !this.hasPiece()) {
+                // If the piece is currently being placed, set its tile position
+                currMovingPiece.moveToTile(this.tilePos);
+
+                // Remove the first element of the party array, because that is what this piece is.
+                // This will allow for the piece to be placed on the board and a new piece to take its place
+                party.splice(0, 1);
+                Map.WHITE_PIECES.push(currMovingPiece);
+
+                // Update all of the available tiles for each piece on the board
                 Map.updatePiecePositions();
 
                 currMovingPiece = undefined;
-            } else if (currMovingPiece.getTile() == this) {
-                currMovingPiece.moveToTile(this.tilePos);
-
-                currMovingPiece = undefined;
             }
-        } else if (this.piece != undefined) {
+        } else if (this.piece != undefined && this.piece.canManualMove && isPlayersTurn) {
+            // If this tile is clicked and there is a piece on it, and there is no currently moving piece, then set this tile's piece to the moving piece
             currMovingPiece = this.piece;
+            // Also make sure to bring the moving piece to the front of drawing so it doesn't go behind other pieces as you move it around
             currMovingPiece.bringToFront();
         }
 
+        // Update the tinted tiles on the board
         this._mouseEnter();
-
-        // // When the mouse clicks, and there is a piece on this tile, then make this tile the currently selected tile
-        // if (this.piece != undefined) {
-        //     // If there was already a selected tile, then make sure to reset the hightlighted tiles for that piece
-        //     if (Tile._SELECTED_TILE != undefined) {
-        //         this._setTilesTint(Tile._SELECTED_TILE.piece.availableTiles, 0xFFFFFF);
-        //         Tile._SELECTED_TILE.tint = 0xFFFFFF;
-        //     }
-
-        //     // Set the selected tile to this tile
-        //     Tile._SELECTED_TILE = this;
-
-        //     // Highlight the currently selected piece's avaiable moves
-        //     this._setTilesTint(Tile._SELECTED_TILE.piece.availableTiles, AVAIL_TINT);
-        //     this.tint = SELECT_TINT;
-        // } else if (Tile._SELECTED_TILE != undefined) {
-        //     // If the mouse clicks and there is a currently selected tile but no piece on this tile, then reset the selected tile
-        //     this._setTilesTint(Tile._SELECTED_TILE.piece.availableTiles, 0xFFFFFF);
-        //     Tile._SELECTED_TILE.tint = 0xFFFFFF;
-
-        //     Tile._SELECTED_TILE = undefined;
-        // }
     }
 
     _setTilesTint(tiles, tint) {
         for (let i = 0; i < tiles.length; i++) {
             tiles[i].tint = tint;
+        }
+    }
+
+    static _resetAllTileTint() {
+        for (let x = 0; x < Map.GEN_LEVEL_WIDTH; x++) {
+            for (let y = 0; y < Map.GEN_LEVEL_HEIGHT; y++) {
+                let tile = Map.getTile([x, y]);
+
+                if (tile != undefined) {
+                    tile.tint = 0xFFFFFF;
+                }
+            }
         }
     }
 }

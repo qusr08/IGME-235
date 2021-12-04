@@ -27,3 +27,8 @@ function randRange(min, max) {
 function inRange(value, min, max) {
     return (value >= min && value <= max);
 }
+
+// https://stackoverflow.com/questions/9907419/how-to-get-a-key-in-a-javascript-object-by-its-value
+function getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+}

@@ -33,6 +33,12 @@ h1 {
     filter: drop-shadow(5px 5px 0 black);
 }
 
+#game {
+    display: flex;
+    justify-content: center;
+    margin: 20px auto;
+}
+
 .info-section {
     margin: max(3vh, 10px) 0;
     padding: max(1vh, 10px) max(1vw, 10px);
