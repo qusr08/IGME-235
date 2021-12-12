@@ -31,7 +31,7 @@ app.loader.load();
 // Change Pixi.js settings
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
-PIXI.Sprite.prototype.bringToFront = function () {
+PIXI.Sprite.prototype.bringToFront = function() {
     // Get this sprites parent
     let parent = this.parent;
 
@@ -43,7 +43,7 @@ PIXI.Sprite.prototype.bringToFront = function () {
     }
 }
 
-PIXI.Sprite.prototype.bringInFrontOf = function (other) {
+PIXI.Sprite.prototype.bringInFrontOf = function(other) {
     if (other == undefined) {
         return;
     }

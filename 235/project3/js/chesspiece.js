@@ -52,7 +52,7 @@ class ChessPiece extends PIXI.Sprite {
             Map.BLACK_PIECES.push(this);
         }
 
-        this.setTilePos(tilePos);
+        this.setTilePos(tilePos, true, false);
     }
 
     setPieceInfoType(pieceInfoType) {
@@ -177,7 +177,7 @@ class ChessPiece extends PIXI.Sprite {
         }
     }
 
-    setTilePos(tilePos, setScreenPos = true) {
+    setTilePos(tilePos, setScreenPos = true, playSoundEffect = true) {
         if (this.tilePos != undefined) {
             let currTile = Map.getTile(this.tilePos);
             if (currTile != undefined) {
@@ -197,6 +197,11 @@ class ChessPiece extends PIXI.Sprite {
             // Update the piece's screen position
             if (setScreenPos) {
                 this.setScreenPos(Map.convertTileToScreenPos(tilePos, true));
+            }
+
+            // Play sound effect
+            if (playSoundEffect) {
+                Utils.choose(GameManager.MOVE_SOUND_EFFECTS).play();
             }
 
             // Update available positions for each piece

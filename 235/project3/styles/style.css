@@ -25,7 +25,7 @@ p {
 }
 
 body {
-    margin: max(5vh, 10px) max(5vw, 10px);
+    padding: max(5vh, 10px) max(5vw, 10px);
     background-color: var(--color4);
 }
 

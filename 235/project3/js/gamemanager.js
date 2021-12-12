@@ -31,6 +31,7 @@ class GameManager {
     static ACTIVE_TILE = undefined;
     static HIGHLIGHTED_TILES = [];
     static _ANIMATION_CHECK_INDEX = 0;
+    static MOVE_SOUND_EFFECTS = [];
 
     static LEVEL_NUMBER = 1;
     static _LEVEL_NUMBER_TEXT = undefined;
@@ -102,7 +103,7 @@ class GameManager {
         GameManager._GAME_OVER_TEXT.y = Map.SCENE_HEIGHT / 2;
         GameManager.GAME_SCENE.addChild(GameManager._GAME_OVER_TEXT);
 
-        GameManager._VERSION_TEXT = new PIXI.Text("made by frank alfano  |  v1.0  |  1,422 lines of code :)");
+        GameManager._VERSION_TEXT = new PIXI.Text("made by frank alfano\n\nv1.0\n\n1,400+ lines of code");
         GameManager._VERSION_TEXT.style = TEXT_STYLE;
         GameManager._VERSION_TEXT.anchor.set(0, 1);
         GameManager._VERSION_TEXT.x = 10;
@@ -155,6 +156,10 @@ class GameManager {
         GameManager._GAME_OVER_BACK_BUTTON.on("pointerover", () => GameManager._GAME_OVER_BACK_BUTTON.scale.set(1.25 * Map.TILE_SIZE / Sprites.TEXTURE_SIZE));
         GameManager._GAME_OVER_BACK_BUTTON.on("pointerout", () => GameManager._GAME_OVER_BACK_BUTTON.scale.set(Map.TILE_SIZE / Sprites.TEXTURE_SIZE));
         GameManager.GAME_SCENE.addChild(GameManager._GAME_OVER_BACK_BUTTON);
+
+        GameManager.MOVE_SOUND_EFFECTS.push(new Howl({ src: ["media/move-sound-1.wav"] }));
+        GameManager.MOVE_SOUND_EFFECTS.push(new Howl({ src: ["media/move-sound-2.wav"] }));
+        GameManager.MOVE_SOUND_EFFECTS.push(new Howl({ src: ["media/move-sound-3.wav"] }));
     }
 
     static gameSetup() {
