@@ -4,7 +4,7 @@ class Map {
     static SCENE_HEIGHT = 720;
 
     static TILE_SIZE = 64; // The pixel size of each tile
-    static GEN_LEVEL_WIDTH = 17; // 11; // The level width in tiles
+    static GEN_LEVEL_WIDTH = 17; // The level width in tiles
     static GEN_LEVEL_HEIGHT = 9; // The level height in tiles
     static GEN_LEVEL_ITER = parseInt((Map.GEN_LEVEL_WIDTH * Map.GEN_LEVEL_HEIGHT) / 3); // The minimum number of tiles for each level
     static LEVEL_BORDER = parseInt((Map.SCENE_HEIGHT - (Map.TILE_SIZE * Map.GEN_LEVEL_HEIGHT)) / 2); // The border of the map around the edge of the screen
@@ -25,7 +25,7 @@ class Map {
     static WHITE_PIECES = [];
 
     static generateLevel(scene) {
-        console.log(`Level Generation Started [${Map.GEN_LEVEL_WIDTH} x ${Map.GEN_LEVEL_HEIGHT}]`);
+        //console.log(`Level Generation Started [${Map.GEN_LEVEL_WIDTH} x ${Map.GEN_LEVEL_HEIGHT}]`);
         let genStartTime = Date.now();
 
         // Clear the previous level positions and pieces
@@ -40,7 +40,7 @@ class Map {
         let pos = [Math.floor(Map.GEN_LEVEL_WIDTH / 2), Math.floor(Map.GEN_LEVEL_HEIGHT / 2)];
 
         //#region Creating Tile Positions
-        console.log("Creating Tile Positions ...");
+        //console.log("Creating Tile Positions ...");
 
         for (let i = 0; i < Map.GEN_LEVEL_ITER; i++) {
             // Append the position to the end of the array
@@ -83,7 +83,7 @@ class Map {
         //#endregion
 
         //#region Smoothing Level
-        console.log("Smoothing Level ...");
+        //console.log("Smoothing Level ...");
 
         // Use this while loop to make sure the level is a certain size
         do {
@@ -127,7 +127,7 @@ class Map {
         //#endregion
 
         //#region Placing Tiles
-        console.log(`Placing Tiles ... [${Map.TILE_LIST.length}]`);
+        //console.log(`Placing Tiles ... [${Map.TILE_LIST.length}]`);
 
         // Place tile sprites
         for (let i = 0; i < Map.TILE_LIST.length; i++) {
@@ -143,13 +143,13 @@ class Map {
 
         //#region Placing Black Pieces
         // Calculate the number of pieces to spawn based on the size of the map
-        // let numPieces = Math.ceil(Map.TILE_LIST.length / Map.GEN_LEVEL_ITER * 12);
-        let numPieces = 1;
+        let numPieces = Math.ceil(Map.TILE_LIST.length / Map.GEN_LEVEL_ITER * 12);
+        // let numPieces = 1;
         // A list of all the available positions for a piece to spawn
         let availablePositions = [...Map.TILE_LIST];
         let availableTurns = [1, 2, 3, 4];
 
-        console.log(`Placing Black Pieces ... [${numPieces}]`);
+        //console.log(`Placing Black Pieces ... [${numPieces}]`);
 
         // Place random pieces on the chess board
         for (let i = 0; i < numPieces; i++) {
@@ -173,7 +173,7 @@ class Map {
         //#endregion
 
         //#region Placing White Pieces
-        console.log(`Placing White Pieces ... [${GameManager.PARTY_PIECE_TYPES.length}]`);
+        //console.log(`Placing White Pieces ... [${GameManager.PARTY_PIECE_TYPES.length}]`);
 
         if (GameManager.PARTY_PIECE_TYPES.length == 0) {
             console.warn("There are no white pieces to place!");
@@ -192,7 +192,7 @@ class Map {
         }
         //#endregion
 
-        console.log(`Level Generation Complete [${Date.now() - genStartTime}ms]`);
+        //console.log(`Level Generation Complete [${Date.now() - genStartTime}ms]`);
     }
 
     static convertTileToScreenPos(tilePos, atCenter = false) {

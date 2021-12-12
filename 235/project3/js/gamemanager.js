@@ -8,11 +8,11 @@ class GameManager {
 
     static TurnState = {
         ENEMY: 0,
-        WAITING: 1,
-        PLAYER: 2,
-        WIN: 3,
-        LOSE: 4,
-        PAUSED: 5
+        ENEMY_MOVE: 1,
+        WAITING: 2,
+        PLAYER: 3,
+        WIN: 4,
+        LOSE: 5
     }
 
     static GAMESTATE = GameManager.GameState.MENU;
@@ -30,21 +30,64 @@ class GameManager {
     static ACTIVE_PIECE = undefined;
     static ACTIVE_TILE = undefined;
     static HIGHLIGHTED_TILES = [];
+    static _ANIMATION_CHECK_INDEX = 0;
 
     static LEVEL_NUMBER = 1;
     static _LEVEL_NUMBER_TEXT = undefined;
     static _GAME_OVER_TEXT = undefined;
+    static _VERSION_TEXT = undefined;
 
     static _PLAY_BUTTON = undefined;
     static _TUTORIAL_BUTTON = undefined;
-    static _BACK_BUTTON = undefined;
+    static _TUTORIAL_BACK_BUTTON = undefined;
+    static _GAME_OVER_BACK_BUTTON = undefined;
 
     static _GAME_OVER_SPRITE = undefined;
     static _TITLE_SPRITE = undefined;
     static _TUTORIAL_SPRITE = undefined;
+    static _BACKGROUND_SPRITE = undefined;
 
     static appSetup() {
-        console.log("Setting up application ...");
+        //console.log("Setting up application ...");
+
+        // Add interactions
+        GameManager.APPLICATION.stage.interactive = true;
+        GameManager.APPLICATION.stage.on("pointermove", (e) => {
+            // Update mouse position variable
+            let data = e.data.global;
+            GameManager.MOUSE_POSITION = [data.x, data.y];
+        });
+
+        GameManager.GAME_SCENE = new PIXI.Container();
+        GameManager.APPLICATION.stage.addChild(GameManager.GAME_SCENE);
+        GameManager.MENU_SCENE = new PIXI.Container();
+        GameManager.APPLICATION.stage.addChild(GameManager.MENU_SCENE);
+        GameManager.TUTORIAL_SCENE = new PIXI.Container();
+        GameManager.APPLICATION.stage.addChild(GameManager.TUTORIAL_SCENE);
+
+        // Load sprites on spritesheets into variables
+        //console.log("Loading Sprites ...");
+        Sprites.loadSprites();
+
+        GameManager._TUTORIAL_SPRITE = new PIXI.Sprite(Sprites.TUTORIAL);
+        GameManager.TUTORIAL_SCENE.addChild(this._TUTORIAL_SPRITE);
+
+        GameManager._BACKGROUND_SPRITE = new PIXI.Sprite(Sprites.BACKGROUND);
+        GameManager.MENU_SCENE.addChild(GameManager._BACKGROUND_SPRITE);
+
+        GameManager._GAME_OVER_SPRITE = new PIXI.Sprite(Sprites.GAMEOVER);
+        GameManager._GAME_OVER_SPRITE.scale.set(2 * Map.TILE_SIZE / Sprites.TEXTURE_SIZE);
+        GameManager._GAME_OVER_SPRITE.anchor.set(0.5);
+        GameManager._GAME_OVER_SPRITE.x = Map.SCENE_WIDTH / 2;
+        GameManager._GAME_OVER_SPRITE.y = Map.SCENE_HEIGHT / 4;
+        GameManager.GAME_SCENE.addChild(this._GAME_OVER_SPRITE);
+
+        GameManager._TITLE_SPRITE = new PIXI.Sprite(Sprites.TITLE);
+        GameManager._TITLE_SPRITE.scale.set(2 * Map.TILE_SIZE / Sprites.TEXTURE_SIZE);
+        GameManager._TITLE_SPRITE.anchor.set(0.5);
+        GameManager._TITLE_SPRITE.x = Map.SCENE_WIDTH / 2;
+        GameManager._TITLE_SPRITE.y = Map.SCENE_HEIGHT / 4;
+        GameManager.MENU_SCENE.addChild(this._TITLE_SPRITE);
 
         GameManager._LEVEL_NUMBER_TEXT = new PIXI.Text("Level ###");
         GameManager._LEVEL_NUMBER_TEXT.style = TEXT_STYLE;
@@ -59,39 +102,69 @@ class GameManager {
         GameManager._GAME_OVER_TEXT.y = Map.SCENE_HEIGHT / 2;
         GameManager.GAME_SCENE.addChild(GameManager._GAME_OVER_TEXT);
 
-        GameManager._PLAY_BUTTON = new PIXI.Sprite(Sprites.PLAY_BUTTON);
-        GameManager._PLAY_BUTTON.scale.set(Map.TILE_SIZE / Sprites.TEXTURE_SIZE);
-        GameManager._PLAY_BUTTON.anchor.set(0.5);
-        GameManager._PLAY_BUTTON.interactive = true;
-        GameManager._PLAY_BUTTON.buttonMode = true;
-        GameManager._PLAY_BUTTON.on("pointerup", () => GameManager.setGameState(GameManager.GameState.GAME_SETUP));
-        GameManager.MENU_SCENE.addChild(GameManager._PLAY_BUTTON);
+        GameManager._VERSION_TEXT = new PIXI.Text("made by frank alfano  |  v1.0  |  1,422 lines of code :)");
+        GameManager._VERSION_TEXT.style = TEXT_STYLE;
+        GameManager._VERSION_TEXT.anchor.set(0, 1);
+        GameManager._VERSION_TEXT.x = 10;
+        GameManager._VERSION_TEXT.y = Map.SCENE_HEIGHT - 10;
+        GameManager.MENU_SCENE.addChild(GameManager._VERSION_TEXT);
 
         GameManager._PLAY_BUTTON = new PIXI.Sprite(Sprites.PLAY_BUTTON);
         GameManager._PLAY_BUTTON.scale.set(Map.TILE_SIZE / Sprites.TEXTURE_SIZE);
         GameManager._PLAY_BUTTON.anchor.set(0.5);
+        GameManager._PLAY_BUTTON.x = Map.SCENE_WIDTH / 2;
+        GameManager._PLAY_BUTTON.y = Map.SCENE_HEIGHT / 2;
         GameManager._PLAY_BUTTON.interactive = true;
         GameManager._PLAY_BUTTON.buttonMode = true;
         GameManager._PLAY_BUTTON.on("pointerup", () => GameManager.setGameState(GameManager.GameState.GAME_SETUP));
+        GameManager._PLAY_BUTTON.on("pointerover", () => GameManager._PLAY_BUTTON.scale.set(1.25 * Map.TILE_SIZE / Sprites.TEXTURE_SIZE));
+        GameManager._PLAY_BUTTON.on("pointerout", () => GameManager._PLAY_BUTTON.scale.set(Map.TILE_SIZE / Sprites.TEXTURE_SIZE));
         GameManager.MENU_SCENE.addChild(GameManager._PLAY_BUTTON);
 
-        GameManager._GAME_OVER_SPRITE = Sprites.GAMEOVER;
-        GameManager.GAME_SCENE.addChild(this._GAME_OVER_SPRITE);
-        GameManager._TITLE_SPRITE = Sprites.TITLE;
-        GameManager.MENU_SCENE.addChild(this._TITLE_SPRITE);
-        GameManager._TUTORIAL_SPRITE = Sprites.TUTORIAL;
-        GameManager.TUTORIAL_SCENE.addChild(this._TUTORIAL_SPRITE);
+        GameManager._TUTORIAL_BUTTON = new PIXI.Sprite(Sprites.TUTORIAL_BUTTON);
+        GameManager._TUTORIAL_BUTTON.scale.set(Map.TILE_SIZE / Sprites.TEXTURE_SIZE);
+        GameManager._TUTORIAL_BUTTON.anchor.set(0.5);
+        GameManager._TUTORIAL_BUTTON.x = Map.SCENE_WIDTH / 2;
+        GameManager._TUTORIAL_BUTTON.y = Map.SCENE_HEIGHT / 3 * 2;
+        GameManager._TUTORIAL_BUTTON.interactive = true;
+        GameManager._TUTORIAL_BUTTON.buttonMode = true;
+        GameManager._TUTORIAL_BUTTON.on("pointerup", () => GameManager.setGameState(GameManager.GameState.TUTORIAL));
+        GameManager._TUTORIAL_BUTTON.on("pointerover", () => GameManager._TUTORIAL_BUTTON.scale.set(1.25 * Map.TILE_SIZE / Sprites.TEXTURE_SIZE));
+        GameManager._TUTORIAL_BUTTON.on("pointerout", () => GameManager._TUTORIAL_BUTTON.scale.set(Map.TILE_SIZE / Sprites.TEXTURE_SIZE));
+        GameManager.MENU_SCENE.addChild(GameManager._TUTORIAL_BUTTON);
+
+        GameManager._TUTORIAL_BACK_BUTTON = new PIXI.Sprite(Sprites.BACK_BUTTON);
+        GameManager._TUTORIAL_BACK_BUTTON.scale.set(Map.TILE_SIZE / Sprites.TEXTURE_SIZE);
+        GameManager._TUTORIAL_BACK_BUTTON.x = 10;
+        GameManager._TUTORIAL_BACK_BUTTON.y = 10;
+        GameManager._TUTORIAL_BACK_BUTTON.interactive = true;
+        GameManager._TUTORIAL_BACK_BUTTON.buttonMode = true;
+        GameManager._TUTORIAL_BACK_BUTTON.on("pointerup", () => GameManager.setGameState(GameManager.GameState.MENU));
+        GameManager._TUTORIAL_BACK_BUTTON.on("pointerover", () => GameManager._TUTORIAL_BACK_BUTTON.scale.set(1.25 * Map.TILE_SIZE / Sprites.TEXTURE_SIZE));
+        GameManager._TUTORIAL_BACK_BUTTON.on("pointerout", () => GameManager._TUTORIAL_BACK_BUTTON.scale.set(Map.TILE_SIZE / Sprites.TEXTURE_SIZE));
+        GameManager.TUTORIAL_SCENE.addChild(GameManager._TUTORIAL_BACK_BUTTON);
+
+        GameManager._GAME_OVER_BACK_BUTTON = new PIXI.Sprite(Sprites.BACK_BUTTON);
+        GameManager._GAME_OVER_BACK_BUTTON.scale.set(Map.TILE_SIZE / Sprites.TEXTURE_SIZE);
+        GameManager._GAME_OVER_BACK_BUTTON.anchor.set(0.5);
+        GameManager._GAME_OVER_BACK_BUTTON.x = Map.SCENE_WIDTH / 2;
+        GameManager._GAME_OVER_BACK_BUTTON.y = Map.SCENE_HEIGHT / 3 * 2;
+        GameManager._GAME_OVER_BACK_BUTTON.interactive = true;
+        GameManager._GAME_OVER_BACK_BUTTON.buttonMode = true;
+        GameManager._GAME_OVER_BACK_BUTTON.on("pointerup", () => GameManager.setGameState(GameManager.GameState.MENU));
+        GameManager._GAME_OVER_BACK_BUTTON.on("pointerover", () => GameManager._GAME_OVER_BACK_BUTTON.scale.set(1.25 * Map.TILE_SIZE / Sprites.TEXTURE_SIZE));
+        GameManager._GAME_OVER_BACK_BUTTON.on("pointerout", () => GameManager._GAME_OVER_BACK_BUTTON.scale.set(Map.TILE_SIZE / Sprites.TEXTURE_SIZE));
+        GameManager.GAME_SCENE.addChild(GameManager._GAME_OVER_BACK_BUTTON);
     }
 
     static gameSetup() {
         GameManager.PARTY_PIECE_TYPES = [ChessPiece.PieceType.QUEEN];
-        GameManager.LEVEL_NUMBER = 1;
+        GameManager.LEVEL_NUMBER = 0;
+        GameManager._incrementLevelNumber();
     }
 
     static update() {
         switch (GameManager.GAMESTATE) {
-            case GameManager.GameState.MENU:
-                break;
             case GameManager.GameState.GAME:
                 // Update current moving piece position to follow mouse
                 if (GameManager.ACTIVE_PIECE != undefined) {
@@ -100,20 +173,18 @@ class GameManager {
                 }
 
                 switch (GameManager.TURNSTATE) {
-                    case GameManager.TurnState.ENEMY:
-                        break;
                     case GameManager.TurnState.WAITING:
                         if (GameManager.ANIMATING_PIECES.length == 0 && GameManager.ANIMATING_TILES.length == 0) {
-                            GameManager.setTurnState(GameManager.TurnState.PLAYER);
+                            if (GameManager._ANIMATION_CHECK_INDEX >= Map.BLACK_PIECES.length) {
+                                GameManager.setTurnState(GameManager.TurnState.PLAYER);
+                            } else {
+                                GameManager.setTurnState(GameManager.TurnState.ENEMY);
+                            }
                         }
 
                         break;
-                    case GameManager.TurnState.PLAYER:
-                        break;
                 }
 
-                break;
-            case GameManager.GameState.TUTORIAL:
                 break;
         }
 
@@ -140,8 +211,6 @@ class GameManager {
                 if (GameManager.TURNSTATE == GameManager.TurnState.WIN) {
                     GameManager._incrementLevelNumber();
                     GameManager.setGameState(GameManager.GameState.GAME);
-                } else if (GameManager.TURNSTATE == GameManager.TurnState.LOSE) {
-                    GameManager.setGameState(GameManager.GameState.MENU);
                 }
             }
         }
@@ -155,9 +224,9 @@ class GameManager {
     static setGameState(gameState) {
         GameManager.GAMESTATE = gameState;
 
+        GameManager._updateUIElements();
+
         switch (GameManager.GAMESTATE) {
-            case GameManager.GameState.MENU:
-                break;
             case GameManager.GameState.GAME_SETUP:
                 GameManager.gameSetup();
 
@@ -168,6 +237,7 @@ class GameManager {
                 Map.generateLevel(GameManager.GAME_SCENE);
                 Map.animateMapIn();
 
+                GameManager._ANIMATION_CHECK_INDEX = Map.BLACK_PIECES.length;
                 GameManager.setTurnState(GameManager.TurnState.WAITING);
 
                 break;
@@ -176,18 +246,19 @@ class GameManager {
 
     static setTurnState(turnState) {
         GameManager.TURNSTATE = turnState;
+
         // Map.update();
+        GameManager.resetHighlightedTiles();
+        GameManager._updateUIElements();
+
+        //console.log(`Turnstate set to : ${turnState}`);
 
         switch (GameManager.TURNSTATE) {
             case GameManager.TurnState.ENEMY:
-                console.log("> Enemy's Turn!");
+                //console.log("> Enemy's Turn!");
 
-                // An array to track which spaces each piece is moving to 
-                let enemyMoveToTiles = [];
-
-                // Loop through all the black pieces to see which ones need to animate
-                for (let i = 0; i < Map.BLACK_PIECES.length; i++) {
-                    let currPiece = Map.BLACK_PIECES[i];
+                for (; GameManager._ANIMATION_CHECK_INDEX < Map.BLACK_PIECES.length; GameManager._ANIMATION_CHECK_INDEX++) {
+                    let currPiece = Map.BLACK_PIECES[GameManager._ANIMATION_CHECK_INDEX];
                     currPiece.subtractTurn();
 
                     // If the piece's turns until it moves is 0, then it should move this turn
@@ -195,12 +266,12 @@ class GameManager {
                         let pieceToTilePos = undefined;
 
                         // Check to see if there is a tile with a white piece on it. If so, move to that tile
-                        for (let j = 0; j < currPiece.availableTiles.length; j++) {
+                        for (let i = 0; i < currPiece.availableTiles.length; i++) {
                             // Get a tile that is available to the current piece
-                            let tile = currPiece.availableTiles[j];
+                            let tile = currPiece.availableTiles[i];
 
                             // If that tile has a white piece on it, then move this current piece to that tile
-                            if (tile.hasPiece() && tile.piece.isWhite && !enemyMoveToTiles.includes(tile.tilePos)) {
+                            if (tile.hasPiece() && tile.piece.isWhite) {
                                 pieceToTilePos = tile.tilePos;
 
                                 break;
@@ -210,7 +281,7 @@ class GameManager {
                         // Get a random tile for that piece to move to if there is no white piece for this current piece to capture
                         if (pieceToTilePos == undefined) {
                             let tile = Utils.choose(currPiece.availableTiles);
-                            if (tile != undefined && !enemyMoveToTiles.includes(tile.tilePos)) {
+                            if (tile != undefined) {
                                 pieceToTilePos = tile.tilePos;
                             }
                         }
@@ -218,8 +289,6 @@ class GameManager {
                         // Move the piece to that tile, as long as there is a tile for the piece to move to
                         // Also check to make sure another piece isn't moving to the same space
                         if (pieceToTilePos != undefined) {
-                            enemyMoveToTiles.push(pieceToTilePos);
-
                             GameManager.addAnimatingPiece(new SpriteAnimation(currPiece, currPiece.screenPos, Map.convertTileToScreenPos(pieceToTilePos, true), 6, () => {
                                 GameManager.setActivePiece(currPiece);
                                 currPiece.setPieceInfoType(ChessPiece.PieceInfoType.NONE);
@@ -228,6 +297,10 @@ class GameManager {
                                 GameManager.setActivePiece(undefined);
                                 currPiece.setTurns(4);
                             }));
+
+                            GameManager._ANIMATION_CHECK_INDEX++;
+
+                            break;
                         } else {
                             // If the piece can't move, then just reset it's turns
                             currPiece.setTurns(4);
@@ -238,11 +311,8 @@ class GameManager {
                 GameManager.setTurnState(GameManager.TurnState.WAITING);
 
                 break;
-            case GameManager.TurnState.WAITING:
-
-                break;
             case GameManager.TurnState.PLAYER:
-                console.log("> Player's Turn!");
+                //console.log("> Player's Turn!");
 
                 // If all the black pieces are gone, you win
                 if (Map.BLACK_PIECES.length == 0) {
@@ -254,16 +324,20 @@ class GameManager {
                     GameManager.setTurnState(GameManager.TurnState.LOSE);
                 }
 
+                GameManager._ANIMATION_CHECK_INDEX = 0;
+
                 break;
             case GameManager.TurnState.WIN:
                 Map.animateMapOut();
 
                 break;
             case GameManager.TurnState.LOSE:
-                Map.animateMapOut();
+                GameManager._GAME_OVER_SPRITE.bringToFront();
+                GameManager._GAME_OVER_BACK_BUTTON.bringToFront();
+                GameManager._GAME_OVER_TEXT.bringToFront();
+                GameManager._GAME_OVER_TEXT.text = `${GameManager.LEVEL_NUMBER - 1} levels survived`;
 
-                break;
-            case GameManager.TurnState.PAUSED:
+                Map.animateMapOut();
 
                 break;
         }
@@ -302,10 +376,18 @@ class GameManager {
     }
 
     static setActiveTile(tile) {
-        // if (GameManager.ANIMATING_TILES.length > 0 || GameManager.ANIMATING_PIECES.length > 0) {
-        //     GameManager.ACTIVE_TILE = undefined;
-        // } else {
-        // }
         GameManager.ACTIVE_TILE = tile;
+    }
+
+    static _updateUIElements() {
+        GameManager.GAME_SCENE.visible = (GameManager.GAMESTATE == GameManager.GameState.GAME_SETUP || GameManager.GAMESTATE == GameManager.GameState.GAME);
+        GameManager.MENU_SCENE.visible = (GameManager.GAMESTATE == GameManager.GameState.MENU);
+        GameManager.TUTORIAL_SCENE.visible = (GameManager.GAMESTATE == GameManager.GameState.TUTORIAL);
+
+        GameManager._LEVEL_NUMBER_TEXT.visible = (GameManager.TURNSTATE != GameManager.TurnState.LOSE);
+
+        GameManager._GAME_OVER_SPRITE.visible = (GameManager.TURNSTATE == GameManager.TurnState.LOSE);
+        GameManager._GAME_OVER_TEXT.visible = (GameManager.TURNSTATE == GameManager.TurnState.LOSE);
+        GameManager._GAME_OVER_BACK_BUTTON.visible = (GameManager.TURNSTATE == GameManager.TurnState.LOSE);
     }
 }

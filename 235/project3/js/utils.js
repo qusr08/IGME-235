@@ -90,6 +90,7 @@ class Sprites {
     static TITLE;
     static GAMEOVER;
     static TUTORIAL;
+    static BACKGROUND;
 
     static loadSprites() {
         let spriteSheet = app.loader.resources["media/pieces.png"].texture;
@@ -119,13 +120,14 @@ class Sprites {
         Sprites.NEW_PIECE = new PIXI.Texture(spriteSheet, new PIXI.Rectangle(Sprites.TEXTURE_SIZE * 4, Sprites.TEXTURE_SIZE * 3, Sprites.TEXTURE_SIZE, Sprites.TEXTURE_SIZE));
         Sprites.LOCK = new PIXI.Texture(spriteSheet, new PIXI.Rectangle(Sprites.TEXTURE_SIZE * 4, Sprites.TEXTURE_SIZE * 2, Sprites.TEXTURE_SIZE, Sprites.TEXTURE_SIZE));
 
-        Sprites.PLAY_BUTTON = app.loader.resources["media/play.png"].texture;
-        Sprites.TUTORIAL_BUTTON = app.loader.resources["media/tutorial.png"].texture;
-        Sprites.BACK_BUTTON = app.loader.resources["media/back.png"].texture;
+        Sprites.PLAY_BUTTON = app.loader.resources["media/play-button.png"].texture;
+        Sprites.TUTORIAL_BUTTON = app.loader.resources["media/tutorial-button.png"].texture;
+        Sprites.BACK_BUTTON = app.loader.resources["media/back-button.png"].texture;
 
         Sprites.TITLE = app.loader.resources["media/title.png"].texture;
         Sprites.GAMEOVER = app.loader.resources["media/gameover.png"].texture;
         Sprites.TUTORIAL = app.loader.resources["media/tutorial.png"].texture;
+        Sprites.BACKGROUND = app.loader.resources["media/background.png"].texture;
     }
 }
 

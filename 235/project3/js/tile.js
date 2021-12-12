@@ -48,7 +48,7 @@ class Tile extends PIXI.Sprite {
 
     setPiece(piece) {
         if (piece != undefined && this.hasPiece()) {
-            console.log("> Piece taken!");
+            //console.log("> Piece taken!");
 
             this.piece.destroy();
         }
