@@ -103,7 +103,7 @@ class GameManager {
         GameManager._GAME_OVER_TEXT.y = Map.SCENE_HEIGHT / 2;
         GameManager.GAME_SCENE.addChild(GameManager._GAME_OVER_TEXT);
 
-        GameManager._VERSION_TEXT = new PIXI.Text("made by frank alfano\n\nv1.0\n\n1,400+ lines of code");
+        GameManager._VERSION_TEXT = new PIXI.Text("made by frank alfano\n\nv1.1\n\n1,400+ lines of code");
         GameManager._VERSION_TEXT.style = TEXT_STYLE;
         GameManager._VERSION_TEXT.anchor.set(0, 1);
         GameManager._VERSION_TEXT.x = 10;
@@ -253,7 +253,6 @@ class GameManager {
         GameManager.TURNSTATE = turnState;
 
         // Map.update();
-        GameManager.resetHighlightedTiles();
         GameManager._updateUIElements();
 
         //console.log(`Turnstate set to : ${turnState}`);
@@ -308,7 +307,7 @@ class GameManager {
                             break;
                         } else {
                             // If the piece can't move, then just reset it's turns
-                            currPiece.setTurns(4);
+                            currPiece.setTurns(1);
                         }
                     }
                 }
@@ -317,7 +316,7 @@ class GameManager {
 
                 break;
             case GameManager.TurnState.PLAYER:
-                //console.log("> Player's Turn!");
+                console.log("> Player's Turn!");
 
                 // If all the black pieces are gone, you win
                 if (Map.BLACK_PIECES.length == 0) {
@@ -357,6 +356,8 @@ class GameManager {
     }
 
     static setHighlightedTiles(highlightedTiles) {
+        GameManager.resetHighlightedTiles();
+
         GameManager.HIGHLIGHTED_TILES = highlightedTiles;
 
         for (let i = 0; i < GameManager.HIGHLIGHTED_TILES.length; i++) {
@@ -372,11 +373,21 @@ class GameManager {
         GameManager.HIGHLIGHTED_TILES = [];
     }
 
+    static resetAllTiles() {
+        for (let i = 0; i < Map.TILE_LIST.length; i++) {
+            Map.getTile(Map.TILE_LIST[i]).tint = 0xFFFFFF;
+        }
+    }
+
     static setActivePiece(piece) {
         GameManager.ACTIVE_PIECE = piece;
 
         if (GameManager.ACTIVE_PIECE != undefined) {
             GameManager.ACTIVE_PIECE.bringToFront();
+
+            if (GameManager.ACTIVE_PIECE.isWhite) {
+                GameManager.setHighlightedTiles(GameManager.ACTIVE_PIECE.availableTiles);
+            }
         }
     }
 

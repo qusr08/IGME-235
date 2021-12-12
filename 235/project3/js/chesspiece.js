@@ -259,7 +259,12 @@ class BlackChessPiece extends ChessPiece {
 
     setTurns(turns) {
         this.turns = turns;
-        this.setPieceInfoType(turns);
+
+        if (this.turns < 0) {
+            this.setTurns(4);
+        } else {
+            this.setPieceInfoType(turns);
+        }
     }
 
     destroy() {

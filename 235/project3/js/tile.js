@@ -70,19 +70,22 @@ class Tile extends PIXI.Sprite {
     _mouseEnter(e) {
         // Set the tint of this current tile
         this.tint = HOVER_TINT;
-        // Set this tile to the currently active tile
-        GameManager.setActiveTile(this);
 
-        // If there is not a currently selected tile, check to see if there is a piece on this tile
-        if (GameManager.ACTIVE_PIECE == undefined) {
-            // If there is a piece, then highlight the piece's available moves
-            if (this.hasPiece()) {
-                GameManager.setHighlightedTiles(this.piece.availableTiles);
-            }
-        } else {
-            // If there is a selected tile, check to see if this tile is either the selected tile or a tile that the selected piece could move to
-            if (this.piece == GameManager.ACTIVE_PIECE || GameManager.ACTIVE_PIECE.availableTiles.includes(this)) {
-                this.tint = SELECT_TINT;
+        if (GameManager.TURNSTATE == GameManager.TurnState.PLAYER) {
+            // Set this tile to the currently active tile
+            GameManager.setActiveTile(this);
+
+            // If there is not a currently selected tile, check to see if there is a piece on this tile
+            if (GameManager.ACTIVE_PIECE == undefined) {
+                // If there is a piece, then highlight the piece's available moves
+                if (this.hasPiece()) {
+                    GameManager.setHighlightedTiles(this.piece.availableTiles);
+                }
+            } else {
+                // If there is a selected tile, check to see if this tile is either the selected tile or a tile that the selected piece could move to
+                if (this.piece == GameManager.ACTIVE_PIECE || GameManager.ACTIVE_PIECE.availableTiles.includes(this)) {
+                    this.tint = SELECT_TINT;
+                }
             }
         }
     }
@@ -90,54 +93,58 @@ class Tile extends PIXI.Sprite {
     _mouseExit(e) {
         // Reset the tint of this current tile
         this.tint = 0xFFFFFF;
-        // Reset the currently active tile
-        GameManager.setActiveTile(undefined);
 
-        // If there is not a currently selected tile, check to see if there is a piece on this tile
-        if (GameManager.ACTIVE_PIECE == undefined) {
-            // If there is a piece, then make sure to reset the tiles that involve is available moves since the mouse is now moving off of this tile
-            if (this.hasPiece()) {
-                GameManager.resetHighlightedTiles();
-            }
-        } else {
-            // If there is a selected tile, check to see if this tile is the selected tile or a available tile. Each case will result in a different color
-            if (this.piece == GameManager.ACTIVE_PIECE) {
-                this.tint = SELECT_TINT;
-            } else if (GameManager.ACTIVE_PIECE.availableTiles.includes(this)) {
-                this.tint = AVAIL_TINT;
+        if (GameManager.TURNSTATE == GameManager.TurnState.PLAYER) {
+            // Reset the currently active tile
+            GameManager.setActiveTile(undefined);
+
+            // If there is not a currently selected tile, check to see if there is a piece on this tile
+            if (GameManager.ACTIVE_PIECE == undefined) {
+                // If there is a piece, then make sure to reset the tiles that involve is available moves since the mouse is now moving off of this tile
+                if (this.hasPiece()) {
+                    GameManager.resetHighlightedTiles();
+                }
+            } else {
+                // If there is a selected tile, check to see if this tile is the selected tile or a available tile. Each case will result in a different color
+                if (this.piece == GameManager.ACTIVE_PIECE) {
+                    this.tint = SELECT_TINT;
+                } else if (GameManager.ACTIVE_PIECE.availableTiles.includes(this)) {
+                    this.tint = AVAIL_TINT;
+                }
             }
         }
     }
 
     _mouseClick(e) {
-        // If there is a piece currently being moved and the mouse is clicked on this tile
-        if (GameManager.ACTIVE_PIECE != undefined) {
-            // As long as this tile is included within the moving piece's available tiles, place the piece on this tile
-            if (GameManager.ACTIVE_PIECE.availableTiles.includes(this)) {
-                // Reset the tinted tiles
-                GameManager.resetHighlightedTiles();
+        if (GameManager.TURNSTATE == GameManager.TurnState.PLAYER) {
+            // If there is a piece currently being moved and the mouse is clicked on this tile
+            if (GameManager.ACTIVE_PIECE != undefined && GameManager.ACTIVE_PIECE.isWhite) {
+                // As long as this tile is included within the moving piece's available tiles, place the piece on this tile
+                if (GameManager.ACTIVE_PIECE.availableTiles.includes(this)) {
+                    // Reset the tinted tiles
+                    // GameManager.resetHighlightedTiles();
+                    GameManager.resetAllTiles();
 
-                // Move the piece to this tile
-                GameManager.ACTIVE_PIECE.setTilePos(this.tilePos);
+                    // Move the piece to this tile
+                    GameManager.ACTIVE_PIECE.setTilePos(this.tilePos);
 
-                // If the piece that was just moved was a white piece, then the player just used their turn
-                if (GameManager.TURNSTATE == GameManager.TurnState.PLAYER && GameManager.ACTIVE_PIECE.isWhite) {
+                    // If the piece that was just moved was a white piece, then the player just used their turn
                     GameManager.setTurnState(GameManager.TurnState.ENEMY);
+
+                    GameManager.setActivePiece(undefined);
+                } else if (Map.getTile(GameManager.ACTIVE_PIECE.tilePos) == this) {
+                    // Move the piece to this tile
+                    GameManager.ACTIVE_PIECE.setTilePos(this.tilePos);
+
+                    GameManager.setActivePiece(undefined);
                 }
-
-                GameManager.setActivePiece(undefined);
-            } else if (Map.getTile(GameManager.ACTIVE_PIECE.tilePos) == this) {
-                // Move the piece to this tile
-                GameManager.ACTIVE_PIECE.setTilePos(this.tilePos);
-
-                GameManager.setActivePiece(undefined);
+            } else if (this.hasPiece() && this.piece.isWhite) {
+                // If this tile is clicked and there is a piece on it, and there is no currently moving piece, then set this tile's piece to the moving piece
+                GameManager.setActivePiece(this.piece);
             }
-        } else if (GameManager.TURNSTATE == GameManager.TurnState.PLAYER && this.hasPiece() && this.piece.isWhite) {
-            // If this tile is clicked and there is a piece on it, and there is no currently moving piece, then set this tile's piece to the moving piece
-            GameManager.setActivePiece(this.piece);
-        }
 
-        // Update the tinted tiles on the board
-        this._mouseEnter();
+            // Update the tinted tiles on the board
+            this._mouseEnter();
+        }
     }
 }

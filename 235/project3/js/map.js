@@ -233,9 +233,9 @@ class Map {
 
         // If there is currently an active tile and that active tile has a piece on it, update the highlighted tiles so the new available tiles for each piece is updated on the screen
         GameManager.resetHighlightedTiles();
-        if (GameManager.ACTIVE_TILE != undefined && GameManager.ACTIVE_TILE.hasPiece()) {
-            GameManager.setHighlightedTiles(GameManager.ACTIVE_TILE.piece.availableTiles);
-        }
+        // if (GameManager.ACTIVE_TILE != undefined && GameManager.ACTIVE_TILE.hasPiece()) {
+        //     GameManager.setHighlightedTiles(GameManager.ACTIVE_TILE.piece.availableTiles);
+        // }
     }
 
     static isTileAvailable(tilePos) {
