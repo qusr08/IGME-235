@@ -10,23 +10,17 @@ document.getElementById("game").appendChild(app.view);
 
 let stage;
 let gameScene;
-
-let mousePosition = [];
-
-let currMovingPiece = undefined;
-let piecesToAnimate = [];
-let enemyMoveTurns = [];
-let party = [];
-let win = false;
-let lose = false;
-
-// Flags
-let createdLevel = false;
-let isPlayersTurn = false;
+let menuScene;
+let tutorialScene;
 
 // Load sprites and other assets
 app.loader.add([
-    "media/pieces.png"
+    "media/pieces.png",
+    "media/title.png",
+    "media/gameover.png",
+    "media/play.png",
+    "media/tutorial.png",
+    "media/back.png"
 ]);
 app.loader.onProgress.add(e => { console.log(`Loading Pixi.js Assets ... [${e.progress}%]`) });
 app.loader.onComplete.add(setup);
@@ -36,10 +30,39 @@ app.loader.load();
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
 PIXI.Sprite.prototype.bringToFront = function () {
-    if (this.parent) {
-        let parent = this.parent;
+    // Get this sprites parent
+    let parent = this.parent;
+
+    // If the parent is not undefined, then remove and add the sprite back to the list of children
+    // This will put this sprite at the end of the children list, meaning it gets drawn last (and therefore is drawn on top of everything else)
+    if (parent != undefined) {
         parent.removeChild(this);
         parent.addChild(this);
+    }
+}
+
+PIXI.Sprite.prototype.bringInFrontOf = function (other) {
+    if (other == undefined) {
+        return;
+    }
+
+    // Get this sprites parent and the parent of the sprite that you want to set it in front of
+    let parent = this.parent;
+    let otherParent = other.parent;
+
+    // If both parents are not undefined, then we can adjust the draw order of the sprites
+    if (parent != undefined && parent == otherParent) {
+        // Get the index in the array of children
+        let otherChildIndex = parent.getChildIndex(other);
+
+        // Remove this sprite from its current parent and move it to the other sprites parent
+        // Make sure to insert it at the right array value
+        // Inserting the child at the one more than the index of the other sprite will put it after the other sprite, meaning it will be drawn in front of it
+        if (otherChildIndex + 1 >= parent.children.length) {
+            this.bringToFront();
+        } else {
+            parent.setChildIndex(this, otherChildIndex + 1);
+        }
     }
 }
 
@@ -51,6 +74,13 @@ const SELECT_TINT = 0xFF66FF;
 const AVAIL_TINT = 0xFF6666;
 const TEXT_COLOR = 0xEDEDED;
 
+let TEXT_STYLE = new PIXI.TextStyle({
+    fill: 0xEDEDED,
+    fontSize: 18,
+    fontFamily: "5Pixel",
+    strokeThickness: 4
+});
+
 function setup() {
     stage = app.stage;
 
@@ -59,77 +89,27 @@ function setup() {
     stage.on("pointermove", (e) => {
         // Update mouse position variable
         let data = e.data.global;
-        mousePosition = [data.x, data.y];
-
-        // Update current moving piece position to follow mouse
-        if (currMovingPiece != undefined) {
-            currMovingPiece.x = mousePosition[0];
-            currMovingPiece.y = mousePosition[1];
-        }
+        GameManager.MOUSE_POSITION = [data.x, data.y];
     });
 
-    app.view.onclick = (e) => {
-
-    }
-
     gameScene = new PIXI.Container();
+    menuScene = new PIXI.Container();
+    tutorialScene = new PIXI.Container();
     stage.addChild(gameScene);
+    stage.addChild(menuScene);
+    stage.addChild(tutorialScene);
+
+    GameManager.APPLICATION = app;
+    GameManager.GAME_SCENE = gameScene;
 
     // Load sprites on spritesheets into variables
     console.log("Loading Sprites ...");
     Sprites.loadSprites();
 
-    party.push(new ChessPiece(ChessPiece.PieceType.QUEEN, ChessPiece.PieceColor.WHITE, [-1, -1], gameScene));
-    // gameScene.addChild(new Panel(Map.LEVEL_SCREEN_WIDTH, 0, Map.SCENE_WIDTH - Map.LEVEL_SCREEN_WIDTH, Map.SCENE_HEIGHT, 0x444444));
+    GameManager.appSetup();
+
+    GameManager.setGameState(GameManager.GameState.GAME_SETUP);
 
     // Add the game loop to repeat as the application is running
-    app.ticker.add(levelStart);
-}
-
-function levelStart() {
-    // Generate a level
-    if (!createdLevel) {
-        Map.generateLevel(gameScene);
-
-        createdLevel = true;
-    }
-
-    if (party.length == 0) {
-        app.ticker.remove(levelStart);
-        app.ticker.add(game);
-
-        isPlayersTurn = true;
-
-        console.log("!!! Player's Turn!");
-    } else {
-        if (currMovingPiece == undefined) {
-            currMovingPiece = party[0];
-            currMovingPiece.bringToFront();
-        }
-    }
-}
-
-function game() {
-    // for (let i = piecesToAnimate.length - 1; i >= 0; i--) {
-    //     // This animate method returns true when the piece is still animating and false when it finishes
-    //     // So, when this piece is finished animating, remove it from the list
-    //     if (!piecesToAnimate[i].animate()) {
-    //         piecesToAnimate.splice(i, 1);
-    //     }
-    // }
-
-    if (!isPlayersTurn) {
-        let pieceToMove = Map.BLACK_PIECES[Math.floor(randRange(0, Map.BLACK_PIECES.length))];
-        if (pieceToMove != undefined) {
-            console.log("!!! Enemy's Turn!");
-
-            let pieceToTilePos = pieceToMove.availableTiles[Math.floor(randRange(0, pieceToMove.availableTiles.length))].tilePos;
-
-            pieceToMove.moveToTile(pieceToTilePos);
-
-            isPlayersTurn = true;
-
-            console.log("!!! Player's Turn!");
-        }
-    }
+    app.ticker.add(GameManager.update);
 }
