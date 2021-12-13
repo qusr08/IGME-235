@@ -13,20 +13,27 @@ class ChessPiece extends PIXI.Sprite {
         BLACK: 6
     };
 
-    static PieceInfoType = {
+    static PieceTurnType = {
         NONE: 0,
         ONE: 1,
         TWO: 2,
         THREE: 3,
-        FOUR: 4,
-        LOCKED: 5
+        FOUR: 4
+    };
+
+    static PieceAbilityType = {
+        NONE: 0,
+        LOCKED: 1,
+        CRACKED: 2,
+        CLONE: 3,
+        FAST: 4
     };
 
     constructor(pieceType, pieceColor, tilePos = undefined, scene = undefined) {
         super(ChessPiece._getSprite(pieceType, pieceColor));
 
         this.anchor.set(0.5);
-        this.scale.set(Map.TILE_SIZE / Sprites.TEXTURE_SIZE);
+        this.scale.set(GameManager.SPRITE_SCALE);
 
         this.scene = scene;
         this.pieceType = pieceType;
@@ -35,15 +42,21 @@ class ChessPiece extends PIXI.Sprite {
         this.isInitialized = false;
         this.isWhite = (this.pieceColor == ChessPiece.PieceColor.WHITE);
 
-        this.pieceInfoSprite = new PIXI.Sprite(undefined);
-        this.pieceInfoSprite.scale.set(Map.TILE_SIZE / (Sprites.TEXTURE_SIZE * 6));
-        this.pieceInfoSprite.anchor.set(1);
+        this.pieceTurnTypeSprite = new PIXI.Sprite(undefined);
+        this.pieceTurnTypeSprite.scale.set(GameManager.SPRITE_SCALE / 6);
+        this.pieceTurnTypeSprite.anchor.set(1);
 
-        this.setPieceInfoType(ChessPiece.PieceInfoType.NONE);
+        this.pieceAbilityTypeSprite = new PIXI.Sprite(undefined);
+        this.pieceAbilityTypeSprite.scale.set(GameManager.SPRITE_SCALE / 6);
+        this.pieceAbilityTypeSprite.anchor.set(0, 1);
+
+        this.setPieceTurnType(ChessPiece.PieceTurnType.NONE);
+        this.setPieceAbilityType(ChessPiece.PieceAbilityType.NONE);
 
         if (scene != undefined) {
             scene.addChild(this);
-            this.addChild(this.pieceInfoSprite);
+            this.addChild(this.pieceTurnTypeSprite);
+            this.addChild(this.pieceAbilityTypeSprite);
         }
 
         if (this.isWhite) {
@@ -52,62 +65,17 @@ class ChessPiece extends PIXI.Sprite {
             Map.BLACK_PIECES.push(this);
         }
 
-        this.setTilePos(tilePos, true, false);
+        this.setTilePos(tilePos, true, false, false);
     }
 
-    setPieceInfoType(pieceInfoType) {
-        this.pieceInfoType = pieceInfoType;
-
-        // Update the info sprite
-        this.pieceInfoSprite.texture = ChessPiece._getInfoSprite(this.pieceInfoType);
+    setPieceTurnType(pieceTurnType) {
+        this.pieceTurnType = pieceTurnType;
+        this.pieceTurnTypeSprite.texture = ChessPiece._getTurnTypeSprite(this.pieceTurnType);
     }
 
-    static _getInfoSprite(pieceInfoType) {
-        switch (pieceInfoType) {
-            case ChessPiece.PieceInfoType.ONE:
-                return Sprites.NUMBER_1;
-            case ChessPiece.PieceInfoType.TWO:
-                return Sprites.NUMBER_2;
-            case ChessPiece.PieceInfoType.THREE:
-                return Sprites.NUMBER_3;
-            case ChessPiece.PieceInfoType.FOUR:
-                return Sprites.NUMBER_4;
-            case ChessPiece.PieceInfoType.LOCKED:
-                return Sprites.LOCK;
-            default:
-                return undefined;
-        }
-    }
-
-    static _getSprite(pieceType, pieceColor) {
-        switch (pieceType + pieceColor) {
-            case 0:
-                return Sprites.WHITE_PAWN;
-            case 1:
-                return Sprites.WHITE_ROOK;
-            case 2:
-                return Sprites.WHITE_KNIGHT;
-            case 3:
-                return Sprites.WHITE_BISHOP;
-            case 4:
-                return Sprites.WHITE_QUEEN;
-            case 5:
-                return Sprites.WHITE_KING;
-            case 6:
-                return Sprites.BLACK_PAWN;
-            case 7:
-                return Sprites.BLACK_ROOK;
-            case 8:
-                return Sprites.BLACK_KNIGHT;
-            case 9:
-                return Sprites.BLACK_BISHOP;
-            case 10:
-                return Sprites.BLACK_QUEEN;
-            case 11:
-                return Sprites.BLACK_KING;
-            default:
-                return Sprites.WHITE_PAWN;
-        }
+    setPieceAbilityType(pieceAbilityType) {
+        this.pieceAbilityType = pieceAbilityType;
+        this.pieceAbilityTypeSprite.texture = ChessPiece._getAbilityTypeSprite(this.pieceAbilityType);
     }
 
     update() {
@@ -118,14 +86,10 @@ class ChessPiece extends PIXI.Sprite {
 
         // Clear the currently available tiles
         this.availableTiles = [];
-
         // Add the current tile the piece is standing on
         this._tryAddTile(this.tilePos);
-
         // Based on the piece type, add board tiles to a list of possible tiles that the piece can move to
         switch (this.pieceType) {
-            case ChessPiece.PieceType.PAWN:
-                break;
             case ChessPiece.PieceType.ROOK:
                 this._addTilesInLine(Map.UP);
                 this._addTilesInLine(Map.RIGHT);
@@ -175,20 +139,37 @@ class ChessPiece extends PIXI.Sprite {
 
                 break;
         }
+
+        if (!this.isWhite) {
+            if (this.pieceAbilityType == ChessPiece.PieceAbilityType.FAST) {
+                this.setTurns(1);
+            }
+        }
     }
 
-    setTilePos(tilePos, setScreenPos = true, playSoundEffect = true) {
+    setTilePos(tilePos, setScreenPos = true, playSoundEffect = true, doAbility = true) {
+        let currTile = undefined;
+        let toTile = undefined;
+
         if (this.tilePos != undefined) {
-            let currTile = Map.getTile(this.tilePos);
+            currTile = Map.getTile(this.tilePos);
             if (currTile != undefined) {
                 currTile.setPiece(undefined);
             }
         }
 
         if (tilePos != undefined) {
-            let toTile = Map.getTile(tilePos);
+            toTile = Map.getTile(tilePos);
             if (toTile != undefined) {
                 toTile.setPiece(this);
+            }
+
+            if (!this.isWhite && doAbility) {
+                if (this.pieceAbilityType == ChessPiece.PieceAbilityType.CRACKED) {
+                    Map.animateTilesOut([this]);
+                } else if (this.pieceAbilityType == ChessPiece.PieceAbilityType.CLONE) {
+                    let piece = new BlackChessPiece(this.pieceType, ChessPiece.PieceTurnType.FOUR + 1, ChessPiece.PieceAbilityType.NONE, this.tilePos, this.scene);
+                }
             }
 
             this.tilePos = tilePos;
@@ -244,13 +225,75 @@ class ChessPiece extends PIXI.Sprite {
 
         return false;
     }
+
+    static _getTurnTypeSprite(pieceTurnType) {
+        switch (pieceTurnType) {
+            case ChessPiece.PieceTurnType.ONE:
+                return Sprites.NUMBER_1;
+            case ChessPiece.PieceTurnType.TWO:
+                return Sprites.NUMBER_2;
+            case ChessPiece.PieceTurnType.THREE:
+                return Sprites.NUMBER_3;
+            case ChessPiece.PieceTurnType.FOUR:
+                return Sprites.NUMBER_4;
+            default:
+                return undefined;
+        }
+    }
+
+    static _getAbilityTypeSprite(pieceAbilityType) {
+        switch (pieceAbilityType) {
+            case ChessPiece.PieceAbilityType.LOCKED:
+                return Sprites.LOCKED;
+            case ChessPiece.PieceAbilityType.CRACKED:
+                return Sprites.CRACKED;
+            case ChessPiece.PieceAbilityType.CLONE:
+                return Sprites.CLONE;
+            case ChessPiece.PieceAbilityType.FAST:
+                return Sprites.FAST;
+            default:
+                return undefined;
+        }
+    }
+
+    static _getSprite(pieceType, pieceColor) {
+        switch (pieceType + pieceColor) {
+            case 0:
+                return Sprites.WHITE_PAWN;
+            case 1:
+                return Sprites.WHITE_ROOK;
+            case 2:
+                return Sprites.WHITE_KNIGHT;
+            case 3:
+                return Sprites.WHITE_BISHOP;
+            case 4:
+                return Sprites.WHITE_QUEEN;
+            case 5:
+                return Sprites.WHITE_KING;
+            case 6:
+                return Sprites.BLACK_PAWN;
+            case 7:
+                return Sprites.BLACK_ROOK;
+            case 8:
+                return Sprites.BLACK_KNIGHT;
+            case 9:
+                return Sprites.BLACK_BISHOP;
+            case 10:
+                return Sprites.BLACK_QUEEN;
+            case 11:
+                return Sprites.BLACK_KING;
+            default:
+                return Sprites.WHITE_PAWN;
+        }
+    }
 }
 
 class BlackChessPiece extends ChessPiece {
-    constructor(pieceType, turns, tilePos = undefined, scene = undefined) {
+    constructor(pieceType, turns, ability, tilePos = undefined, scene = undefined) {
         super(pieceType, ChessPiece.PieceColor.BLACK, tilePos, scene);
 
         this.setTurns(turns);
+        this.setPieceAbilityType(ability);
     }
 
     subtractTurn() {
@@ -259,18 +302,11 @@ class BlackChessPiece extends ChessPiece {
 
     setTurns(turns) {
         this.turns = turns;
-
-        if (this.turns < 0) {
-            this.setTurns(4);
-        } else {
-            this.setPieceInfoType(turns);
-        }
+        this.setPieceTurnType(this.turns);
     }
 
     destroy() {
         this.scene.removeChild(this);
-        this.scene.removeChild(this.pieceInfoSprite);
-
         Map.BLACK_PIECES.splice(Map.BLACK_PIECES.indexOf(this), 1);
     }
 }
@@ -282,8 +318,6 @@ class WhiteChessPiece extends ChessPiece {
 
     destroy() {
         this.scene.removeChild(this);
-        this.scene.removeChild(this.pieceInfoSprite);
-
         Map.WHITE_PIECES.splice(Map.WHITE_PIECES.indexOf(this), 1);
     }
 }

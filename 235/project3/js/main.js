@@ -2,16 +2,11 @@
 "use strict";
 
 const app = new PIXI.Application({
-    width: Map.SCENE_WIDTH,
-    height: Map.SCENE_HEIGHT,
+    width: GameManager.SCENE_WIDTH,
+    height: GameManager.SCENE_HEIGHT,
     backgroundColor: 0x171717
 });
 document.getElementById("game").appendChild(app.view);
-
-let stage;
-let gameScene;
-let menuScene;
-let tutorialScene;
 
 // Load sprites and other assets
 app.loader.add([

@@ -80,8 +80,10 @@ class Sprites {
     static NUMBER_3;
     static NUMBER_4;
 
-    static NEW_PIECE;
-    static LOCK;
+    static LOCKED;
+    static CRACKED;
+    static CLONE;
+    static FAST;
 
     static PLAY_BUTTON;
     static TUTORIAL_BUTTON;
@@ -117,8 +119,10 @@ class Sprites {
         Sprites.NUMBER_3 = new PIXI.Texture(spriteSheet, new PIXI.Rectangle(Sprites.TEXTURE_SIZE * 2, Sprites.TEXTURE_SIZE * 3, Sprites.TEXTURE_SIZE, Sprites.TEXTURE_SIZE));
         Sprites.NUMBER_4 = new PIXI.Texture(spriteSheet, new PIXI.Rectangle(Sprites.TEXTURE_SIZE * 3, Sprites.TEXTURE_SIZE * 3, Sprites.TEXTURE_SIZE, Sprites.TEXTURE_SIZE));
 
-        Sprites.NEW_PIECE = new PIXI.Texture(spriteSheet, new PIXI.Rectangle(Sprites.TEXTURE_SIZE * 4, Sprites.TEXTURE_SIZE * 3, Sprites.TEXTURE_SIZE, Sprites.TEXTURE_SIZE));
-        Sprites.LOCK = new PIXI.Texture(spriteSheet, new PIXI.Rectangle(Sprites.TEXTURE_SIZE * 4, Sprites.TEXTURE_SIZE * 2, Sprites.TEXTURE_SIZE, Sprites.TEXTURE_SIZE));
+        Sprites.LOCKED = new PIXI.Texture(spriteSheet, new PIXI.Rectangle(Sprites.TEXTURE_SIZE * 4, Sprites.TEXTURE_SIZE * 2, Sprites.TEXTURE_SIZE, Sprites.TEXTURE_SIZE));
+        Sprites.CRACKED = new PIXI.Texture(spriteSheet, new PIXI.Rectangle(Sprites.TEXTURE_SIZE * 5, Sprites.TEXTURE_SIZE * 2, Sprites.TEXTURE_SIZE, Sprites.TEXTURE_SIZE));
+        Sprites.CLONE = new PIXI.Texture(spriteSheet, new PIXI.Rectangle(Sprites.TEXTURE_SIZE * 4, Sprites.TEXTURE_SIZE * 3, Sprites.TEXTURE_SIZE, Sprites.TEXTURE_SIZE));
+        Sprites.FAST = new PIXI.Texture(spriteSheet, new PIXI.Rectangle(Sprites.TEXTURE_SIZE * 5, Sprites.TEXTURE_SIZE * 3, Sprites.TEXTURE_SIZE, Sprites.TEXTURE_SIZE));
 
         Sprites.PLAY_BUTTON = app.loader.resources["media/play-button.png"].texture;
         Sprites.TUTORIAL_BUTTON = app.loader.resources["media/tutorial-button.png"].texture;

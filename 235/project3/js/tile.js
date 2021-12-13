@@ -7,7 +7,7 @@ class Tile extends PIXI.Sprite {
     constructor(tileType, tilePos, scene = undefined) {
         super(Tile._getSprite(tileType));
 
-        this.scale.set(Map.TILE_SIZE / Sprites.TEXTURE_SIZE);
+        this.scale.set(GameManager.SPRITE_SCALE);
 
         this.tilePos = tilePos;
         this.tileType = tileType;
@@ -72,9 +72,6 @@ class Tile extends PIXI.Sprite {
         this.tint = HOVER_TINT;
 
         if (GameManager.TURNSTATE == GameManager.TurnState.PLAYER) {
-            // Set this tile to the currently active tile
-            GameManager.setActiveTile(this);
-
             // If there is not a currently selected tile, check to see if there is a piece on this tile
             if (GameManager.ACTIVE_PIECE == undefined) {
                 // If there is a piece, then highlight the piece's available moves
@@ -95,9 +92,6 @@ class Tile extends PIXI.Sprite {
         this.tint = 0xFFFFFF;
 
         if (GameManager.TURNSTATE == GameManager.TurnState.PLAYER) {
-            // Reset the currently active tile
-            GameManager.setActiveTile(undefined);
-
             // If there is not a currently selected tile, check to see if there is a piece on this tile
             if (GameManager.ACTIVE_PIECE == undefined) {
                 // If there is a piece, then make sure to reset the tiles that involve is available moves since the mouse is now moving off of this tile
@@ -122,7 +116,6 @@ class Tile extends PIXI.Sprite {
                 // As long as this tile is included within the moving piece's available tiles, place the piece on this tile
                 if (GameManager.ACTIVE_PIECE.availableTiles.includes(this)) {
                     // Reset the tinted tiles
-                    // GameManager.resetHighlightedTiles();
                     GameManager.resetAllTiles();
 
                     // Move the piece to this tile

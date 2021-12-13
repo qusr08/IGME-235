@@ -1,13 +1,9 @@
 class Map {
-    // The size of the game window in pixel
-    static SCENE_WIDTH = 1280;
-    static SCENE_HEIGHT = 720;
-
     static TILE_SIZE = 64; // The pixel size of each tile
     static GEN_LEVEL_WIDTH = 17; // The level width in tiles
     static GEN_LEVEL_HEIGHT = 9; // The level height in tiles
     static GEN_LEVEL_ITER = parseInt((Map.GEN_LEVEL_WIDTH * Map.GEN_LEVEL_HEIGHT) / 3); // The minimum number of tiles for each level
-    static LEVEL_BORDER = parseInt((Map.SCENE_HEIGHT - (Map.TILE_SIZE * Map.GEN_LEVEL_HEIGHT)) / 2); // The border of the map around the edge of the screen
+    static LEVEL_BORDER = parseInt((GameManager.SCENE_HEIGHT - (Map.TILE_SIZE * Map.GEN_LEVEL_HEIGHT)) / 2); // The border of the map around the edge of the screen
 
     // The size of the level in pixels
     static LEVEL_SCREEN_WIDTH = (Map.LEVEL_BORDER * 2) + (Map.GEN_LEVEL_WIDTH * Map.TILE_SIZE);
@@ -21,6 +17,7 @@ class Map {
 
     static TILE_POSITIONS = Array.from(Array(Map.GEN_LEVEL_WIDTH), () => new Array(Map.GEN_LEVEL_HEIGHT));
     static TILE_LIST = [];
+
     static BLACK_PIECES = [];
     static WHITE_PIECES = [];
 
@@ -143,7 +140,8 @@ class Map {
 
         //#region Placing Black Pieces
         // Calculate the number of pieces to spawn based on the size of the map
-        let numPieces = Math.ceil(Map.TILE_LIST.length / Map.GEN_LEVEL_ITER * 12);
+        // let numPieces = Math.ceil(Map.TILE_LIST.length / Map.GEN_LEVEL_ITER * 12);
+        let numPieces = 3;
         // let numPieces = 1;
         // A list of all the available positions for a piece to spawn
         let availablePositions = [...Map.TILE_LIST];
@@ -163,7 +161,13 @@ class Map {
             // Generate a random piece between a rook and a king (leaving out pawn)
             let pieceType = Math.floor(Utils.randRange(ChessPiece.PieceType.ROOK, ChessPiece.PieceType.KING + 1));
             let turnIndex = Math.floor(Utils.randRange(0, availableTurns.length));
-            let piece = new BlackChessPiece(pieceType, availableTurns[turnIndex], pieceTilePos, scene);
+
+            let pieceAbility = ChessPiece.PieceAbilityType.CRACKED;
+            // if (Math.random() < 0.25) {
+            //     pieceAbility = Math.floor(Utils.randRange(ChessPiece.PieceAbilityType.CRACKED, ChessPiece.PieceAbilityType.FAST + 1));
+            // }
+
+            let piece = new BlackChessPiece(pieceType, availableTurns[turnIndex], pieceAbility, pieceTilePos, scene);
 
             availableTurns.splice(turnIndex, 1);
             if (availableTurns.length == 0) {
@@ -211,15 +215,85 @@ class Map {
 
     static update() {
         // Update the z index of all tiles in the map
-        for (let x = 0; x < Map.GEN_LEVEL_WIDTH; x++) {
-            for (let y = 0; y < Map.GEN_LEVEL_HEIGHT; y++) {
-                // Make sure that the tile exists first
-                let tile = Map.getTile([x, y]);
-                if (tile != undefined) {
-                    tile.update();
-                }
+        for (let i = 0; i < Map.TILE_LIST.length; i++) {
+            let tile = Map.getTile(Map.TILE_LIST[i]);
+            if (tile != undefined) {
+                tile.update();
             }
         }
+
+        // let tileGroups = [];
+        // let surroundingGroupIndecies = [];
+        // for (let i = 0; i < Map.TILE_LIST.length; i++) {
+        //     let tile = Map.getTile(Map.TILE_LIST[i]);
+        //     if (tile == undefined) {
+        //         continue;
+        //     }
+
+        //     surroundingGroupIndecies = [];
+        //     // Get the surrounding tiles to the current tile
+        //     let surroundingTiles = [
+        //         Map.getTile(Utils.add2DArray(tile.tilePos, Map.UP)),
+        //         Map.getTile(Utils.add2DArray(tile.tilePos, Map.RIGHT)),
+        //         Map.getTile(Utils.add2DArray(tile.tilePos, Map.DOWN)),
+        //         Map.getTile(Utils.add2DArray(tile.tilePos, Map.LEFT))
+        //     ];
+
+        //     // Loop through all generated groups
+        //     for (let j = 0; j < tileGroups.length; j++) {
+        //         // Loop through all surrounding tiles
+        //         for (let k = 0; k < surroundingTiles.length; k++) {
+        //             // If the surrounding tile is undefined, its either a hole in the map or its outside the bounds of the map
+        //             if (surroundingTiles[k] == undefined) {
+        //                 continue;
+        //             }
+
+        //             // If the current group includes the surrounding tile, then this current tile should be part of that group
+        //             if (!surroundingGroupIndecies.includes(j) && tileGroups[j].includes(surroundingTiles[k])) {
+        //                 // Add the current tile to the group
+        //                 surroundingGroupIndecies.push(j);
+        //             }
+        //         }
+        //     }
+
+        //     // If the current tile has 2 or more surrounding groups, combine all of those groups into 1 group
+        //     if (surroundingGroupIndecies.length > 1) {
+        //         let newGroup = [];
+        //         let index = 0;
+        //         for (let i = surroundingGroupIndecies.length - 1; i >= 0; i--) {
+        //             index = surroundingGroupIndecies[i];
+
+        //             for (let j = 0; j < tileGroups[index].length; j++) {
+        //                 newGroup.push(tileGroups[index][j]);
+        //             }
+
+        //             tileGroups.splice(index, 1);
+        //         }
+
+        //         tileGroups.push(newGroup);
+        //     } else if (surroundingGroupIndecies.length == 1) {
+        //         // If there is only 1 surrounding group, then just add the current tile to that group
+        //         tileGroups[surroundingGroupIndecies[0]].push(tile);
+        //     } else {
+        //         // If there are no surrounding groups, make a new group for this tile
+        //         tileGroups.push([tile]);
+        //     }
+        // }
+
+        // // Find the biggest group and destroy the rest of them
+        // if (tileGroups.length > 1) {
+        //     let biggestGroupIndex = 0;
+
+        //     for (let i = 1; i < tileGroups.length; i++) {
+        //         // If the current tile group is bigger than the previous 
+        //         if (tileGroups[i].length > tileGroups[biggestGroupIndex].length) {
+        //             Map.animateTilesOut(tileGroups[biggestGroupIndex]);
+        //             biggestGroupIndex = i;
+        //         } else {
+        //             Map.animateTilesOut(tileGroups[i]);
+        //         }
+        //     }
+        // }
 
         // Update all black piece available tiles
         for (let i = 0; i < Map.BLACK_PIECES.length; i++) {
@@ -233,9 +307,6 @@ class Map {
 
         // If there is currently an active tile and that active tile has a piece on it, update the highlighted tiles so the new available tiles for each piece is updated on the screen
         GameManager.resetHighlightedTiles();
-        // if (GameManager.ACTIVE_TILE != undefined && GameManager.ACTIVE_TILE.hasPiece()) {
-        //     GameManager.setHighlightedTiles(GameManager.ACTIVE_TILE.piece.availableTiles);
-        // }
     }
 
     static isTileAvailable(tilePos) {
@@ -257,11 +328,35 @@ class Map {
         return Map.TILE_POSITIONS[tilePos[0]][tilePos[1]];
     }
 
+    static animateTilesOut(tiles) {
+        for (let i = 0; i < tiles.length; i++) {
+            let tile = Map.getTile(tiles[i].tilePos);
+            if (tile != undefined) {
+                let tileFromScreenPos = tile.screenPos;
+                let tileToScreenPos = Utils.add2DArray(tile.screenPos, [0, Map.LEVEL_SCREEN_HEIGHT]);
+
+                GameManager.addAnimatingSprite(new SpriteAnimation(tile, tileFromScreenPos, tileToScreenPos, 15, undefined, () => {
+                    Map.TILE_LIST.splice(Map.TILE_LIST.indexOf(tile), 1);
+                    Map.TILE_POSITIONS[tile.tilePos[0]][tile.tilePos[1]] = undefined;
+                }, i * 4));
+                if (tile.hasPiece()) {
+                    let pieceToScreenPos = Map.convertTileToScreenPos(tile.tilePos, true);
+                    let pieceFromScreenPos = Utils.add2DArray(pieceToScreenPos, [0, Map.LEVEL_SCREEN_HEIGHT]);
+                    GameManager.addAnimatingSprite(new SpriteAnimation(tile.piece, pieceFromScreenPos, pieceToScreenPos, 15, undefined, () => {
+                        tile.piece.destroy();
+                        Map.update();
+                    }, i * 4));
+                }
+            }
+        }
+    }
+
     static animateMapIn() {
         GameManager.resetHighlightedTiles();
 
-        let count = 0;
+        // for (let i = 0; i < Map.TILE_LIST.length; i++) {}
 
+        let count = 0;
         for (let y = 0; y < Map.GEN_LEVEL_HEIGHT; y++) {
             for (let x = 0; x < Map.GEN_LEVEL_WIDTH; x++) {
                 let tile = Map.getTile([x, y]);
@@ -270,11 +365,11 @@ class Map {
                     let tileFromScreenPos = Utils.add2DArray(tile.screenPos, [0, Map.LEVEL_SCREEN_HEIGHT]);
                     let tileToScreenPos = tile.screenPos;
 
-                    GameManager.addAnimatingTile(new SpriteAnimation(tile, tileFromScreenPos, tileToScreenPos, 15, undefined, undefined, count));
+                    GameManager.addAnimatingSprite(new SpriteAnimation(tile, tileFromScreenPos, tileToScreenPos, 15, undefined, undefined, count));
                     if (tile.hasPiece()) {
                         let pieceToScreenPos = Map.convertTileToScreenPos(tile.tilePos, true);
                         let pieceFromScreenPos = Utils.add2DArray(pieceToScreenPos, [0, Map.LEVEL_SCREEN_HEIGHT]);
-                        GameManager.addAnimatingTile(new SpriteAnimation(tile.piece, pieceFromScreenPos, pieceToScreenPos, 15, undefined, undefined, count));
+                        GameManager.addAnimatingSprite(new SpriteAnimation(tile.piece, pieceFromScreenPos, pieceToScreenPos, 15, undefined, undefined, count));
                     }
 
                     count += 4;
@@ -287,7 +382,6 @@ class Map {
         GameManager.resetHighlightedTiles();
 
         let count = 0;
-
         for (let y = Map.GEN_LEVEL_HEIGHT - 1; y >= 0; y--) {
             for (let x = 0; x < Map.GEN_LEVEL_WIDTH; x++) {
                 let tile = Map.getTile([x, y]);
@@ -296,11 +390,11 @@ class Map {
                     let tileFromScreenPos = tile.screenPos;
                     let tileToScreenPos = Utils.add2DArray(tile.screenPos, [0, Map.LEVEL_SCREEN_HEIGHT]);
 
-                    GameManager.addAnimatingTile(new SpriteAnimation(tile, tileFromScreenPos, tileToScreenPos, 15, undefined, undefined, count));
+                    GameManager.addAnimatingSprite(new SpriteAnimation(tile, tileFromScreenPos, tileToScreenPos, 15, undefined, undefined, count));
                     if (tile.hasPiece()) {
                         let pieceFromScreenPos = tile.piece.screenPos;
                         let pieceToScreenPos = Utils.add2DArray(tile.piece.screenPos, [0, Map.LEVEL_SCREEN_HEIGHT]);
-                        GameManager.addAnimatingTile(new SpriteAnimation(tile.piece, pieceFromScreenPos, pieceToScreenPos, 15, undefined, undefined, count));
+                        GameManager.addAnimatingSprite(new SpriteAnimation(tile.piece, pieceFromScreenPos, pieceToScreenPos, 15, undefined, undefined, count));
                     }
 
                     count += 4;
