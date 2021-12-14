@@ -309,19 +309,22 @@ class Map {
         GameManager.resetHighlightedTiles();
     }
 
-    static isTileAvailable(tilePos) {
-        // Get the tile and make sure it exists
-        return (Map.getTile(tilePos) != undefined);
-    }
-
-    static getTile(tilePos) {
+    static isTilePosInBounds(tilePos) {
         // If the input tile pos is undefined, obviously there is no tile to get from its position :)
         if (tilePos == undefined) {
-            return undefined;
+            return false;
         }
 
         // Check to make sure the tiles are within the bounds of the map
         if (!Utils.inRange(tilePos[0], 0, Map.GEN_LEVEL_WIDTH - 1) || !Utils.inRange(tilePos[1], 0, Map.GEN_LEVEL_HEIGHT - 1)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    static getTile(tilePos) {
+        if (!Map.isTilePosInBounds(tilePos)) {
             return undefined;
         }
 

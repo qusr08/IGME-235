@@ -221,6 +221,10 @@ class ChessPiece extends PIXI.Sprite {
 
                 return false;
             }
+        } else {
+            if (Map.isTilePosInBounds(tilePos)) {
+                return true;
+            }
         }
 
         return false;
