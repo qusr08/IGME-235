@@ -1,0 +1,290 @@
+* {
+    margin: 0;
+    font-family: monospace;
+}
+
+:root {
+    --color1: #22577A;
+    --color2: #38A3A5;
+    --color3: #57CC99;
+    --color4: #80ED99;
+}
+
+::selection {
+    color: var(--color1);
+    background: var(--color4);
+}
+
+hr {
+    margin: 30px 5%;
+    background-color: var(--color4);
+    border: 2px solid var(--color4);
+    border-radius: 10px 10px 10px 10px;
+}
+
+p {
+    padding: 10px;
+    font-size: 1.5em;
+}
+
+
+/* #region Header */
+
+header {
+    /* Make the menu bar stick to the top of the page at all times */
+    position: sticky;
+    top: 0;
+    /* Make menu bar stay above everything else on the webpage */
+    z-index: 10000;
+}
+
+.logo-image {
+    position: absolute;
+    left: calc(50% - (264px / 2));
+    margin: 10px 0;
+}
+
+@media screen and (max-height:650px) {
+    .logo-image {
+        display: none;
+    }
+}
+
+footer {
+    background: linear-gradient(90deg, var(--color2), var(--color1));
+    text-align: center;
+    padding: 30px;
+}
+
+
+/* #endregion */
+
+
+/* #region Menu Bar */
+
+.menubar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 0 0;
+    /* Make sure the menu bar fills the entire top part of the screen */
+    align-items: stretch;
+    background: linear-gradient(270deg, var(--color2), var(--color1));
+    /* background-color: var(--color1); */
+}
+
+.menubar-title {
+    padding: 10px;
+    /* Have the title part of the menu bar take up all left over room */
+    flex: 1;
+    color: var(--color4);
+    font-size: 2.5em;
+}
+
+.menubar-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    /* margin-bottom: 5px; */
+}
+
+.menubar-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    font-size: 1.5em;
+    text-align: center;
+    transition: background-color 0.5s ease;
+    background-color: var(--color3);
+    font-weight: bolder;
+}
+
+.menubar-button:hover {
+    background-color: var(--color4);
+}
+
+
+/* Have the menu bar buttons move to a new line once the screen gets smaller */
+
+@media screen and (max-width:1200px) {
+    .menubar {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+        justify-content: center;
+        gap: 0 25%;
+    }
+    .menubar-title {
+        text-align: center;
+    }
+}
+
+/*#endregion */
+
+
+/* #region Sections */
+
+.section-link {
+    display: block;
+    position: relative;
+    top: -55px;
+    visibility: hidden;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2em;
+    margin: 10px;
+}
+
+.section-title h3 {
+    color: var(--color2);
+}
+
+.section-image {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    height: 95vh;
+    text-align: center;
+    font-size: 4em;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.4);
+    background-blend-mode: multiply;
+    /* background-image: var(--background); */
+    background-position: center;
+}
+
+@media screen and (max-width: 700px) {
+    .section-image {
+        font-size: 2.5em;
+    }
+}
+
+.section-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    margin: 10px;
+    border-width: 5px;
+    border-style: solid;
+    border-image: linear-gradient(45deg, var(--color4), var(--color2)) 1;
+    background: linear-gradient(0deg, var(--color2), var(--color1));
+}
+
+
+/* #region About */
+
+.about {
+    display: flex;
+    flex-flow: row nowrap;
+    margin: 0 10%;
+    justify-content: center;
+    align-items: center;
+}
+
+.about img {
+    border-width: 10px;
+    border-style: solid;
+    border-image: linear-gradient(90deg, var(--color4), var(--color2)) 1;
+}
+
+@media screen and (max-width: 1100px) {
+    .about {
+        flex-flow: column nowrap;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .about {
+        margin: 0 10px;
+    }
+}
+
+
+/* #endregion */
+
+.exercises {}
+
+.projects {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+
+/* #region Socials */
+
+.socials {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 5%;
+}
+
+.socials-links {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 10px;
+}
+
+.socials-link {
+    display: flex;
+    width: max(50px);
+    aspect-ratio: 1;
+    /* transition: border-width 0.5s ease;
+    border-width: 0px;
+    border-style: solid;
+    border-color: var(--color4);
+    border-radius: 100%; */
+}
+
+.socials-link img {
+    width: 100%;
+}
+
+
+/* .socials-link:hover {
+    border-width: 10px;
+} */
+
+
+/* #endregion */
+
+.project-button {
+    aspect-ratio: 1;
+    font-size: 2em;
+}
+
+
+/* #endregion */
+
+
+/* #region Links */
+
+a:link {
+    color: var(--color1);
+    text-decoration: none;
+}
+
+a:visited {
+    color: var(--color1);
+    text-decoration: none;
+}
+
+a:focus {
+    color: var(--color2);
+    text-decoration: underline;
+}
+
+a:hover {
+    color: var(--color2);
+    text-decoration: underline;
+}
+
+a:active {
+    color: white;
+    text-decoration: underline;
+}
+
+
+/* #endregion */

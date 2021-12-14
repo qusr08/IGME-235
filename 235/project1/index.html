@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link rel="stylesheet" href="../homepage/styles/homepage-style-1.1.css">
     <link rel="stylesheet" href="css/style.css">
 
     <title>Portfolio - Frank Alfano</title>
@@ -13,132 +14,193 @@
 
 <body>
     <header>
-        <!-- The top menu bar -->
         <div class="menubar">
-            <h1 id="title">Frank Alfano</h1>
-            <div class="buttons">
-                <div class="button"><a href="#about">About</a></div>
-                <div class="button"><a href="#gallery">Gallery</a></div>
-                <div class="button"><a href="#contact">Contact</a></div>
-                <div class="button"><a href="media/Resume.pdf" target="_blank">Resume</a></div>
+            <h1 class="menubar-title">Frank Alfano</h1>
+            <div class="menubar-buttons">
+                <!-- <a class="menubar-button" href="#about">About</a> -->
+                <a class="menubar-button" href="#prichi">Prichi</a>
+                <a class="menubar-button" href="#blockchain">Blockchain</a>
+                <a class="menubar-button" href="#wumpus">Wumpus</a>
+                <a class="menubar-button" href="#collab">Collab</a>
             </div>
         </div>
     </header>
 
     <main>
-        <!-- Info about me -->
-        <div id="about">
-            <div id="pfp">
-                <img src="media/pfp.jpg" alt="">
-                <h1>I want people to have fun and enjoy themselves. Developing games is a way for me to do that.</h1>
-                <p>
-                    My name is Frank Alfano and I am a game developer! I have been programming since I was in 5th grade, and have mainly worked with Unity and C#. I find programming video games to be very relaxing and rewarding, so most of my free time is spent learning
-                    and working on personal projects. When I'm not developing, I am riding my bike or just enjoying the outdoors.
-                </p>
+        <!-- <img class="logo-image" src="../homepage/images/logos/trevolte-logo.png" alt=""> -->
+        <div class="section-image" style="background-image: url('media/code-wallpaper.png');">
+            <h1>Portfolio</h1>
+            <h3>Frank Alfano</h3>
+            <h6><em>Game Developer</em></h6>
+        </div>
+
+        <hr>
+        <div class="section-link" id="about"></div>
+        <div class="section-title">
+            <h3>About</h3>
+        </div>
+        <div class="about">
+            <img src="../homepage/images/pfp.jpg" alt="">
+            <p>My name is Frank Alfano and I am a game developer! I have been programming video games since I was in 5th grade and love to work with math and computers. I like all aspects of game design, but programming is definitely my strongest skill.
+                I have been using Unity and C# to make most of my games, but I also know Java and Python as well as HTML, CSS, and Javascript for web development. Currently, my colleague <a href="https://www.linkedin.com/in/joseph-ferrugio-10262001/"
+                    target="_blank">Joe Ferrugio</a> and I created and are partnered in the company Trevolte Studios, where we plan to release games we make. My dream job would be to eventually get this game studio off the ground, but any job where I'm working
+                on games would be fine with me.
+                <br><br> Other than computers, I like to ride my bike and enjoy the outdoors as much as possible. Also, I find space to be particularly interesting, so looking up at the stars and using my telescope at home is another fun thing to do.</p>
+        </div>
+        <div class="socials">
+            <div class="socials-links">
+                <a class="socials-link" href="https://twitter.com/__qusr" target="_blank"><img src="../homepage/images/logos/twitter-logo.png" alt=""></a>
+                <a class="socials-link" href="https://www.instagram.com/__qusr/" target="_blank"><img src="../homepage/images/logos/instagram-logo.png" alt=""></a>
+                <a class="socials-link" href="https://github.com/qusr08" target="_blank"><img src="../homepage/images/logos/github-logo.png" alt=""></a>
+                <a class="socials-link" href="https://trevoltestudios.itch.io/" target="_blank"><img src="../homepage/images/logos/itchio-logo.png" alt=""></a>
+                <a class="socials-link" href="https://www.linkedin.com/in/frank-alfano-iii-ab65791b5/" target="_blank"><img src="../homepage/images/logos/linkedin-logo.png" alt=""></a>
             </div>
         </div>
         <hr>
-        <!-- All projects -->
-        <div id="gallery">
-            <h1>Gallery</h1>
-            <h4>These are all projects (both personal and school related) that I have worked on.</h4>
-            <br>
+        <div class="section-link" id="projects"></div>
+        <!-- <div class="section-title">
+            <h3>Gallery</h3>
+            <h6><em>Projects that I have created, both for classes and on my own time</em></h6>
+        </div>
+        <hr> -->
+        <div class="gallery">
+            <div class="section-link" id="prichi"></div>
             <div class="project">
-                <h1 class="title">Blockchain</h1>
-                <div class="links">
-                    <div class="button"><a href="https://qusr.itch.io/blockchain" target="_blank">itch.io</a></div>
-                    <div class="button"><a href="https://github.com/qusr08/Blockchain" target="_blank">Github</a></div>
+                <div class="project-title-image" style="background-image: url('media/prichi/prichi-background.png');"></div>
+                <div class="project-screenshots">
+                    <img class="project-image" src="media/prichi/prichi-1.png" alt="prichi screenshot">
+                    <img class="project-image" src="media/prichi/prichi-2.png" alt="prichi screenshot">
+                    <img class="project-image" src="media/prichi/prichi-3.png" alt="prichi screenshot">
                 </div>
-                <div class="images">
-                    <img src="media/blockchain/blockchain-1.png" alt="">
-                    <img src="media/blockchain/blockchain-2.png" alt="">
-                    <img src="media/blockchain/blockchain-3.png" alt="">
+                <div class="project-info">
+                    <hr>
+                    <div class="section-title">
+                        <h3>Prichi</h3>
+                    </div>
+                    <p>
+                        This is my final project I made for during my 2021 fall semester at the Rochester Institute of Technology for IGME-235. It was made over the course of a couple weeks in Javascript with <a href="https://pixijs.com/" target="_blank">PixiJS</a>.
+                        I made it entirely by myself with virtually no outside assets/libraries used. I used <a href="https://www.drpetter.se/project_sfxr.html" target="_blank">sfxr</a> to make the sound effects and
+                        <a href="https://www.getpaint.net/download.html" target="_blank">paint.NET</a> to make the art. I even made my own font for the game on <a href="https://fontstruct.com/" target="_blank">Fontstruct</a>.
+                        <br><br>The premise of the game is "dungeon chess", where you have to navigate your chess piece around a randomly-generated level to eliminate all of the other chess pieces. Your goal is to survive as many levels as possible!
+                        <br><br>I really enjoy the idea of this project, and can definitely see myself developing the game further into a more content-rich game. I have a few more ideas for where the game can go, but I don't think it could be a full release
+                        of any kind. I'm very happy with all the sounds, graphics, and polish that I managed to achieve for this game. I am a big fan of turn-based puzzle games, and wanted to make this final project a game that I would enjoy playing.
+                    </p>
+                    <div class="section-title">
+                        <h3><a href="../project3/" target="_blank">Play the game here!</a></h3>
+                    </div>
+                    <hr>
                 </div>
-                <p class="description">
-                    This game was made in 48 hours for the
-                    <a href="https://www.youtube.com/channel/UCqJ-Xo29CKyLTjn6z2XwYAw" target="_blank">GameMaker's Toolkit</a> Game Jam 2021! The theme for the jam was "Chained Together", and so this game is all about chaining various blocks together
-                    to solve puzzles. The game was made with
-                    <a href="https://unity.com/ " target="blank">Unity</a> and C#, with art done in <a href="https://www.getpaint.net/download.html " target="blank">paint.NET</a>. I did all of the programming, art, and helped with the level design. My
-                    friend
-                    <a href=" https://www.linkedin.com/in/joseph-ferrugio-10262001/ " target="blank">Joe Ferrugio</a> helped with the level design and made the music. Overall, we placed in the top 600 of submissions, out of 6000 total. <br><br> Below
-                    is a video of me playing through the first couple of levels:</p>
-                <video class="video" controls>
-                        <source src="media/blockchain/blockchain-video.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
+                <div class="project-video">
+                    <iframe src="https://www.youtube.com/embed/7rpkAUNSK-A" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
             </div>
+            <hr>
+            <div class="section-link" id="blockchain"></div>
             <div class="project">
-                <h1 class="title">Collab</h1>
-                <div class="links">
-                    <div class="button"><a href="https://github.com/qusr08/Collab" target="_blank">Github</a></div>
+                <div class="project-title-image" style="background-image: url('media/blockchain/blockchain-background.png');"></div>
+                <div class="project-screenshots">
+                    <img class="project-image" src="media/blockchain/blockchain-1.png" alt="blockchain screenshot">
+                    <img class="project-image" src="media/blockchain/blockchain-2.png" alt="blockchain screenshot">
+                    <img class="project-image" src="media/blockchain/blockchain-3.png" alt="blockchain screenshot">
                 </div>
-                <div class="images">
-                    <img src="media/collab/collab-1.png" alt="">
-                    <img src="media/collab/collab-2.png" alt="">
-                    <img src="media/collab/collab-3.png" alt="">
+                <div class="project-info">
+                    <hr>
+                    <div class="section-title">
+                        <h3>Blockchain</h3>
+                    </div>
+                    <p>
+                        This game was made in 48 hours for the <a href="https://www.youtube.com/channel/UCqJ-Xo29CKyLTjn6z2XwYAw" target="_blank">GameMaker's Toolkit</a> Game Jam 2021! The theme for the jam was "Joined Together", and so this game is all
+                        about chaining various blocks together to solve puzzles. The game was made with <a href="https://unity.com/" target="_blank">Unity</a> and C#, with art done in <a href="https://www.getpaint.net/download.html" target="_blank">paint.NET</a>.
+                        I did all of the programming, art, and helped with the level design. My friend <a href=" https://www.linkedin.com/in/joseph-ferrugio-10262001/" target="_blank">Joe Ferrugio</a> helped with the level design and made the music. Overall,
+                        we placed in the top 10% of submissions, out of over 6000 total.
+                        <br><br>In Blockchain, you move around your character block and connect to various other blocks with different properties. You can use these other blocks to press buttons, open doors, or get across gaps. Each color of block has
+                        their own rules about which blocks they can stick to, which leads to some very interesting puzzle ideas. When making this game, I wanted to make sure that it was able to be finished, since we only have 48 hours to complete it.
+                        It was the first game jam I have ever attempted, and didn't have very high expectations. We shot for top 50% at least, and hoped for the best. When we first got the theme, we settled on the idea of moving different blocks around
+                        because it was simple, easily expanded upon, and (somewhat) intuitive for the player to figure out.
+                        <br><br>Currently, I have no plans to continue the development of this project in its current state, but I think it stands pretty strongly as a game jam submission. However, I do have ideas on how to make the gameplay more interesting
+                        and engaging which I will hopefully turn into another project at a later date.
+                    </p>
+                    <div class="socials">
+                        <div class="socials-links">
+                            <a class="socials-link" href="https://trevoltestudios.itch.io/blockchain" target="_blank"><img src="../homepage/images/logos/itchio-logo.png" alt=""></a>
+                            <a class="socials-link" href="https://github.com/qusr08/Blockchain" target="_blank"><img src="../homepage/images/logos/github-logo.png" alt=""></a>
+                        </div>
+                    </div>
+                    <hr>
                 </div>
-                <p class="description">
-                    Collab is a game I made by myself in the span of about 2 months. It's a 2 player puzzle platforming game where both players need to work together to solve puzzles. It is the first "complete" game that I have made, or at least one with more than 30 minutes
-                    of gameplay and a good deal of polish. Even though this game isn't that special on the outside, it still holds a nice place in my mind.<br><br>I used Unity and C# to make this game, along with paint.NET for the
-                    art. I recommend checking out the Github page if you are interested in learning about the mechanics!</p>
-                <video class="video" controls>
-                        <source src="media/blockchain/blockchain-video.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
+                <div class="project-video">
+                    <iframe src="https://www.youtube.com/embed/55_r7RdvT5w" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
             </div>
+            <hr>
+            <div class="section-link" id="wumpus"></div>
             <div class="project">
-                <h1 class="title">Placeholder 2</h1>
-                <div class="links">
-                    <div class="button"><a href="https://qusr.itch.io/blockchain" target="_blank">itch.io</a></div>
-                    <div class="button"><a href="https://github.com/qusr08/Blockchain" target="_blank">Github</a></div>
+                <div class="project-title-image" style="background-image: url('media/wumpus/wumpus-background.png');"></div>
+                <div class="project-screenshots">
+                    <img class="project-image" src="media/blockchain/wumpus-1.png" alt="wumpus screenshot">
+                    <img class="project-image" src="media/blockchain/wumpus-2.png" alt="wumpus screenshot">
+                    <img class="project-image" src="media/blockchain/wumpus-3.png" alt="wumpus screenshot">
                 </div>
-                <div class="images">
-                    <img src="media/blockchain/blockchain-1.png" alt="">
-                    <img src="media/blockchain/blockchain-2.png" alt="">
-                    <img src="media/blockchain/blockchain-3.png" alt="">
+                <div class="project-info">
+                    <hr>
+                    <div class="section-title">
+                        <h3>Wumpus</h3>
+                    </div>
+                    <p>
+                        I created this project during my junior year of high school for a computer science class. I created it by myself and coded it entirely from scratch in Java. The assignment in the class was originally just a text-based adventure, but I turned that idea
+                        into an actual game with graphics. I used <a href="https://www.drpetter.se/project_sfxr.html" target="_blank">sfxr</a> to make the sound effects and <a href="https://www.getpaint.net/download.html" target="_blank">paint.NET</a>                        to make the art. The (admittedly) poorly-made music was created in <a href="https://boscaceoil.net/" target="_blank">Bosca Ceoil</a> and the font I made using <a href="https://fontstruct.com/" target="_blank">Fontstruct</a>.
+                        <br><br>In Wumpus, you play as a person trying to kill the mysterious wumpus creature. You can't see much of your surroundings, so it's hard to tell where the wumpus is in relation to you. You get cues to tell you if something
+                        is nearby, like a hole in the floor or the wumpus. There are various items that you can find, like a bow, sword, trap, or torch. Each item has a different function and allows you to better prepare yourself to face the wumpus. Your
+                        goal is to kill the wumpus using the bow or sword before the wumpus kills you!
+                        <br><br>Looking back at this project, I really enjoyed making it and I am really proud of the final result, even to this day. I remember everyone else in my class being amazed at what I was able to create, which was very motivating.
+                        After knowing what I know now, and looking back at the code I wrote, there are some glaring errors that I can't believe I made, but it really demonstrated to myself how far I've come as a programmer and as a game developer. I definitely
+                        won't try to develop this game further, but it is nice to have it saved so I can keep looking at it in the future.
+                    </p>
+                    <div class="socials">
+                        <div class="socials-links">
+                            <a class="socials-link" href="https://github.com/qusr08/Wumpus" target="_blank"><img src="../homepage/images/logos/github-logo.png" alt=""></a>
+                        </div>
+                    </div>
+                    <hr>
                 </div>
-                <p class="description">
-                    This game was made in 48 hours for the
-                    <a href="https://www.youtube.com/channel/UCqJ-Xo29CKyLTjn6z2XwYAw" target="_blank">GameMaker's Toolkit</a> Game Jam 2021! The theme for the jam was "Chained Together", and so this game is all about chaining various blocks together
-                    to solve puzzles. The game was made with
-                    <a href="https://unity.com/ " target="blank">Unity</a> and C#, with art done in <a href="https://www.getpaint.net/download.html " target="blank">paint.NET</a>. I did all of the programming, art, and helped with the level design. My
-                    friend
-                    <a href=" https://www.linkedin.com/in/joseph-ferrugio-10262001/ " target="blank">Joe Ferrugio</a> helped with the level design and made the music. Overall, we placed in the top 600 of submissions, out of 6000 total. <br><br> Below
-                    is a video of me playing through the first couple of levels:</p>
-                <video class="video" controls>
-                        <source src="media/blockchain/blockchain-video.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
+            </div>
+            <hr>
+            <div class="section-link" id="collab"></div>
+            <div class="project">
+                <div class="project-title-image" style="background-image: url('media/collab/collab-background.png');"></div>
+                <div class="project-screenshots">
+                    <img class="project-image" src="media/collab/collab-1.png" alt="collab screenshot">
+                    <img class="project-image" src="media/collab/collab-2.png" alt="collab screenshot">
+                    <img class="project-image" src="media/collab/collab-3.png" alt="collab screenshot">
+                </div>
+                <div class="project-info">
+                    <hr>
+                    <div class="section-title">
+                        <h3>Collab</h3>
+                    </div>
+                    <p>
+                        Collab is a small game that I made in about 2 months to get myself more familiar with Unity and C#. I created it by myself with the exception of my friend <a href=" https://www.linkedin.com/in/joseph-ferrugio-10262001/" target="_blank">Joe Ferrugio</a>                        who made the music using <a href="https://boscaceoil.net/" target="_blank">Bosca Ceoil</a>. I create the art in <a href="https://www.getpaint.net/download.html" target="_blank">paint.NET</a>, the sound effects using <a href="https://www.drpetter.se/project_sfxr.html"
+                            target="_blank">sfxr</a>, and the font using <a href="https://fontstruct.com/" target="_blank">Fontstruct</a>.
+                        <br><br>The game is a simple 2 player puzzle-platforming game were each player can switch the ability of their character to reach the end of the level. The abilities are super jump, super speed, and shrinking to a smaller size.
+                        For each level, the players only have a combined amount of times they can switch their powers, so you have to be strategic about it. Both players need to reach the end of the level to beat it!
+                        <br><br>My friend Joe and I have discussed a few ideas about how to expand upon this game and make it a full release, but I am still unsure if it will happen. The end result definitely helped me improve my game development skills
+                        in Unity and C#, but I can't picture a full game come from this concept.
+                    </p>
+                    <div class="socials">
+                        <div class="socials-links">
+                            <a class="socials-link" href="https://github.com/qusr08/Collab" target="_blank"><img src="../homepage/images/logos/github-logo.png" alt=""></a>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
             </div>
         </div>
-    </main>
+        <hr>
 
-    <footer>
-        <!-- Contact info -->
-        <div id="contact">
-            <div>
-                <h2>Socials</h2>
-                <p>
-                    Instagram: <a href="https://www.instagram.com/__qusr/" target="_blank">__qusr</a>
-                    <br> Twitter: <a href="https://twitter.com/__qusr" target="_blank">__qusr</a>
-                    <br> Github: <a href="https://github.com/qusr08" target="_blank">qusr08</a>
-                    <br> itch.io: <a href="https://qusr.itch.io/" target="_blank">qusr</a>
-                </p>
-            </div>
-            <p>
-                Made by Frank Alfano
-                <br> IGME 235 @ RIT
-            </p>
-            <div>
-                <h2>Contact Information</h2>
-                <p>
-                    Phone: (201) 687-7160
-                    <br> Email: falfanoiii@gmail.com
-                    <br> Linkedin: <a href="https://www.linkedin.com/in/frank-alfano-iii-ab65791b5/" target="_blank">Frank Alfano</a>
-                </p>
-            </div>
-        </div>
-    </footer>
+        <footer>
+            <h3>Created 10/25/2021, last updated 12/13/2021 [v1.1]
+                <br> Made by Frank Alfano
+            </h3>
+        </footer>
 </body>
 
 </html>

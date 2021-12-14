@@ -140,8 +140,8 @@ class Map {
 
         //#region Placing Black Pieces
         // Calculate the number of pieces to spawn based on the size of the map
-        // let numPieces = Math.ceil(Map.TILE_LIST.length / Map.GEN_LEVEL_ITER * 12);
-        let numPieces = 3;
+        let numPieces = Math.ceil(Map.TILE_LIST.length / Map.GEN_LEVEL_ITER * 12);
+        // let numPieces = 3;
         // let numPieces = 1;
         // A list of all the available positions for a piece to spawn
         let availablePositions = [...Map.TILE_LIST];
@@ -162,10 +162,10 @@ class Map {
             let pieceType = Math.floor(Utils.randRange(ChessPiece.PieceType.ROOK, ChessPiece.PieceType.KING + 1));
             let turnIndex = Math.floor(Utils.randRange(0, availableTurns.length));
 
-            let pieceAbility = ChessPiece.PieceAbilityType.CRACKED;
-            // if (Math.random() < 0.25) {
-            //     pieceAbility = Math.floor(Utils.randRange(ChessPiece.PieceAbilityType.CRACKED, ChessPiece.PieceAbilityType.FAST + 1));
-            // }
+            let pieceAbility = ChessPiece.PieceAbilityType.NONE;
+            if (Math.random() < 0.25) {
+                pieceAbility = Math.floor(Utils.randRange(ChessPiece.PieceAbilityType.CRACKED, ChessPiece.PieceAbilityType.FAST + 1));
+            }
 
             let piece = new BlackChessPiece(pieceType, availableTurns[turnIndex], pieceAbility, pieceTilePos, scene);
 
