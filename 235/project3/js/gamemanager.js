@@ -47,6 +47,8 @@ class GameManager {
     static _VERSION_TEXT = undefined;
 
     static _PLAY_BUTTON = undefined;
+    static _PLAY_INSANE_BUTTON = undefined;
+    static _PLAY_CLASSIC_BUTTON = undefined;
     static _TUTORIAL_BUTTON = undefined;
     static _TUTORIAL_BACK_BUTTON = undefined;
     static _GAME_OVER_BACK_BUTTON = undefined;
@@ -86,12 +88,22 @@ class GameManager {
         GameManager._GAME_OVER_TEXT = GameManager._createText("", [0.5, 0.5], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT / 2], GameManager.GAME_SCENE);
         GameManager._VERSION_TEXT = GameManager._createText("made by frank alfano   |   v1.0.5", [0.5, 1], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT - 10], GameManager.MENU_SCENE);
 
-        GameManager._PLAY_BUTTON = GameManager._createButton(Sprites.PLAY_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT / 2], GameManager.MENU_SCENE,
-            () => { GameManager.setGameState(GameManager.GameState.GAME_SETUP); },
-            () => { GameManager._PLAY_BUTTON.scale.set(1.25 * GameManager.SPRITE_SCALE); },
-            () => { GameManager._PLAY_BUTTON.scale.set(GameManager.SPRITE_SCALE); });
+        // GameManager._PLAY_BUTTON = GameManager._createButton(Sprites.PLAY_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT / 2], GameManager.MENU_SCENE,
+        //     () => { GameManager.setGameState(GameManager.GameState.GAME_SETUP); },
+        //     () => { GameManager._PLAY_BUTTON.scale.set(1.25 * GameManager.SPRITE_SCALE); },
+        //     () => { GameManager._PLAY_BUTTON.scale.set(GameManager.SPRITE_SCALE); });
 
-        GameManager._TUTORIAL_BUTTON = GameManager._createButton(Sprites.TUTORIAL_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT / 3 * 2], GameManager.MENU_SCENE,
+        GameManager._PLAY_INSANE_BUTTON = GameManager._createButton(Sprites.PLAY_INSANE_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 3 * 2, GameManager.SCENE_HEIGHT / 2], GameManager.MENU_SCENE,
+            () => { GameManager.setGameState(GameManager.GameState.GAME_SETUP); },
+            () => { GameManager._PLAY_INSANE_BUTTON.scale.set(1.25 * GameManager.SPRITE_SCALE); },
+            () => { GameManager._PLAY_INSANE_BUTTON.scale.set(GameManager.SPRITE_SCALE); });
+
+        GameManager._PLAY_CLASSIC_BUTTON = GameManager._createButton(Sprites.PLAY_CLASSIC_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 3, GameManager.SCENE_HEIGHT / 2], GameManager.MENU_SCENE,
+            () => { GameManager.setGameState(GameManager.GameState.GAME_SETUP); },
+            () => { GameManager._PLAY_CLASSIC_BUTTON.scale.set(1.25 * GameManager.SPRITE_SCALE); },
+            () => { GameManager._PLAY_CLASSIC_BUTTON.scale.set(GameManager.SPRITE_SCALE); });
+
+        GameManager._TUTORIAL_BUTTON = GameManager._createButton(Sprites.TUTORIAL_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT / 4 * 3], GameManager.MENU_SCENE,
             () => { GameManager.setGameState(GameManager.GameState.TUTORIAL); },
             () => { GameManager._TUTORIAL_BUTTON.scale.set(1.25 * GameManager.SPRITE_SCALE); },
             () => { GameManager._TUTORIAL_BUTTON.scale.set(GameManager.SPRITE_SCALE); });

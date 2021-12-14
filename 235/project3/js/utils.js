@@ -86,6 +86,8 @@ class Sprites {
     static FAST;
 
     static PLAY_BUTTON;
+    static PLAY_INSANE_BUTTON;
+    static PLAY_CLASSIC_BUTTON;
     static TUTORIAL_BUTTON;
     static BACK_BUTTON;
 
@@ -125,6 +127,8 @@ class Sprites {
         Sprites.FAST = new PIXI.Texture(spriteSheet, new PIXI.Rectangle(Sprites.TEXTURE_SIZE * 5, Sprites.TEXTURE_SIZE * 3, Sprites.TEXTURE_SIZE, Sprites.TEXTURE_SIZE));
 
         Sprites.PLAY_BUTTON = app.loader.resources["media/play-button.png"].texture;
+        Sprites.PLAY_INSANE_BUTTON = app.loader.resources["media/play-button-insane.png"].texture;
+        Sprites.PLAY_CLASSIC_BUTTON = app.loader.resources["media/play-button-classic.png"].texture;
         Sprites.TUTORIAL_BUTTON = app.loader.resources["media/tutorial-button.png"].texture;
         Sprites.BACK_BUTTON = app.loader.resources["media/back-button.png"].texture;
 

@@ -14,6 +14,8 @@ app.loader.add([
     "media/title.png",
     "media/gameover.png",
     "media/play-button.png",
+    "media/play-button-insane.png",
+    "media/play-button-classic.png",
     "media/tutorial-button.png",
     "media/back-button.png",
     "media/tutorial.png",
