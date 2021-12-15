@@ -112,6 +112,9 @@ class GameManager {
         GameManager._TUTORIAL_BUTTON = GameManager._createButton(Sprites.TUTORIAL_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 3, GameManager.SCENE_HEIGHT / 4 * 3], GameManager.MENU_SCENE, () => { GameManager.setGameState(GameManager.GameState.TUTORIAL_1); });
         GameManager._CREDITS_BUTTON = GameManager._createButton(Sprites.CREDITS_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 3 * 2, GameManager.SCENE_HEIGHT / 4 * 3], GameManager.MENU_SCENE, () => { GameManager.setGameState(GameManager.GameState.CREDITS); });
 
+        GameManager._TUTORIAL_NEXT_BUTTON = GameManager._createButton(Sprites.NEXT_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0], [GameManager.SCENE_WIDTH / 3 * 2, 10], GameManager.TUTORIAL_SCENE, () => {});
+        GameManager._TUTORIAL_PREVIOUS_BUTTON = GameManager._createButton(Sprites.PREVIOUS_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0], [GameManager.SCENE_WIDTH / 3, 10], GameManager.TUTORIAL_SCENE, () => {});
+
         GameManager._TUTORIAL_BACK_BUTTON = GameManager._createButton(Sprites.BACK_BUTTON, GameManager.SPRITE_SCALE, [0, 0], [10, 10], GameManager.TUTORIAL_SCENE, () => { GameManager.setGameState(GameManager.GameState.MENU); });
         GameManager._CREDITS_BACK_BUTTON = GameManager._createButton(Sprites.BACK_BUTTON, GameManager.SPRITE_SCALE, [0, 0], [10, 10], GameManager.CREDITS_SCENE, () => { GameManager.setGameState(GameManager.GameState.MENU); });
         GameManager._GAME_OVER_BACK_BUTTON = GameManager._createButton(Sprites.BACK_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT / 3 * 2], GameManager.GAME_SCENE, () => { GameManager.setGameState(GameManager.GameState.MENU); });
