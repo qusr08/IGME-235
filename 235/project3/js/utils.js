@@ -85,16 +85,21 @@ class Sprites {
     static CLONE;
     static FAST;
 
-    static PLAY_BUTTON;
     static PLAY_INSANE_BUTTON;
     static PLAY_CLASSIC_BUTTON;
+    static CREDITS_BUTTON;
     static TUTORIAL_BUTTON;
     static BACK_BUTTON;
+    static NEXT_BUTTON;
+    static PREVIOUS_BUTTON;
 
     static TITLE;
     static GAMEOVER;
-    static TUTORIAL;
-    static BACKGROUND;
+
+    static TUTORIAL_BACKGROUND_1;
+    static TUTORIAL_BACKGROUND_2;
+    static CREDITS_BACKGROUND;
+    static GAME_BACKGROUND;
 
     static loadSprites() {
         let spriteSheet = app.loader.resources["media/pieces.png"].texture;
@@ -126,16 +131,20 @@ class Sprites {
         Sprites.CLONE = new PIXI.Texture(spriteSheet, new PIXI.Rectangle(Sprites.TEXTURE_SIZE * 4, Sprites.TEXTURE_SIZE * 3, Sprites.TEXTURE_SIZE, Sprites.TEXTURE_SIZE));
         Sprites.FAST = new PIXI.Texture(spriteSheet, new PIXI.Rectangle(Sprites.TEXTURE_SIZE * 5, Sprites.TEXTURE_SIZE * 3, Sprites.TEXTURE_SIZE, Sprites.TEXTURE_SIZE));
 
-        Sprites.PLAY_BUTTON = app.loader.resources["media/play-button.png"].texture;
         Sprites.PLAY_INSANE_BUTTON = app.loader.resources["media/play-button-insane.png"].texture;
         Sprites.PLAY_CLASSIC_BUTTON = app.loader.resources["media/play-button-classic.png"].texture;
+        Sprites.CREDITS_BUTTON = app.loader.resources["media/credits-button.png"].texture;
         Sprites.TUTORIAL_BUTTON = app.loader.resources["media/tutorial-button.png"].texture;
         Sprites.BACK_BUTTON = app.loader.resources["media/back-button.png"].texture;
+        Sprites.NEXT_BUTTON = app.loader.resources["media/next-button.png"].texture;
+        Sprites.PREVIOUS_BUTTON = app.loader.resources["media/previous-button.png"].texture;
 
         Sprites.TITLE = app.loader.resources["media/title.png"].texture;
         Sprites.GAMEOVER = app.loader.resources["media/gameover.png"].texture;
-        Sprites.TUTORIAL = app.loader.resources["media/tutorial.png"].texture;
-        Sprites.BACKGROUND = app.loader.resources["media/background.png"].texture;
+        Sprites.TUTORIAL_BACKGROUND_1 = app.loader.resources["media/tutorial-background-1.png"].texture;
+        Sprites.TUTORIAL_BACKGROUND_2 = app.loader.resources["media/tutorial-background-2.png"].texture;
+        Sprites.CREDITS_BACKGROUND = app.loader.resources["media/credits-background.png"].texture;
+        Sprites.GAME_BACKGROUND = app.loader.resources["media/game-background.png"].texture;
     }
 }
 

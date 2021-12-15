@@ -13,13 +13,17 @@ app.loader.add([
     "media/pieces.png",
     "media/title.png",
     "media/gameover.png",
-    "media/play-button.png",
     "media/play-button-insane.png",
     "media/play-button-classic.png",
+    "media/credits-button.png",
     "media/tutorial-button.png",
     "media/back-button.png",
-    "media/tutorial.png",
-    "media/background.png"
+    "media/next-button.png",
+    "media/previous-button.png",
+    "media/tutorial-background-1.png",
+    "media/tutorial-background-2.png",
+    "media/credits-background.png",
+    "media/game-background.png"
 ]);
 app.loader.onProgress.add(e => { console.log(`Loading Pixi.js Assets ... [${e.progress}%]`) });
 app.loader.onComplete.add(setup);

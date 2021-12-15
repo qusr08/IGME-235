@@ -3,7 +3,9 @@ class GameManager {
         MENU: 0,
         GAME_SETUP: 1,
         GAME: 2,
-        TUTORIAL: 3
+        TUTORIAL_1: 3,
+        TUTORIAL_2: 4,
+        CREDITS: 5
     }
 
     static TurnState = {
@@ -21,10 +23,12 @@ class GameManager {
 
     static GAMESTATE = GameManager.GameState.MENU;
     static TURNSTATE = GameManager.GameState.WAITING;
+
     static APPLICATION = undefined;
     static GAME_SCENE = undefined;
     static MENU_SCENE = undefined;
     static TUTORIAL_SCENE = undefined;
+    static CREDITS_SCENE = undefined;
 
     static MOUSE_POSITION = [0, 0];
 
@@ -43,20 +47,30 @@ class GameManager {
 
     static _LEVEL_NUMBER_TEXT = undefined;
     static _TURN_INDICATOR_TEXT = undefined;
+    static _PIECE_TIP_TEXT = undefined;
     static _GAME_OVER_TEXT = undefined;
     static _VERSION_TEXT = undefined;
 
-    static _PLAY_BUTTON = undefined;
-    static _PLAY_INSANE_BUTTON = undefined;
+    static _TITLE_SPRITE = undefined;
     static _PLAY_CLASSIC_BUTTON = undefined;
+    static _PLAY_INSANE_BUTTON = undefined;
+    static _MENU_BACKGROUND = undefined;
+    static _GAME_BACKGROUND = undefined;
+
     static _TUTORIAL_BUTTON = undefined;
+    static _TUTORIAL_NEXT_BUTTON = undefined;
+    static _TUTORIAL_PREVIOUS_BUTTON = undefined;
     static _TUTORIAL_BACK_BUTTON = undefined;
-    static _GAME_OVER_BACK_BUTTON = undefined;
+    static _TUTORIAL_BACKGROUND_1 = undefined;
+    static _TUTORIAL_BACKGROUND_2 = undefined;
+
+    static _CREDITS_BUTTON = undefined;
+    static _CREDITS_BACK_BUTTON = undefined;
+    static _CREDITS_BACKGROUND = undefined;
 
     static _GAME_OVER_SPRITE = undefined;
-    static _TITLE_SPRITE = undefined;
-    static _TUTORIAL_BACKGROUND = undefined;
-    static _MENU_BACKGROUND = undefined;
+    static _GAME_OVER_BACK_BUTTON = undefined;
+
 
     static appSetup() {
         //console.log("Setting up application ...");
@@ -72,51 +86,35 @@ class GameManager {
         GameManager.GAME_SCENE = GameManager._createScene();
         GameManager.MENU_SCENE = GameManager._createScene();
         GameManager.TUTORIAL_SCENE = GameManager._createScene();
+        GameManager.CREDITS_SCENE = GameManager._createScene();
 
         // Load sprites on spritesheets into variables
         //console.log("Loading Sprites ...");
         Sprites.loadSprites();
 
-        GameManager._TUTORIAL_BACKGROUND = GameManager._createSprite(Sprites.TUTORIAL, 1, [0, 0], [0, 0], GameManager.TUTORIAL_SCENE);
-        GameManager._MENU_BACKGROUND = GameManager._createSprite(Sprites.BACKGROUND, 1, [0, 0], [0, 0], GameManager.MENU_SCENE);
+        GameManager._TUTORIAL_BACKGROUND_1 = GameManager._createSprite(Sprites.TUTORIAL_BACKGROUND_1, 1, [0, 0], [0, 0], GameManager.TUTORIAL_SCENE);
+        GameManager._TUTORIAL_BACKGROUND_2 = GameManager._createSprite(Sprites.TUTORIAL_BACKGROUND_2, 1, [0, 0], [0, 0], GameManager.TUTORIAL_SCENE);
+        GameManager._CREDITS_BACKGROUND = GameManager._createSprite(Sprites.CREDITS_BACKGROUND, 1, [0, 0], [0, 0], GameManager.CREDITS_SCENE);
+        GameManager._MENU_BACKGROUND = GameManager._createSprite(Sprites.GAME_BACKGROUND, 1, [0, 0], [0, 0], GameManager.MENU_SCENE);
+        GameManager._GAME_BACKGROUND = GameManager._createSprite(Sprites.GAME_BACKGROUND, 1, [0, 0], [0, 0], GameManager.GAME_SCENE);
 
         GameManager._GAME_OVER_SPRITE = GameManager._createSprite(Sprites.GAMEOVER, 2 * GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT / 4], GameManager.GAME_SCENE);
         GameManager._TITLE_SPRITE = GameManager._createSprite(Sprites.TITLE, 2 * GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT / 4], GameManager.MENU_SCENE);
 
         GameManager._LEVEL_NUMBER_TEXT = GameManager._createText("", [0, 0], [10, 10], GameManager.GAME_SCENE);
         GameManager._TURN_INDICATOR_TEXT = GameManager._createText("", [0.5, 0], [GameManager.SCENE_WIDTH / 2, 10], GameManager.GAME_SCENE);
+        // GameManager._PIECE_TIP_TEXT
         GameManager._GAME_OVER_TEXT = GameManager._createText("", [0.5, 0.5], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT / 2], GameManager.GAME_SCENE);
         GameManager._VERSION_TEXT = GameManager._createText("made by frank alfano   |   v1.0.5", [0.5, 1], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT - 10], GameManager.MENU_SCENE);
 
-        // GameManager._PLAY_BUTTON = GameManager._createButton(Sprites.PLAY_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT / 2], GameManager.MENU_SCENE,
-        //     () => { GameManager.setGameState(GameManager.GameState.GAME_SETUP); },
-        //     () => { GameManager._PLAY_BUTTON.scale.set(1.25 * GameManager.SPRITE_SCALE); },
-        //     () => { GameManager._PLAY_BUTTON.scale.set(GameManager.SPRITE_SCALE); });
+        GameManager._PLAY_CLASSIC_BUTTON = GameManager._createButton(Sprites.PLAY_CLASSIC_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 3, GameManager.SCENE_HEIGHT / 2], GameManager.MENU_SCENE, () => { GameManager.setGameState(GameManager.GameState.GAME_SETUP); });
+        GameManager._PLAY_INSANE_BUTTON = GameManager._createButton(Sprites.PLAY_INSANE_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 3 * 2, GameManager.SCENE_HEIGHT / 2], GameManager.MENU_SCENE, () => { GameManager.setGameState(GameManager.GameState.GAME_SETUP); });
+        GameManager._TUTORIAL_BUTTON = GameManager._createButton(Sprites.TUTORIAL_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 3, GameManager.SCENE_HEIGHT / 4 * 3], GameManager.MENU_SCENE, () => { GameManager.setGameState(GameManager.GameState.TUTORIAL_1); });
+        GameManager._CREDITS_BUTTON = GameManager._createButton(Sprites.CREDITS_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 3 * 2, GameManager.SCENE_HEIGHT / 4 * 3], GameManager.MENU_SCENE, () => { GameManager.setGameState(GameManager.GameState.CREDITS); });
 
-        GameManager._PLAY_INSANE_BUTTON = GameManager._createButton(Sprites.PLAY_INSANE_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 3 * 2, GameManager.SCENE_HEIGHT / 2], GameManager.MENU_SCENE,
-            () => { GameManager.setGameState(GameManager.GameState.GAME_SETUP); },
-            () => { GameManager._PLAY_INSANE_BUTTON.scale.set(1.25 * GameManager.SPRITE_SCALE); },
-            () => { GameManager._PLAY_INSANE_BUTTON.scale.set(GameManager.SPRITE_SCALE); });
-
-        GameManager._PLAY_CLASSIC_BUTTON = GameManager._createButton(Sprites.PLAY_CLASSIC_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 3, GameManager.SCENE_HEIGHT / 2], GameManager.MENU_SCENE,
-            () => { GameManager.setGameState(GameManager.GameState.GAME_SETUP); },
-            () => { GameManager._PLAY_CLASSIC_BUTTON.scale.set(1.25 * GameManager.SPRITE_SCALE); },
-            () => { GameManager._PLAY_CLASSIC_BUTTON.scale.set(GameManager.SPRITE_SCALE); });
-
-        GameManager._TUTORIAL_BUTTON = GameManager._createButton(Sprites.TUTORIAL_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT / 4 * 3], GameManager.MENU_SCENE,
-            () => { GameManager.setGameState(GameManager.GameState.TUTORIAL); },
-            () => { GameManager._TUTORIAL_BUTTON.scale.set(1.25 * GameManager.SPRITE_SCALE); },
-            () => { GameManager._TUTORIAL_BUTTON.scale.set(GameManager.SPRITE_SCALE); });
-
-        GameManager._TUTORIAL_BACK_BUTTON = GameManager._createButton(Sprites.BACK_BUTTON, GameManager.SPRITE_SCALE, [0, 0], [10, 10], GameManager.TUTORIAL_SCENE,
-            () => { GameManager.setGameState(GameManager.GameState.MENU); },
-            () => { GameManager._TUTORIAL_BACK_BUTTON.scale.set(1.25 * GameManager.SPRITE_SCALE); },
-            () => { GameManager._TUTORIAL_BACK_BUTTON.scale.set(GameManager.SPRITE_SCALE); });
-
-        GameManager._GAME_OVER_BACK_BUTTON = GameManager._createButton(Sprites.BACK_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT / 3 * 2], GameManager.GAME_SCENE,
-            () => { GameManager.setGameState(GameManager.GameState.MENU); },
-            () => { GameManager._GAME_OVER_BACK_BUTTON.scale.set(1.25 * GameManager.SPRITE_SCALE); },
-            () => { GameManager._GAME_OVER_BACK_BUTTON.scale.set(GameManager.SPRITE_SCALE); });
+        GameManager._TUTORIAL_BACK_BUTTON = GameManager._createButton(Sprites.BACK_BUTTON, GameManager.SPRITE_SCALE, [0, 0], [10, 10], GameManager.TUTORIAL_SCENE, () => { GameManager.setGameState(GameManager.GameState.MENU); });
+        GameManager._CREDITS_BACK_BUTTON = GameManager._createButton(Sprites.BACK_BUTTON, GameManager.SPRITE_SCALE, [0, 0], [10, 10], GameManager.CREDITS_SCENE, () => { GameManager.setGameState(GameManager.GameState.MENU); });
+        GameManager._GAME_OVER_BACK_BUTTON = GameManager._createButton(Sprites.BACK_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT / 3 * 2], GameManager.GAME_SCENE, () => { GameManager.setGameState(GameManager.GameState.MENU); });
 
         GameManager.MOVE_SOUND_EFFECTS.push(new Howl({ src: ["media/move-sound-1.wav"] }));
         GameManager.MOVE_SOUND_EFFECTS.push(new Howl({ src: ["media/move-sound-2.wav"] }));
@@ -364,7 +362,8 @@ class GameManager {
     static _updateUIElements() {
         GameManager.GAME_SCENE.visible = (GameManager.GAMESTATE == GameManager.GameState.GAME_SETUP || GameManager.GAMESTATE == GameManager.GameState.GAME);
         GameManager.MENU_SCENE.visible = (GameManager.GAMESTATE == GameManager.GameState.MENU);
-        GameManager.TUTORIAL_SCENE.visible = (GameManager.GAMESTATE == GameManager.GameState.TUTORIAL);
+        GameManager.TUTORIAL_SCENE.visible = (GameManager.GAMESTATE == GameManager.GameState.TUTORIAL_1 || GameManager.GAMESTATE == GameManager.GameState.TUTORIAL_2);
+        GameManager.CREDITS_SCENE.visible = (GameManager.GAMESTATE == GameManager.GameState.CREDITS);
 
         GameManager._LEVEL_NUMBER_TEXT.visible = (GameManager.TURNSTATE != GameManager.TurnState.LOSE);
         GameManager._TURN_INDICATOR_TEXT.visible = (GameManager.TURNSTATE != GameManager.TurnState.LOSE);
@@ -391,15 +390,9 @@ class GameManager {
         button.interactive = true;
         button.buttonMode = true;
 
-        if (onPointerUp != undefined) {
-            button.on("pointerup", onPointerUp);
-        }
-        if (onPointerOver != undefined) {
-            button.on("pointerover", onPointerOver);
-        }
-        if (onPointerOut != undefined) {
-            button.on("pointerout", onPointerOut);
-        }
+        button.on("pointerup", onPointerUp);
+        button.on("pointerover", (onPointerOver == undefined) ? () => { button.scale.set(1.25 * scale); } : onPointerOver);
+        button.on("pointerout", (onPointerOut == undefined) ? () => { button.scale.set(scale); } : onPointerOut);
 
         return button;
     }

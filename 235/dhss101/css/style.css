@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&family=Roboto:wght@100&family=Zen+Kurenaido&display=swap');
 * {
     margin: 0;
     font-family: monospace;
@@ -27,27 +28,10 @@ p {
     font-size: 1.5em;
 }
 
-
-/* #region Header */
-
 header {
-    /* Make the menu bar stick to the top of the page at all times */
     position: sticky;
     top: 0;
-    /* Make menu bar stay above everything else on the webpage */
     z-index: 10000;
-}
-
-.logo-image {
-    position: absolute;
-    left: calc(50% - (264px / 2));
-    margin: 10px 0;
-}
-
-@media screen and (max-height:650px) {
-    .logo-image {
-        display: none;
-    }
 }
 
 footer {
@@ -56,16 +40,16 @@ footer {
     padding: 30px;
 }
 
-
-/* #endregion */
-
-
-/* #region Menu Bar */
+.info {
+    display: flex;
+    flex-flow: column nowrap;
+    margin: 0 10%;
+    justify-content: center;
+    align-items: center;
+}
 
 .menubar {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
     gap: 0 0;
     /* Make sure the menu bar fills the entire top part of the screen */
     align-items: stretch;
@@ -92,37 +76,51 @@ footer {
     justify-content: center;
     align-items: center;
     padding: 10px;
-    font-size: 1.5em;
+    font-size: 2em;
     text-align: center;
     transition: background-color 0.5s ease;
     background-color: var(--color3);
     font-weight: bolder;
+    height: 50px;
 }
 
 .menubar-button:hover {
     background-color: var(--color4);
 }
 
-
-/* Have the menu bar buttons move to a new line once the screen gets smaller */
-
-@media screen and (max-width:1200px) {
-    .menubar {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr;
-        justify-content: center;
-        gap: 0 25%;
-    }
-    .menubar-title {
-        text-align: center;
-    }
+.search-bar {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
 }
 
+.search-bar>* {
+    margin: 10px;
+}
 
-/*#endregion */
+.search-bar>p {
+    background-color: var(--color4);
+    align-self: center;
+}
 
+.search-bar>.menubar-button {
+    height: min-content;
+}
 
-/* #region Sections */
+.dropdown-menus {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.dropdown-menus>* {
+    background-color: var(--color4);
+    margin: 10px;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.interview {
+    margin: 0 10%;
+}
 
 .section-link {
     display: block;
@@ -146,7 +144,9 @@ footer {
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
-    height: 95vh;
+    /* height: 95vh; */
+    height: 85vh;
+    padding: 0 10%;
     text-align: center;
     font-size: 4em;
     color: white;
@@ -154,113 +154,8 @@ footer {
     background-blend-mode: multiply;
     /* background-image: var(--background); */
     background-position: center;
+    background-size: cover;
 }
-
-@media screen and (max-width: 700px) {
-    .section-image {
-        font-size: 2.5em;
-    }
-}
-
-.section-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    margin: 10px;
-    border-width: 5px;
-    border-style: solid;
-    border-image: linear-gradient(45deg, var(--color4), var(--color2)) 1;
-    background: linear-gradient(0deg, var(--color2), var(--color1));
-}
-
-
-/* #region About */
-
-.about {
-    display: flex;
-    flex-flow: row nowrap;
-    margin: 0 10%;
-    justify-content: center;
-    align-items: center;
-}
-
-.about img {
-    border-width: 10px;
-    border-style: solid;
-    border-image: linear-gradient(90deg, var(--color4), var(--color2)) 1;
-}
-
-@media screen and (max-width: 1100px) {
-    .about {
-        flex-flow: column nowrap;
-    }
-}
-
-@media screen and (max-width: 700px) {
-    .about {
-        margin: 0 10px;
-    }
-}
-
-
-/* #endregion */
-
-.exercises {}
-
-.projects {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-}
-
-
-/* #region Socials */
-
-.socials {
-    display: flex;
-    flex-flow: row wrap;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-    margin: 30px 5%;
-}
-
-.socials-links {
-    display: flex;
-    flex-flow: row nowrap;
-    gap: 10px;
-}
-
-.socials-link {
-    display: flex;
-    width: max(50px);
-    aspect-ratio: 1;
-    /* transition: border-width 0.5s ease;
-    border-width: 0px;
-    border-style: solid;
-    border-color: var(--color4);
-    border-radius: 100%; */
-}
-
-.socials-link img {
-    width: 100%;
-}
-
-
-/* .socials-link:hover {
-    border-width: 10px;
-} */
-
-
-/* #endregion */
-
-.project-button {
-    aspect-ratio: 1;
-    font-size: 2em;
-}
-
-
-/* #endregion */
-
-
-/* #region Links */
 
 a:link {
     color: var(--color1);
@@ -287,5 +182,45 @@ a:active {
     text-decoration: underline;
 }
 
+.socials {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 5%;
+}
 
-/* #endregion */
+.socials-links {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 10px;
+}
+
+.socials-link {
+    display: flex;
+    width: max(75px);
+    aspect-ratio: 1;
+    /* transition: border-width 0.5s ease;
+    border-width: 0px;
+    border-style: solid;
+    border-color: var(--color4);
+    border-radius: 100%; */
+}
+
+.socials-link img {
+    width: 100%;
+}
+
+.graph {
+    margin: 0 10%;
+}
+
+.graph>img {
+    display: flex;
+    width: 100%;
+    justify-self: center;
+    border-width: 10px;
+    border-style: solid;
+    border-image: linear-gradient(90deg, var(--color4), var(--color2)) 1;
+}

@@ -1,7 +1,7 @@
 class Map {
     static TILE_SIZE = 64; // The pixel size of each tile
-    static GEN_LEVEL_WIDTH = 17; // The level width in tiles
-    static GEN_LEVEL_HEIGHT = 9; // The level height in tiles
+    static GEN_LEVEL_WIDTH = 5; //17; // The level width in tiles
+    static GEN_LEVEL_HEIGHT = 5; //9; // The level height in tiles
     static GEN_LEVEL_ITER = parseInt((Map.GEN_LEVEL_WIDTH * Map.GEN_LEVEL_HEIGHT) / 3); // The minimum number of tiles for each level
     static LEVEL_BORDER = parseInt((GameManager.SCENE_HEIGHT - (Map.TILE_SIZE * Map.GEN_LEVEL_HEIGHT)) / 2); // The border of the map around the edge of the screen
 
@@ -140,8 +140,8 @@ class Map {
 
         //#region Placing Black Pieces
         // Calculate the number of pieces to spawn based on the size of the map
-        let numPieces = Math.ceil(Map.TILE_LIST.length / Map.GEN_LEVEL_ITER * 12);
-        // let numPieces = 3;
+        // let numPieces = Math.ceil(Map.TILE_LIST.length / Map.GEN_LEVEL_ITER * 12);
+        let numPieces = 4;
         // let numPieces = 1;
         // A list of all the available positions for a piece to spawn
         let availablePositions = [...Map.TILE_LIST];
@@ -163,9 +163,9 @@ class Map {
             let turnIndex = Math.floor(Utils.randRange(0, availableTurns.length));
 
             let pieceAbility = ChessPiece.PieceAbilityType.NONE;
-            if (Math.random() < 0.25) {
-                pieceAbility = Math.floor(Utils.randRange(ChessPiece.PieceAbilityType.CRACKED, ChessPiece.PieceAbilityType.FAST + 1));
-            }
+            // if (Math.random() < 0.25) {
+            pieceAbility = Math.floor(Utils.randRange(ChessPiece.PieceAbilityType.CRACKED, ChessPiece.PieceAbilityType.FAST + 1));
+            // }
 
             let piece = new BlackChessPiece(pieceType, availableTurns[turnIndex], pieceAbility, pieceTilePos, scene);
 
