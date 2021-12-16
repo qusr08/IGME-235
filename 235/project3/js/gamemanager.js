@@ -105,15 +105,25 @@ class GameManager {
         GameManager._TURN_INDICATOR_TEXT = GameManager._createText("", [0.5, 0], [GameManager.SCENE_WIDTH / 2, 10], GameManager.GAME_SCENE);
         // GameManager._PIECE_TIP_TEXT
         GameManager._GAME_OVER_TEXT = GameManager._createText("", [0.5, 0.5], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT / 2], GameManager.GAME_SCENE);
-        GameManager._VERSION_TEXT = GameManager._createText("made by frank alfano   |   v1.0.5", [0.5, 1], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT - 10], GameManager.MENU_SCENE);
+        GameManager._VERSION_TEXT = GameManager._createText("made by frank alfano   |   v1.1.5b", [0.5, 1], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT - 10], GameManager.MENU_SCENE);
 
         GameManager._PLAY_CLASSIC_BUTTON = GameManager._createButton(Sprites.PLAY_CLASSIC_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 3, GameManager.SCENE_HEIGHT / 2], GameManager.MENU_SCENE, () => { GameManager.setGameState(GameManager.GameState.GAME_SETUP); });
         GameManager._PLAY_INSANE_BUTTON = GameManager._createButton(Sprites.PLAY_INSANE_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 3 * 2, GameManager.SCENE_HEIGHT / 2], GameManager.MENU_SCENE, () => { GameManager.setGameState(GameManager.GameState.GAME_SETUP); });
-        GameManager._TUTORIAL_BUTTON = GameManager._createButton(Sprites.TUTORIAL_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 3, GameManager.SCENE_HEIGHT / 4 * 3], GameManager.MENU_SCENE, () => { GameManager.setGameState(GameManager.GameState.TUTORIAL_1); });
+        GameManager._TUTORIAL_BUTTON = GameManager._createButton(Sprites.TUTORIAL_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 3, GameManager.SCENE_HEIGHT / 4 * 3], GameManager.MENU_SCENE, () => {
+            GameManager.setGameState(GameManager.GameState.TUTORIAL_1);
+            GameManager._TUTORIAL_BACKGROUND_1.visible = true;
+            GameManager._TUTORIAL_BACKGROUND_2.visible = false;
+        });
         GameManager._CREDITS_BUTTON = GameManager._createButton(Sprites.CREDITS_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 3 * 2, GameManager.SCENE_HEIGHT / 4 * 3], GameManager.MENU_SCENE, () => { GameManager.setGameState(GameManager.GameState.CREDITS); });
 
-        GameManager._TUTORIAL_NEXT_BUTTON = GameManager._createButton(Sprites.NEXT_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0], [GameManager.SCENE_WIDTH / 3 * 2, 10], GameManager.TUTORIAL_SCENE, () => {});
-        GameManager._TUTORIAL_PREVIOUS_BUTTON = GameManager._createButton(Sprites.PREVIOUS_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0], [GameManager.SCENE_WIDTH / 3, 10], GameManager.TUTORIAL_SCENE, () => {});
+        GameManager._TUTORIAL_NEXT_BUTTON = GameManager._createButton(Sprites.NEXT_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0], [GameManager.SCENE_WIDTH / 3 * 2, 10], GameManager.TUTORIAL_SCENE, () => {
+            GameManager._TUTORIAL_BACKGROUND_1.visible = false;
+            GameManager._TUTORIAL_BACKGROUND_2.visible = true;
+        });
+        GameManager._TUTORIAL_PREVIOUS_BUTTON = GameManager._createButton(Sprites.PREVIOUS_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0], [GameManager.SCENE_WIDTH / 3, 10], GameManager.TUTORIAL_SCENE, () => {
+            GameManager._TUTORIAL_BACKGROUND_1.visible = true;
+            GameManager._TUTORIAL_BACKGROUND_2.visible = false;
+        });
 
         GameManager._TUTORIAL_BACK_BUTTON = GameManager._createButton(Sprites.BACK_BUTTON, GameManager.SPRITE_SCALE, [0, 0], [10, 10], GameManager.TUTORIAL_SCENE, () => { GameManager.setGameState(GameManager.GameState.MENU); });
         GameManager._CREDITS_BACK_BUTTON = GameManager._createButton(Sprites.BACK_BUTTON, GameManager.SPRITE_SCALE, [0, 0], [10, 10], GameManager.CREDITS_SCENE, () => { GameManager.setGameState(GameManager.GameState.MENU); });
