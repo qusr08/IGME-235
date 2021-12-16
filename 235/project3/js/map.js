@@ -2,7 +2,6 @@ class Map {
     static TILE_SIZE = 64; // The pixel size of each tile
     static GEN_LEVEL_WIDTH = 17; // The level width in tiles
     static GEN_LEVEL_HEIGHT = 9; // The level height in tiles
-    static GEN_LEVEL_ITER = parseInt((Map.GEN_LEVEL_WIDTH * Map.GEN_LEVEL_HEIGHT) / 3); // The minimum number of tiles for each level
     static LEVEL_BORDER = parseInt((GameManager.SCENE_HEIGHT - (Map.TILE_SIZE * Map.GEN_LEVEL_HEIGHT)) / 2); // The border of the map around the edge of the screen
 
     // The size of the level in pixels
@@ -21,7 +20,7 @@ class Map {
     static BLACK_PIECES = [];
     static WHITE_PIECES = [];
 
-    static generateLevel(scene) {
+    static generateLevel(diffMod, scene) {
         //console.log(`Level Generation Started [${Map.GEN_LEVEL_WIDTH} x ${Map.GEN_LEVEL_HEIGHT}]`);
         let genStartTime = Date.now();
 
@@ -35,11 +34,12 @@ class Map {
         Map.TILE_LIST = [];
 
         let pos = [Math.floor(Map.GEN_LEVEL_WIDTH / 2), Math.floor(Map.GEN_LEVEL_HEIGHT / 2)];
+        let genLevelIter = (Map.GEN_LEVEL_WIDTH * Map.GEN_LEVEL_HEIGHT * Math.log(diffMod)) / 16;
 
         //#region Creating Tile Positions
         //console.log("Creating Tile Positions ...");
 
-        for (let i = 0; i < Map.GEN_LEVEL_ITER; i++) {
+        for (let i = 0; i < genLevelIter; i++) {
             // Append the position to the end of the array
             Map.TILE_LIST.push(pos);
 
@@ -120,7 +120,7 @@ class Map {
             for (let i = 0; i < positionsToAdd.length; i++) {
                 Map.TILE_LIST.push(positionsToAdd[i]);
             }
-        } while (Map.TILE_LIST.length < Map.GEN_LEVEL_ITER);
+        } while (Map.TILE_LIST.length < genLevelIter);
         //#endregion
 
         //#region Placing Tiles
@@ -140,7 +140,9 @@ class Map {
 
         //#region Placing Black Pieces
         // Calculate the number of pieces to spawn based on the size of the map
-        let numPieces = Math.ceil(Map.TILE_LIST.length / Map.GEN_LEVEL_ITER * 12);
+        // let numPieces = Math.ceil(Map.TILE_LIST.length / genLevelIter * 12);
+        let numPieces = Math.ceil(Map.TILE_LIST.length / 6);
+        let abilityChance = diffMod / 16;
         // A list of all the available positions for a piece to spawn
         let availablePositions = [...Map.TILE_LIST];
         let availableTurns = [1, 2, 3, 4];
@@ -161,7 +163,7 @@ class Map {
             let turnIndex = Math.floor(Utils.randRange(0, availableTurns.length));
 
             let pieceAbility = ChessPiece.PieceAbilityType.NONE;
-            if (Math.random() < 0.25) {
+            if (GameManager.DIFFICULTY_TYPE == GameManager.DifficultyType.INSANE && Math.random() < abilityChance) {
                 pieceAbility = Math.floor(Utils.randRange(ChessPiece.PieceAbilityType.CRACKED, ChessPiece.PieceAbilityType.FAST + 1));
             }
 

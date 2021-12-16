@@ -6,7 +6,7 @@ class GameManager {
         TUTORIAL_1: 3,
         TUTORIAL_2: 4,
         CREDITS: 5
-    }
+    };
 
     static TurnState = {
         ENEMY: 0,
@@ -14,7 +14,12 @@ class GameManager {
         PLAYER: 2,
         WIN: 3,
         LOSE: 4
-    }
+    };
+
+    static DifficultyType = {
+        CLASSIC: 0,
+        INSANE: 1
+    };
 
     // The size of the game window in pixel
     static SCENE_WIDTH = 1280;
@@ -31,6 +36,8 @@ class GameManager {
     static CREDITS_SCENE = undefined;
 
     static MOUSE_POSITION = [0, 0];
+    static DIFFICULTY_TYPE = GameManager.DifficultyType.CLASSIC;
+    static DIFFICULTY_MOD = 1;
 
     static ANIMATING_PIECES = [];
     static ANIMATING_SPRITES = [];
@@ -105,10 +112,16 @@ class GameManager {
         GameManager._TURN_INDICATOR_TEXT = GameManager._createText("", [0.5, 0], [GameManager.SCENE_WIDTH / 2, 10], GameManager.GAME_SCENE);
         // GameManager._PIECE_TIP_TEXT
         GameManager._GAME_OVER_TEXT = GameManager._createText("", [0.5, 0.5], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT / 2], GameManager.GAME_SCENE);
-        GameManager._VERSION_TEXT = GameManager._createText("made by frank alfano   |   v1.1.5b", [0.5, 1], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT - 10], GameManager.MENU_SCENE);
+        GameManager._VERSION_TEXT = GameManager._createText("made by frank alfano   |   v1.1.5", [0.5, 1], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT - 10], GameManager.MENU_SCENE);
 
-        GameManager._PLAY_CLASSIC_BUTTON = GameManager._createButton(Sprites.PLAY_CLASSIC_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 3, GameManager.SCENE_HEIGHT / 2], GameManager.MENU_SCENE, () => { GameManager.setGameState(GameManager.GameState.GAME_SETUP); });
-        GameManager._PLAY_INSANE_BUTTON = GameManager._createButton(Sprites.PLAY_INSANE_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 3 * 2, GameManager.SCENE_HEIGHT / 2], GameManager.MENU_SCENE, () => { GameManager.setGameState(GameManager.GameState.GAME_SETUP); });
+        GameManager._PLAY_CLASSIC_BUTTON = GameManager._createButton(Sprites.PLAY_CLASSIC_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 3, GameManager.SCENE_HEIGHT / 2], GameManager.MENU_SCENE, () => {
+            GameManager.setDifficultyType(GameManager.DifficultyType.CLASSIC);
+            GameManager.setGameState(GameManager.GameState.GAME_SETUP);
+        });
+        GameManager._PLAY_INSANE_BUTTON = GameManager._createButton(Sprites.PLAY_INSANE_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 3 * 2, GameManager.SCENE_HEIGHT / 2], GameManager.MENU_SCENE, () => {
+            GameManager.setDifficultyType(GameManager.DifficultyType.INSANE);
+            GameManager.setGameState(GameManager.GameState.GAME_SETUP);
+        });
         GameManager._TUTORIAL_BUTTON = GameManager._createButton(Sprites.TUTORIAL_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 3, GameManager.SCENE_HEIGHT / 4 * 3], GameManager.MENU_SCENE, () => {
             GameManager.setGameState(GameManager.GameState.TUTORIAL_1);
             GameManager._TUTORIAL_BACKGROUND_1.visible = true;
@@ -197,6 +210,21 @@ class GameManager {
         }
     }
 
+    static setDifficultyType(difficultyType) {
+        GameManager.DIFFICULTY_TYPE = difficultyType;
+
+        switch (difficultyType) {
+            case GameManager.DifficultyType.CLASSIC:
+                GameManager.DIFFICULTY_MOD = 1;
+
+                break;
+            case GameManager.DifficultyType.INSANE:
+                GameManager.DIFFICULTY_MOD = 5;
+
+                break;
+        }
+    }
+
     static setGameState(gameState) {
         GameManager.GAMESTATE = gameState;
 
@@ -210,7 +238,7 @@ class GameManager {
 
                 break;
             case GameManager.GameState.GAME:
-                Map.generateLevel(GameManager.GAME_SCENE);
+                Map.generateLevel(GameManager.DIFFICULTY_MOD, GameManager.GAME_SCENE);
                 Map.animateMapIn();
 
                 GameManager._ANIMATION_CHECK_INDEX = Map.BLACK_PIECES.length;
@@ -370,6 +398,8 @@ class GameManager {
     static _incrementLevelNumber() {
         GameManager.LEVEL_NUMBER++;
         GameManager._LEVEL_NUMBER_TEXT.text = `Level ${GameManager.LEVEL_NUMBER}`;
+
+        GameManager.DIFFICULTY_MOD += 0.5;
     }
 
     static _updateUIElements() {
