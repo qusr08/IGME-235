@@ -112,7 +112,7 @@ class GameManager {
         GameManager._TURN_INDICATOR_TEXT = GameManager._createText("", [0.5, 0], [GameManager.SCENE_WIDTH / 2, 10], GameManager.GAME_SCENE);
         // GameManager._PIECE_TIP_TEXT
         GameManager._GAME_OVER_TEXT = GameManager._createText("", [0.5, 0.5], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT / 2], GameManager.GAME_SCENE);
-        GameManager._VERSION_TEXT = GameManager._createText("made by frank alfano   |   v1.1.5", [0.5, 1], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT - 10], GameManager.MENU_SCENE);
+        GameManager._VERSION_TEXT = GameManager._createText("made by frank alfano   |   v1.1.2", [0.5, 1], [GameManager.SCENE_WIDTH / 2, GameManager.SCENE_HEIGHT - 10], GameManager.MENU_SCENE);
 
         GameManager._PLAY_CLASSIC_BUTTON = GameManager._createButton(Sprites.PLAY_CLASSIC_BUTTON, GameManager.SPRITE_SCALE, [0.5, 0.5], [GameManager.SCENE_WIDTH / 3, GameManager.SCENE_HEIGHT / 2], GameManager.MENU_SCENE, () => {
             GameManager.setDifficultyType(GameManager.DifficultyType.CLASSIC);

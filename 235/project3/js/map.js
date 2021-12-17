@@ -21,6 +21,8 @@ class Map {
     static WHITE_PIECES = [];
 
     static generateLevel(diffMod, scene) {
+        console.log(diffMod);
+
         //console.log(`Level Generation Started [${Map.GEN_LEVEL_WIDTH} x ${Map.GEN_LEVEL_HEIGHT}]`);
         let genStartTime = Date.now();
 
@@ -34,7 +36,7 @@ class Map {
         Map.TILE_LIST = [];
 
         let pos = [Math.floor(Map.GEN_LEVEL_WIDTH / 2), Math.floor(Map.GEN_LEVEL_HEIGHT / 2)];
-        let genLevelIter = (Map.GEN_LEVEL_WIDTH * Map.GEN_LEVEL_HEIGHT * Math.log(diffMod)) / 16;
+        let genLevelIter = Math.min((Map.GEN_LEVEL_WIDTH * Map.GEN_LEVEL_HEIGHT * Math.log(diffMod)) / 16, (Map.GEN_LEVEL_WIDTH * Map.GEN_LEVEL_HEIGHT) / 3);
 
         //#region Creating Tile Positions
         //console.log("Creating Tile Positions ...");
@@ -142,7 +144,6 @@ class Map {
         // Calculate the number of pieces to spawn based on the size of the map
         // let numPieces = Math.ceil(Map.TILE_LIST.length / genLevelIter * 12);
         let numPieces = Math.ceil(Map.TILE_LIST.length / 6);
-        let abilityChance = diffMod / 16;
         // A list of all the available positions for a piece to spawn
         let availablePositions = [...Map.TILE_LIST];
         let availableTurns = [1, 2, 3, 4];
@@ -163,7 +164,7 @@ class Map {
             let turnIndex = Math.floor(Utils.randRange(0, availableTurns.length));
 
             let pieceAbility = ChessPiece.PieceAbilityType.NONE;
-            if (GameManager.DIFFICULTY_TYPE == GameManager.DifficultyType.INSANE && Math.random() < abilityChance) {
+            if (GameManager.DIFFICULTY_TYPE == GameManager.DifficultyType.INSANE && Math.random() < diffMod / 16) {
                 pieceAbility = Math.floor(Utils.randRange(ChessPiece.PieceAbilityType.CRACKED, ChessPiece.PieceAbilityType.FAST + 1));
             }
 
@@ -221,79 +222,6 @@ class Map {
                 tile.update();
             }
         }
-
-        // let tileGroups = [];
-        // let surroundingGroupIndecies = [];
-        // for (let i = 0; i < Map.TILE_LIST.length; i++) {
-        //     let tile = Map.getTile(Map.TILE_LIST[i]);
-        //     if (tile == undefined) {
-        //         continue;
-        //     }
-
-        //     surroundingGroupIndecies = [];
-        //     // Get the surrounding tiles to the current tile
-        //     let surroundingTiles = [
-        //         Map.getTile(Utils.add2DArray(tile.tilePos, Map.UP)),
-        //         Map.getTile(Utils.add2DArray(tile.tilePos, Map.RIGHT)),
-        //         Map.getTile(Utils.add2DArray(tile.tilePos, Map.DOWN)),
-        //         Map.getTile(Utils.add2DArray(tile.tilePos, Map.LEFT))
-        //     ];
-
-        //     // Loop through all generated groups
-        //     for (let j = 0; j < tileGroups.length; j++) {
-        //         // Loop through all surrounding tiles
-        //         for (let k = 0; k < surroundingTiles.length; k++) {
-        //             // If the surrounding tile is undefined, its either a hole in the map or its outside the bounds of the map
-        //             if (surroundingTiles[k] == undefined) {
-        //                 continue;
-        //             }
-
-        //             // If the current group includes the surrounding tile, then this current tile should be part of that group
-        //             if (!surroundingGroupIndecies.includes(j) && tileGroups[j].includes(surroundingTiles[k])) {
-        //                 // Add the current tile to the group
-        //                 surroundingGroupIndecies.push(j);
-        //             }
-        //         }
-        //     }
-
-        //     // If the current tile has 2 or more surrounding groups, combine all of those groups into 1 group
-        //     if (surroundingGroupIndecies.length > 1) {
-        //         let newGroup = [];
-        //         let index = 0;
-        //         for (let i = surroundingGroupIndecies.length - 1; i >= 0; i--) {
-        //             index = surroundingGroupIndecies[i];
-
-        //             for (let j = 0; j < tileGroups[index].length; j++) {
-        //                 newGroup.push(tileGroups[index][j]);
-        //             }
-
-        //             tileGroups.splice(index, 1);
-        //         }
-
-        //         tileGroups.push(newGroup);
-        //     } else if (surroundingGroupIndecies.length == 1) {
-        //         // If there is only 1 surrounding group, then just add the current tile to that group
-        //         tileGroups[surroundingGroupIndecies[0]].push(tile);
-        //     } else {
-        //         // If there are no surrounding groups, make a new group for this tile
-        //         tileGroups.push([tile]);
-        //     }
-        // }
-
-        // // Find the biggest group and destroy the rest of them
-        // if (tileGroups.length > 1) {
-        //     let biggestGroupIndex = 0;
-
-        //     for (let i = 1; i < tileGroups.length; i++) {
-        //         // If the current tile group is bigger than the previous 
-        //         if (tileGroups[i].length > tileGroups[biggestGroupIndex].length) {
-        //             Map.animateTilesOut(tileGroups[biggestGroupIndex]);
-        //             biggestGroupIndex = i;
-        //         } else {
-        //             Map.animateTilesOut(tileGroups[i]);
-        //         }
-        //     }
-        // }
 
         // Update all black piece available tiles
         for (let i = 0; i < Map.BLACK_PIECES.length; i++) {
