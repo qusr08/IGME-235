@@ -137,7 +137,8 @@ footer {
     margin: 10px;
 }
 
-.section-title h3 {
+.section-title>h3,
+.section-title>h6 {
     color: var(--color2);
 }
 
