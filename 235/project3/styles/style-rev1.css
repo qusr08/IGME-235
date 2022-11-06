@@ -6,10 +6,15 @@
 }
 
 :root {
-    --color1: #E7E0C9;
+    /* --color1: #E7E0C9;
     --color2: #C1CFC0;
     --color3: #6B7AA1;
-    --color4: #11324D;
+    --color4: #11324D; */
+    --color1: #ADBD8F;
+    --color2: #6F8F72;
+    --color3: #262626;
+    /* --color4: #E5E5E5; */
+    --color4: #111111;
 }
 
 * {
@@ -37,6 +42,11 @@ h1 {
     display: flex;
     justify-content: center;
     margin: 20px auto;
+}
+
+#game>* {
+    border: 10px solid var(--color3);
+    filter: drop-shadow(10px 10px 0 black);
 }
 
 .info-section {
